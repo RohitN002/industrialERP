@@ -6,22 +6,25 @@ import { AuthController } from './auth.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { RefreshStrategy } from './strategies/refresh.strategy';
 import { UsersModule } from '../users/users.module';
+import { UsersService } from 'src/users/users.service';
 
 @Module({
   imports: [
     UsersModule,
     ConfigModule,
+
     JwtModule.registerAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        secret: config.get<string>('JWT_ACCESS_SECRET'),
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string | any>('JWT_SECRET'),
         signOptions: {
-          expiresIn: config.get<string>('JWT_ACCESS_EXP'),
+          // Cast the return type to any or the specific StringValue type
+          expiresIn: configService.get<string | any>('JWT_EXPIRES_IN'),
         },
       }),
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, RefreshStrategy],
+  providers: [AuthService, JwtStrategy, RefreshStrategy, UsersService],
 })
 export class AuthModule {}

@@ -9,7 +9,7 @@ export class AuthService {
   constructor(
     private jwtService: JwtService,
     private usersService: UsersService,
-     private configService: ConfigService,
+    private configService: ConfigService,
   ) {}
 
   async login(email: string, password: string) {
@@ -17,7 +17,7 @@ export class AuthService {
 
     if (!user) throw new UnauthorizedException('Invalid credentials');
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user?.passwordHash);
     if (!isMatch) throw new UnauthorizedException('Invalid credentials');
 
     const tokens = await this.generateTokens(user.id, user.email);
@@ -25,29 +25,30 @@ export class AuthService {
 
     return tokens;
   }
+  async register(registerDto) {
+    this.usersService.register(registerDto);
+  }
+  async generateTokens(userId: string, email: string) {
+    const payload = { sub: userId, email };
+    const refreshSecret = this.configService.get<string>('JWT_REFRESH_SECRET');
+    const refreshExp = this.configService.get<string>('JWT_REFRESH_EXP');
 
- async generateTokens(userId: string, email: string) {
-  const payload = { sub: userId, email };
-const refreshSecret = this.configService.get<string>('JWT_REFRESH_SECRET');
-const refreshExp = this.configService.get<string>('JWT_REFRESH_EXP');
+    if (!refreshSecret) {
+      throw new Error('JWT_REFRESH_SECRET not set');
+    }
 
-if (!refreshSecret) {
-  throw new Error('JWT_REFRESH_SECRET not set');
-}
+    if (!refreshExp) {
+      throw new Error('JWT_REFRESH_EXP not set');
+    }
+    const accessToken = await this.jwtService.signAsync(payload);
 
-if (!refreshExp) {
-  throw new Error('JWT_REFRESH_EXP not set');
-}
-  const accessToken = await this.jwtService.signAsync(payload);
+    const refreshToken = await this.jwtService.signAsync(payload, {
+      secret: refreshSecret,
+      expiresIn: refreshExp as any, // force type
+    });
 
-  const refreshToken = await this.jwtService.signAsync(payload, {
-   secret: refreshSecret,
-    expiresIn: refreshExp as any, // force type
-  });
-
-  return { accessToken, refreshToken };
-}
-
+    return { accessToken, refreshToken };
+  }
 
   async updateRefreshToken(userId: string, refreshToken: string) {
     const hash = await bcrypt.hash(refreshToken, 10);
@@ -75,4 +76,3 @@ if (!refreshExp) {
     await this.usersService.clearRefreshToken(userId);
   }
 }
-

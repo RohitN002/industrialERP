@@ -34,7 +34,14 @@ export class UsersService {
   findAll() {
     return `This action returns all users`;
   }
-
+  async register(user: CreateUserDto) {
+    const existingUser = await this.userRepo.findByEmail(user.email);
+    if (existingUser) {
+      return 'email already exist ';
+    }
+    const newUser = await this.userRepo.create(user);
+    return newUser;
+  }
   async clearRefreshToken(id: string) {
     return this.userRepo.clearRefreshToken(id);
   }

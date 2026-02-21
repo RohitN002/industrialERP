@@ -6,7 +6,7 @@
 
   generator client {
     provider = "prisma-client-js"
-      output   = "../src/generated/prisma"
+     
   }
 
   datasource db {
@@ -63,7 +63,7 @@ model User {
   roles         UserRole[]
   employee      Employee?
   customer      Customer?
-refreshTokenHash String
+  refreshTokenHash String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }

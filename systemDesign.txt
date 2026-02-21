@@ -1,0 +1,13 @@
+{
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data?: any;
+  error?: {
+    code: string;
+    details?: any;
+  };
+  timestamp: string;
+  path: string;
+  requestId?: string;
+}
