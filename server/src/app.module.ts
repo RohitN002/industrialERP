@@ -14,6 +14,7 @@ import { ProductModule } from './product/product.module';
 import { ProductionModule } from './production/production.module';
 import { QualityModule } from './quality/quality.module';
 import { CustomerModule } from './customer/customer.module';
+import { LeadModule } from './lead/lead.module';
 
 @Module({
   imports: [UserModule, AuthModule, UsersModule, RoleModule, OrganizationModule, EmployeeModule, LeadModule, SalesModule, PurchaseModule, ProductModule, ProductionModule, QualityModule, CustomerModule],

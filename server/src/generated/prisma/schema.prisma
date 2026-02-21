@@ -13,12 +13,235 @@ datasource db {
   provider = "postgresql"
 }
 
+/////////////////////
+// ENUMS
+/////////////////////
+
+enum RoleType {
+  ADMIN
+  MANAGER
+  SALES
+  PRODUCTION
+  QUALITY
+  CUSTOMER
+}
+
+enum ProductionStatus {
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  REJECTED
+}
+
+enum SaleStatus {
+  DRAFT
+  CONFIRMED
+  SHIPPED
+  CANCELLED
+}
+
+enum QualityStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+/////////////////////
+// CORE IDENTITY
+/////////////////////
+
 model User {
-  id               String   @id @default(uuid())
-  email            String   @unique
-  name             String?
-  password         String?
-  refreshTokenHash String?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  id           String  @id @default(uuid())
+  email        String  @unique
+  passwordHash String
+  isActive     Boolean @default(true)
+
+  roles            UserRole[]
+  employee         Employee?
+  customer         Customer?
+  refreshTokenHash String
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+}
+
+model Role {
+  id    String     @id @default(uuid())
+  name  RoleType   @unique
+  users UserRole[]
+}
+
+model UserRole {
+  userId String
+  roleId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+}
+
+/////////////////////
+// EMPLOYEE & CUSTOMER
+/////////////////////
+
+model Employee {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  designation String?
+  department  String?
+
+  productions Production[]
+  sales       Sale[]
+  purchases   Purchase[]
+  inspections QualityInspection[]
+
+  createdAt DateTime @default(now())
+}
+
+model Customer {
+  id     String  @id @default(uuid())
+  userId String? @unique
+  user   User?   @relation(fields: [userId], references: [id])
+
+  name    String
+  phone   String?
+  address String?
+
+  sales Sale[]
+
+  createdAt DateTime @default(now())
+}
+
+/////////////////////
+// PRODUCT
+/////////////////////
+
+model Product {
+  id          String  @id @default(uuid())
+  name        String
+  sku         String  @unique
+  description String?
+  price       Decimal @db.Decimal(12, 2)
+
+  saleItems       SaleItem[]
+  purchaseItems   PurchaseItem[]
+  productionItems ProductionItem[]
+
+  // ✅ Correct inverse relation
+  productionsAsFinished Production[] @relation("FinishedProduct")
+
+  createdAt DateTime @default(now())
+}
+
+/////////////////////
+// PURCHASE
+/////////////////////
+
+model Purchase {
+  id          String @id @default(uuid())
+  referenceNo String @unique
+
+  createdById String
+  createdBy   Employee @relation(fields: [createdById], references: [id])
+
+  items       PurchaseItem[]
+  inspections QualityInspection[]
+
+  createdAt DateTime @default(now())
+}
+
+model PurchaseItem {
+  id         String  @id @default(uuid())
+  purchaseId String
+  productId  String
+  quantity   Int
+  unitPrice  Decimal @db.Decimal(12, 2)
+
+  purchase Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  product  Product  @relation(fields: [productId], references: [id])
+}
+
+/////////////////////
+// SALES
+/////////////////////
+
+model Sale {
+  id        String     @id @default(uuid())
+  invoiceNo String     @unique
+  status    SaleStatus @default(DRAFT)
+
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id])
+
+  createdById String
+  createdBy   Employee @relation(fields: [createdById], references: [id])
+
+  items SaleItem[]
+
+  createdAt DateTime @default(now())
+}
+
+model SaleItem {
+  id        String  @id @default(uuid())
+  saleId    String
+  productId String
+  quantity  Int
+  unitPrice Decimal @db.Decimal(12, 2)
+
+  sale    Sale    @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+}
+
+/////////////////////
+// PRODUCTION
+/////////////////////
+
+model Production {
+  id      String           @id @default(uuid())
+  batchNo String           @unique
+  status  ProductionStatus @default(PLANNED)
+
+  producedProductId String
+  producedProduct   Product @relation("FinishedProduct", fields: [producedProductId], references: [id])
+
+  createdById String
+  createdBy   Employee @relation(fields: [createdById], references: [id])
+
+  items       ProductionItem[]
+  inspections QualityInspection[]
+
+  createdAt DateTime @default(now())
+}
+
+model ProductionItem {
+  id           String @id @default(uuid())
+  productionId String
+  productId    String
+  quantity     Int
+
+  production Production @relation(fields: [productionId], references: [id], onDelete: Cascade)
+  product    Product    @relation(fields: [productId], references: [id])
+}
+
+/////////////////////
+// QUALITY
+/////////////////////
+
+model QualityInspection {
+  id      String        @id @default(uuid())
+  status  QualityStatus @default(PENDING)
+  remarks String?
+
+  productionId String?
+  purchaseId   String?
+
+  production Production? @relation(fields: [productionId], references: [id])
+  purchase   Purchase?   @relation(fields: [purchaseId], references: [id])
+
+  inspectedById String
+  inspectedBy   Employee @relation(fields: [inspectedById], references: [id])
+
+  createdAt DateTime @default(now())
 }

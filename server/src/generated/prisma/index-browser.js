@@ -123,11 +123,105 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
-  name: 'name',
-  password: 'password',
+  passwordHash: 'passwordHash',
+  isActive: 'isActive',
   refreshTokenHash: 'refreshTokenHash',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RoleScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+};
+
+exports.Prisma.UserRoleScalarFieldEnum = {
+  userId: 'userId',
+  roleId: 'roleId'
+};
+
+exports.Prisma.EmployeeScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  designation: 'designation',
+  department: 'department',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.CustomerScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  phone: 'phone',
+  address: 'address',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ProductScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  sku: 'sku',
+  description: 'description',
+  price: 'price',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.PurchaseScalarFieldEnum = {
+  id: 'id',
+  referenceNo: 'referenceNo',
+  createdById: 'createdById',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.PurchaseItemScalarFieldEnum = {
+  id: 'id',
+  purchaseId: 'purchaseId',
+  productId: 'productId',
+  quantity: 'quantity',
+  unitPrice: 'unitPrice'
+};
+
+exports.Prisma.SaleScalarFieldEnum = {
+  id: 'id',
+  invoiceNo: 'invoiceNo',
+  status: 'status',
+  customerId: 'customerId',
+  createdById: 'createdById',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SaleItemScalarFieldEnum = {
+  id: 'id',
+  saleId: 'saleId',
+  productId: 'productId',
+  quantity: 'quantity',
+  unitPrice: 'unitPrice'
+};
+
+exports.Prisma.ProductionScalarFieldEnum = {
+  id: 'id',
+  batchNo: 'batchNo',
+  status: 'status',
+  producedProductId: 'producedProductId',
+  createdById: 'createdById',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ProductionItemScalarFieldEnum = {
+  id: 'id',
+  productionId: 'productionId',
+  productId: 'productId',
+  quantity: 'quantity'
+};
+
+exports.Prisma.QualityInspectionScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  remarks: 'remarks',
+  productionId: 'productionId',
+  purchaseId: 'purchaseId',
+  inspectedById: 'inspectedById',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -144,10 +238,49 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.RoleType = exports.$Enums.RoleType = {
+  ADMIN: 'ADMIN',
+  MANAGER: 'MANAGER',
+  SALES: 'SALES',
+  PRODUCTION: 'PRODUCTION',
+  QUALITY: 'QUALITY',
+  CUSTOMER: 'CUSTOMER'
+};
 
+exports.SaleStatus = exports.$Enums.SaleStatus = {
+  DRAFT: 'DRAFT',
+  CONFIRMED: 'CONFIRMED',
+  SHIPPED: 'SHIPPED',
+  CANCELLED: 'CANCELLED'
+};
+
+exports.ProductionStatus = exports.$Enums.ProductionStatus = {
+  PLANNED: 'PLANNED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  REJECTED: 'REJECTED'
+};
+
+exports.QualityStatus = exports.$Enums.QualityStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
 
 exports.Prisma.ModelName = {
-  User: 'User'
+  User: 'User',
+  Role: 'Role',
+  UserRole: 'UserRole',
+  Employee: 'Employee',
+  Customer: 'Customer',
+  Product: 'Product',
+  Purchase: 'Purchase',
+  PurchaseItem: 'PurchaseItem',
+  Sale: 'Sale',
+  SaleItem: 'SaleItem',
+  Production: 'Production',
+  ProductionItem: 'ProductionItem',
+  QualityInspection: 'QualityInspection'
 };
 
 /**
