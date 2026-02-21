@@ -59,7 +59,7 @@ model User {
   email         String   @unique
   passwordHash  String
   isActive      Boolean  @default(true)
-
+name            String
   roles         UserRole[]
   employee      Employee?
   customer      Customer?
@@ -109,7 +109,7 @@ model Customer {
   userId    String? @unique
   user      User?   @relation(fields: [userId], references: [id])
 
-  name      String
+
   phone     String?
   address   String?
 

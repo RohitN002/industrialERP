@@ -22,15 +22,15 @@ export class UserRepository {
     });
   }
   async updateRefreshToken(userId, refreshToken) {
-    // return this.prisma.user.update({
-    //   where: { id: userId },
-    //   data: { refreshTokenHash: refreshToken },
-    // });
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: { refreshTokenHash: refreshToken },
+    });
   }
   async clearRefreshToken(userId) {
-    // return this.prisma.user.update({
-    //   where: { id: userId },
-    //   data: { refreshTokenHash: '' },
-    // });
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: { refreshTokenHash: '' },
+    });
   }
 }

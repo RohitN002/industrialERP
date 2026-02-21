@@ -2,10 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './entities/user.entity';
-
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsersService {
-  constructor(private readonly userRepo: UserRepository) {}
+  constructor(
+    private readonly userRepo: UserRepository,
+    private readonly saltRounds = 12,
+  ) {}
 
   create(createUserDto: CreateUserDto) {
     return 'This action adds a new user';
@@ -34,14 +37,24 @@ export class UsersService {
   findAll() {
     return `This action returns all users`;
   }
+  async hash(password: string): Promise<string> {
+    return bcrypt.hash(password, this.saltRounds);
+  }
+
+  async compare(password: string, hash: string): Promise<boolean> {
+    return bcrypt.compare(password, hash);
+  }
   async register(user: CreateUserDto) {
     const existingUser = await this.userRepo.findByEmail(user.email);
     if (existingUser) {
       return 'email already exist ';
     }
-    const newUser = await this.userRepo.create(user);
+
+    const newUser = { ...user, password: this.hash(user.password) };
+
     return newUser;
   }
+
   async clearRefreshToken(id: string) {
     return this.userRepo.clearRefreshToken(id);
   }

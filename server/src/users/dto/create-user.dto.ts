@@ -19,7 +19,8 @@ export enum UserRole {
 export class CreateUserDto {
   @IsEmail({}, { message: 'A valid email is required' })
   email: string;
-
+  @IsString({})
+  name: string;
   @IsString()
   @MinLength(8, { message: 'Password must be at least 8 characters long' })
   password: string; // User sends "password", you convert to "passwordHash" in service
