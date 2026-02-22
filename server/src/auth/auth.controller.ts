@@ -10,11 +10,12 @@ export class AuthController {
   login(@Body() body: any) {
     return this.authService.login(body.email, body.password);
   }
-  @Post('register')
-  register(@Body() registerDto) {
+  @Post('/register')
+  register(@Body() body: any) {
+    const registerDto = body;
     return this.authService.register(registerDto);
   }
-  @UseGuards(JwtRefreshGuard)
+  // @UseGuards(JwtRefreshGuard)
   @Post('refresh')
   refresh(@Req() req: any) {
     return this.authService.refreshTokens(req.user.sub, req.user.refreshToken);

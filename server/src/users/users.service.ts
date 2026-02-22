@@ -1,14 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsersService {
-  constructor(
-    private readonly userRepo: UserRepository,
-    private readonly saltRounds = 12,
-  ) {}
+  constructor(private readonly userRepo: UserRepository) {}
 
   create(createUserDto: CreateUserDto) {
     return 'This action adds a new user';
@@ -38,21 +35,42 @@ export class UsersService {
     return `This action returns all users`;
   }
   async hash(password: string): Promise<string> {
-    return bcrypt.hash(password, this.saltRounds);
+    const saltRounds = 12;
+    return bcrypt.hash(password, saltRounds);
   }
 
   async compare(password: string, hash: string): Promise<boolean> {
     return bcrypt.compare(password, hash);
   }
   async register(user: CreateUserDto) {
-    const existingUser = await this.userRepo.findByEmail(user.email);
+    const { password, roles = [], ...rest } = user;
+
+    // 1️⃣ Check if user already exists
+    const existingUser = await this.userRepo.findByEmail(rest.email);
     if (existingUser) {
-      return 'email already exist ';
+      throw new ConflictException('Email already exists');
     }
 
-    const newUser = { ...user, password: this.hash(user.password) };
+    // 2️⃣ Hash password
+    const passwordHash = await this.hash(password);
 
-    return newUser;
+    // 3️⃣ Create user and connect roles sodfjo
+    const newUser = await this.userRepo.create({
+      ...rest,
+      passwordHash,
+      roles: {
+        create: roles.map((roleName) => ({
+          role: {
+            connect: { name: roleName }, // must exist in Role table
+          },
+        })),
+      },
+    });
+
+    // 4️⃣ Remove passwordHash before returning
+    const { passwordHash: _, ...safeUser } = newUser;
+
+    return safeUser;
   }
 
   async clearRefreshToken(id: string) {

@@ -63,7 +63,7 @@ name            String
   roles         UserRole[]
   employee      Employee?
   customer      Customer?
-  refreshTokenHash String
+  refreshTokenHash String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }

@@ -15,10 +15,10 @@ async function bootstrap() {
     }),
   );
   // ✅ Correct — this is a Filter
-  app.useGlobalFilters(new GlobalExceptionFilter());
+  // app.useGlobalFilters(new GlobalExceptionFilter());
 
   // ✅ Correct — this is an Interceptor
-  app.useGlobalInterceptors(new ResponseInterceptor());
+  // app.useGlobalInterceptors(new ResponseInterceptor());
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
