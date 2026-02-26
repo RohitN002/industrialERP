@@ -19,12 +19,14 @@ export class AuthService {
 
     const isMatch = await bcrypt.compare(password, user?.passwordHash);
     if (!isMatch) throw new UnauthorizedException('Invalid credentials');
-
+    // console.log('userid', user.id, 'user emial', user.email);
     const tokens = await this.generateTokens(user.id, user.email);
+    console.log('tokens', tokens);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
 
     return tokens;
   }
+
   async register(registerDto) {
     this.usersService.register(registerDto);
   }
