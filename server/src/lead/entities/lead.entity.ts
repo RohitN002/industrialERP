@@ -1,1 +1,1 @@
-export class Lead {}
+export class Lead { }

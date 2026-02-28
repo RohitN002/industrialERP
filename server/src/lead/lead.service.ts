@@ -12,15 +12,15 @@ export class LeadService {
     return `This action returns all lead`;
   }
 
-  findOne(id: number) {
+  findOne(id: any) {
     return `This action returns a #${id} lead`;
   }
 
-  update(id: number, updateLeadDto: UpdateLeadDto) {
+  update(id: any, updateLeadDto: UpdateLeadDto) {
     return `This action updates a #${id} lead`;
   }
 
-  remove(id: number) {
+  remove(id: any) {
     return `This action removes a #${id} lead`;
   }
 }

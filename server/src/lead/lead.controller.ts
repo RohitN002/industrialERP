@@ -5,30 +5,30 @@ import { UpdateLeadDto } from './dto/update-lead.dto';
 
 @Controller('lead')
 export class LeadController {
-  constructor(private readonly leadService: LeadService) {}
+  constructor(private readonly leadService: LeadService) { }
 
   @Post()
-  create(@Body() createLeadDto: CreateLeadDto) {
+  async create(@Body() createLeadDto: CreateLeadDto) {
     return this.leadService.create(createLeadDto);
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.leadService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.leadService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return this.leadService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLeadDto: UpdateLeadDto) {
-    return this.leadService.update(+id, updateLeadDto);
+  async update(@Param('id') id: string, @Body() updateLeadDto: UpdateLeadDto) {
+    return this.leadService.update(id, updateLeadDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.leadService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return this.leadService.remove(id);
   }
 }

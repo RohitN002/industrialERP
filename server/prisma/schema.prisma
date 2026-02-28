@@ -100,6 +100,8 @@ model Employee {
   sales       Sale[]
   purchases   Purchase[]
   inspections QualityInspection[]
+  leads       Lead[] @relation("AssignedLeads")
+  createdLeads Lead[] @relation("CreatedLeads")
 
   createdAt   DateTime @default(now())
 }
@@ -247,4 +249,35 @@ model QualityInspection {
   inspectedBy   Employee @relation(fields: [inspectedById], references: [id])
 
   createdAt     DateTime @default(now())
+}
+
+/////////////////////
+// LEADS & CRM
+/////////////////////
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  LOST
+  CONVERTED
+}
+
+model Lead {
+  id          String     @id @default(uuid())
+  name        String
+  email       String?
+  phone       String?
+  company     String?
+  source      String?
+  status      LeadStatus @default(NEW)
+
+  assignedToId String?
+  assignedTo   Employee?  @relation("AssignedLeads", fields: [assignedToId], references: [id])
+
+  createdById String
+  createdBy   Employee   @relation("CreatedLeads", fields: [createdById], references: [id])
+
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }
