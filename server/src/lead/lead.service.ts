@@ -1,26 +1,41 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { UpdateLeadDto } from './dto/update-lead.dto';
+import { Lead } from './entities/lead.entity';
 
 @Injectable()
 export class LeadService {
-  create(createLeadDto: CreateLeadDto) {
-    return 'This action adds a new lead';
+  constructor(private leadEntity: Lead) { }
+
+  async create(createLeadDto: CreateLeadDto) {
+    return this.leadEntity.create(createLeadDto);
   }
 
-  findAll() {
-    return `This action returns all lead`;
+  async findAll() {
+    return this.leadEntity.findAll();
   }
 
-  findOne(id: any) {
-    return `This action returns a #${id} lead`;
+  async findOne(id: string) {
+    const lead = await this.leadEntity.findOne(id);
+    if (!lead) {
+      throw new NotFoundException(`Lead with ID ${id} not found`);
+    }
+    return lead;
   }
 
-  update(id: any, updateLeadDto: UpdateLeadDto) {
-    return `This action updates a #${id} lead`;
+  async update(id: string, updateLeadDto: UpdateLeadDto) {
+    const lead = await this.leadEntity.findOne(id);
+    if (!lead) {
+      throw new NotFoundException(`Lead with ID ${id} not found`);
+    }
+    return this.leadEntity.update(id, updateLeadDto);
   }
 
-  remove(id: any) {
-    return `This action removes a #${id} lead`;
+  async remove(id: string) {
+    const lead = await this.leadEntity.findOne(id);
+    if (!lead) {
+      throw new NotFoundException(`Lead with ID ${id} not found`);
+    }
+    return this.leadEntity.remove(id);
   }
 }

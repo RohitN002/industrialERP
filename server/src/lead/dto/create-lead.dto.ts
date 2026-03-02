@@ -23,7 +23,6 @@ export class CreateLeadDto {
     source?: string;
 
     @IsOptional()
-
     status?: string;
 
     @IsOptional()
