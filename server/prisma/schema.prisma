@@ -104,6 +104,7 @@ model Employee {
   createdLeads Lead[] @relation("CreatedLeads")
 
   createdAt   DateTime @default(now())
+    @@index([userId])
 }
 
 model Customer {
@@ -116,7 +117,7 @@ model Customer {
   address   String?
 
   sales     Sale[]
-
+ @@index([userId])
   createdAt DateTime @default(now())
 }
 
@@ -153,7 +154,7 @@ model Purchase {
 
   items       PurchaseItem[]
   inspections QualityInspection[]
-
+  @@index([createdById])
   createdAt   DateTime @default(now())
 }
 
@@ -163,7 +164,9 @@ model PurchaseItem {
   productId  String
   quantity   Int
   unitPrice  Decimal @db.Decimal(12,2)
-
+ @@index([purchaseId])
+  @@index([productId])
+  @@unique([purchaseId, productId])
   purchase   Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
   product    Product  @relation(fields: [productId], references: [id])
 }
@@ -184,7 +187,8 @@ model Sale {
   createdBy   Employee   @relation(fields: [createdById], references: [id])
 
   items       SaleItem[]
-
+  @@index([customerId])
+  @@index([createdById])
   createdAt   DateTime   @default(now())
 }
 
@@ -194,7 +198,9 @@ model SaleItem {
   productId String
   quantity  Int
   unitPrice Decimal @db.Decimal(12,2)
-
+ @@index([saleId])
+  @@index([productId])
+  @@unique([saleId, productId])
   sale    Sale    @relation(fields: [saleId], references: [id], onDelete: Cascade)
   product Product @relation(fields: [productId], references: [id])
 }
@@ -216,7 +222,8 @@ model Production {
 
   items       ProductionItem[]
   inspections QualityInspection[]
-
+ @@index([producedProductId])
+  @@index([createdById])
   createdAt   DateTime @default(now())
 }
 
@@ -225,7 +232,9 @@ model ProductionItem {
   productionId String
   productId    String
   quantity     Int
-
+ @@index([productionId])
+  @@index([productId])
+  @@unique([productionId, productId])
   production Production @relation(fields: [productionId], references: [id], onDelete: Cascade)
   product    Product    @relation(fields: [productId], references: [id])
 }
@@ -247,7 +256,9 @@ model QualityInspection {
 
   inspectedById String
   inspectedBy   Employee @relation(fields: [inspectedById], references: [id])
-
+@@index([productionId])
+  @@index([purchaseId])
+  @@index([inspectedById])
   createdAt     DateTime @default(now())
 }
 
@@ -277,7 +288,8 @@ model Lead {
 
   createdById String
   createdBy   Employee   @relation("CreatedLeads", fields: [createdById], references: [id])
-
+@@index([assignedToId])
+  @@index([createdById])
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 }
