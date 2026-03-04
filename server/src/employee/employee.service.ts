@@ -7,22 +7,32 @@ import { EmployeeRepository } from './entities/employee.entity';
 export class EmployeeService {
   constructor(private readonly EmployeeRepo: EmployeeRepository) { }
   async create(createEmployeeDto: CreateEmployeeDto) {
-    return this.EmployeeRepo.create(createEmployeeDto);
+    const existingEmployee = await this.EmployeeRepo.findOne(createEmployeeDto.userId);
+    if (existingEmployee) {
+      throw new Error('Employee already exists');
+    }
+
+    const newEmployee = await this.EmployeeRepo.create(createEmployeeDto);
+    return newEmployee;
   }
 
   async findAll() {
-    return this.EmployeeRepo.findAll();
+    const allEmployees = await this.EmployeeRepo.findAll();
+    return allEmployees;
   }
 
   async findOne(id: string) {
-    return this.EmployeeRepo.findOne(id);
+    const employee = await this.EmployeeRepo.findOne(id);
+    return employee;
   }
 
   async update(id: string, updateEmployeeDto: UpdateEmployeeDto) {
-    return this.EmployeeRepo.update(id, updateEmployeeDto);
+    const updatedEmployee = await this.EmployeeRepo.update(id, updateEmployeeDto);
+    return updatedEmployee;
   }
 
   async remove(id: string) {
-    return this.EmployeeRepo.remove(id);
+    const removedEmployee = await this.EmployeeRepo.remove(id);
+    return removedEmployee;
   }
 }

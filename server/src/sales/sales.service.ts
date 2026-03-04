@@ -1,26 +1,48 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { UpdateSaleDto } from './dto/update-sale.dto';
+import { SaleRepository } from './entities/sale.entity';
 
 @Injectable()
 export class SalesService {
-  create(createSaleDto: CreateSaleDto) {
-    return 'This action adds a new sale';
+  constructor(private saleEntity: SaleRepository) { }
+
+  async create(createSaleDto: CreateSaleDto) {
+    const newSale = await this.saleEntity.create(createSaleDto);
+    return newSale;
   }
 
-  findAll() {
-    return `This action returns all sales`;
+  async findAll() {
+    const sales = await this.saleEntity.findAll();
+    if (!sales) {
+      throw new NotFoundException('Sales not found');
+    }
+    return sales;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} sale`;
+  async findOne(id: string) {
+    const sale = await this.saleEntity.findOne(id);
+    if (!sale) {
+      throw new NotFoundException(`Sale with ID ${id} not found`);
+    }
+    return sale;
   }
 
-  update(id: number, updateSaleDto: UpdateSaleDto) {
-    return `This action updates a #${id} sale`;
+  async update(id: string, updateSaleDto: UpdateSaleDto) {
+    const sale = await this.saleEntity.findOne(id);
+    if (!sale) {
+      throw new NotFoundException(`Sale with ID ${id} not found`);
+    }
+    const updatedSale = await this.saleEntity.update(id, updateSaleDto);
+    return updatedSale;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} sale`;
+  async remove(id: string) {
+    const sale = await this.saleEntity.findOne(id);
+    if (!sale) {
+      throw new NotFoundException(`Sale with ID ${id} not found`);
+    }
+    const deletedSale = await this.saleEntity.remove(id);
+    return deletedSale;
   }
 }

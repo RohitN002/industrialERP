@@ -1,15 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateQualityDto } from './dto/create-quality.dto';
 import { UpdateQualityDto } from './dto/update-quality.dto';
+import { QualityRepository } from './entities/quality.entity';
 
 @Injectable()
 export class QualityService {
-  create(createQualityDto: CreateQualityDto) {
-    return 'This action adds a new quality';
+  constructor(private qualityEntity: QualityRepository) { }
+
+  async create(createQualityDto: CreateQualityDto) {
+    const existingQuality = await this.qualityEntity.findOne(createQualityDto.inspectedById);
+    if (existingQuality) {
+      throw new Error('Quality already exists');
+    }
+    const newQuality = await this.qualityEntity.create(createQualityDto);
+    return newQuality;
   }
 
-  findAll() {
-    return `This action returns all quality`;
+  async findAll() {
+    const qualities = await this.qualityEntity.findAll();
+    if (!qualities) {
+      throw new Error('Quality not found');
+    }
+    return qualities;
   }
 
   findOne(id: number) {

@@ -17,6 +17,8 @@ import { CustomerModule } from './customer/customer.module';
 import { AttendanceModule } from './attendance/attendance.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
+import { DesignationModule } from './designation/designation.module';
+import { DepartmentModule } from './department/department.module';
 
 @Module({
   imports: [
@@ -35,6 +37,8 @@ import { ConfigModule } from '@nestjs/config';
     QualityModule,
     CustomerModule,
     AttendanceModule,
+    DesignationModule,
+    DepartmentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

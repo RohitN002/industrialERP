@@ -1,26 +1,53 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAttendanceDto } from './dto/create-attendance.dto';
 import { UpdateAttendanceDto } from './dto/update-attendance.dto';
+import { AttendanceRepository } from './entities/attendance.entity';
 
 @Injectable()
 export class AttendanceService {
-  create(createAttendanceDto: CreateAttendanceDto) {
-    return 'This action adds a new attendance';
+  constructor(
+    private readonly attendanceRepository: AttendanceRepository
+  ) { }
+  async create(createAttendanceDto: CreateAttendanceDto) {
+    const existingAttendance = await this.attendanceRepository.findOne(createAttendanceDto.userId);
+    if (existingAttendance) {
+      throw new Error('Attendance already exists');
+    }
+    const newAttendance = await this.attendanceRepository.create(createAttendanceDto);
+    return newAttendance;
   }
 
-  findAll() {
-    return `This action returns all attendance`;
+  async findAll() {
+    const attendances = await this.attendanceRepository.findAll();
+    if (!attendances) {
+      throw new Error('Attendance not found');
+    }
+    return attendances;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} attendance`;
+  async findOne(id: string) {
+    const attendance = await this.attendanceRepository.findOne(id);
+    if (!attendance) {
+      throw new Error('Attendance not found');
+    }
+    return attendance;
   }
 
-  update(id: number, updateAttendanceDto: UpdateAttendanceDto) {
-    return `This action updates a #${id} attendance`;
+  async update(id: string, updateAttendanceDto: UpdateAttendanceDto) {
+    const attendance = await this.attendanceRepository.findOne(id);
+    if (!attendance) {
+      throw new Error('Attendance not found');
+    }
+    const updatedAttendance = await this.attendanceRepository.update(id, updateAttendanceDto);
+    return updatedAttendance;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} attendance`;
+  async remove(id: string) {
+    const attendance = await this.attendanceRepository.findOne(id);
+    if (!attendance) {
+      throw new Error('Attendance not found');
+    }
+    const deletedAttendance = await this.attendanceRepository.remove(id);
+    return deletedAttendance;
   }
 }

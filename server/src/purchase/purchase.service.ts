@@ -1,26 +1,52 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePurchaseDto } from './dto/create-purchase.dto';
 import { UpdatePurchaseDto } from './dto/update-purchase.dto';
+import { PurchaseRepository } from './entities/purchase.entity';
 
 @Injectable()
 export class PurchaseService {
-  create(createPurchaseDto: CreatePurchaseDto) {
-    return 'This action adds a new purchase';
+  constructor(private purchaseEntity: PurchaseRepository) { }
+
+  async create(createPurchaseDto: CreatePurchaseDto) {
+    const existingPurchase = await this.purchaseEntity.findOne(createPurchaseDto.referenceNo);
+    if (existingPurchase) {
+      throw new Error('Purchase already exists');
+    }
+    const newPurchase = await this.purchaseEntity.create(createPurchaseDto);
+    return newPurchase;
   }
 
-  findAll() {
-    return `This action returns all purchase`;
+  async findAll() {
+    const purchases = await this.purchaseEntity.findAll();
+    if (!purchases) {
+      throw new Error('Purchase not found');
+    }
+    return purchases;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} purchase`;
+  async findOne(id: string) {
+    const purchase = await this.purchaseEntity.findOne(id);
+    if (!purchase) {
+      throw new NotFoundException(`Purchase with ID ${id} not found`);
+    }
+    return purchase;
   }
 
-  update(id: number, updatePurchaseDto: UpdatePurchaseDto) {
-    return `This action updates a #${id} purchase`;
+  async update(id: string, updatePurchaseDto: UpdatePurchaseDto) {
+    const purchase = await this.purchaseEntity.findOne(id);
+    if (!purchase) {
+      throw new NotFoundException(`Purchase with ID ${id} not found`);
+    }
+    const updatedPurchase = await this.purchaseEntity.update(id, updatePurchaseDto);
+    return updatedPurchase;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} purchase`;
+  async remove(id: string) {
+    const purchase = await this.purchaseEntity.findOne(id);
+    if (!purchase) {
+      throw new NotFoundException(`Purchase with ID ${id} not found`);
+    }
+    const deletedPurchase = await this.purchaseEntity.remove(id);
+    return deletedPurchase;
   }
 }
