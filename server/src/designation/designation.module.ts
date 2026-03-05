@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { DesignationService } from './designation.service';
 import { DesignationController } from './designation.controller';
+import { DesignationRepository } from './entities/designation.entity';
 
 @Module({
   controllers: [DesignationController],
-  providers: [DesignationService],
+  providers: [DesignationService, DesignationRepository],
 })
 export class DesignationModule {}

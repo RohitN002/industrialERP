@@ -19,16 +19,16 @@ export class ProductionController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.productionService.findOne(+id);
+    return this.productionService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProductionDto: UpdateProductionDto) {
-    return this.productionService.update(+id, updateProductionDto);
+    return this.productionService.update(id, updateProductionDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.productionService.remove(+id);
+    return this.productionService.remove(id);
   }
 }

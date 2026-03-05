@@ -19,16 +19,16 @@ export class DesignationController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.designationService.findOne(+id);
+    return this.designationService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateDesignationDto: UpdateDesignationDto) {
-    return this.designationService.update(+id, updateDesignationDto);
+    return this.designationService.update(id, updateDesignationDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.designationService.remove(+id);
+    return this.designationService.remove(id);
   }
 }

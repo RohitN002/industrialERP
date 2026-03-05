@@ -19,16 +19,16 @@ export class QualityController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.qualityService.findOne(+id);
+    return this.qualityService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateQualityDto: UpdateQualityDto) {
-    return this.qualityService.update(+id, updateQualityDto);
+    return this.qualityService.update(id, updateQualityDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.qualityService.remove(+id);
+    return this.qualityService.remove(id);
   }
 }

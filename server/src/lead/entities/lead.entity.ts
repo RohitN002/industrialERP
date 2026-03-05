@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateLeadDto } from '../dto/create-lead.dto';
+
 
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Lead } from '@prisma/client'
+
 @Injectable()
 export class LeadRepository {
     constructor(private prisma: PrismaService) { }

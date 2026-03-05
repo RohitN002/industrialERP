@@ -14,15 +14,15 @@ export class RoleService {
     return `This action returns all role`;
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     return `This action returns a #${id} role`;
   }
 
-  async update(id: number, updateRoleDto: UpdateRoleDto) {
+  async update(id: string, updateRoleDto: UpdateRoleDto) {
     return `This action updates a #${id} role`;
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     return `This action removes a #${id} role`;
   }
 }

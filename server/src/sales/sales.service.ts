@@ -1,17 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { UpdateSaleDto } from './dto/update-sale.dto';
-import { SaleRepository } from './entities/sale.entity';
+import { SalesRepository } from './entities/sales.entity';
 
 @Injectable()
 export class SalesService {
-  constructor(private saleEntity: SaleRepository) { }
+  constructor(private saleEntity: SalesRepository) { }
 
   async create(createSaleDto: CreateSaleDto) {
     const newSale = await this.saleEntity.create(createSaleDto);
     return newSale;
   }
-
+ 
   async findAll() {
     const sales = await this.saleEntity.findAll();
     if (!sales) {

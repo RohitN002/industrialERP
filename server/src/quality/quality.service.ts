@@ -24,15 +24,15 @@ export class QualityService {
     return qualities;
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return `This action returns a #${id} quality`;
   }
 
-  update(id: number, updateQualityDto: UpdateQualityDto) {
+  update(id: string, updateQualityDto: UpdateQualityDto) {
     return `This action updates a #${id} quality`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} quality`;
   }
 }
