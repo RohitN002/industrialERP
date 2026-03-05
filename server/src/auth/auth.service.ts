@@ -12,20 +12,20 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
-  async login(email: string, password: string) {
-    const user = await this.usersService.findByEmail(email);
+    async login(email: string, password: string) {
+      const user = await this.usersService.findByEmail(email);
 
-    if (!user) throw new UnauthorizedException('Invalid credentials');
+      if (!user) throw new UnauthorizedException('Invalid credentials');
 
-    const isMatch = await bcrypt.compare(password, user?.passwordHash);
-    if (!isMatch) throw new UnauthorizedException('Invalid credentials');
-    // console.log('userid', user.id, 'user emial', user.email);
-    const tokens = await this.generateTokens(user.id, user.email);
-    console.log('tokens', tokens);
-    await this.updateRefreshToken(user.id, tokens.refreshToken);
+      const isMatch = await bcrypt.compare(password, user?.passwordHash);
+      if (!isMatch) throw new UnauthorizedException('Invalid credentials');
+      // console.log('userid', user.id, 'user emial', user.email);
+      const tokens = await this.generateTokens(user.id, user.email);
+      console.log('tokens', tokens);
+      await this.updateRefreshToken(user.id, tokens.refreshToken);
 
-    return tokens;
-  }
+      return {message: "Login successful", tokens};
+    }
 
   async register(registerDto) {
     this.usersService.register(registerDto);

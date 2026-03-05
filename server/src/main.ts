@@ -1,12 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { ResponseInterceptor } from './common/interceptors/response.interceptor';
-import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
-
+import cookieParser from "cookie-parser";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+app.setGlobalPrefix('/api')
+app.use(cookieParser());
+app.enableCors({
+origin: "http://localhost:3000",
+credentials: true,
+methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+allowedHeaders: "Content-Type, Accept, Authorization",
+});
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // Strips away any properties that aren't in the DTO

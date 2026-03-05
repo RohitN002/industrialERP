@@ -6,10 +6,12 @@ export const loginSchema = z.object({
 });
 
 export const registerSchema = z.object({
-  name: z.string().min(2),
-  email: z.string().email(),
+    email: z.string().email(),
+    name: z.string().min(2),
   password: z.string().min(6),
+  roles: z.array(z.enum(['ADMIN', 'USER', 'EMPLOYEE', 'CUSTOMER'])).min(1).default(['ADMIN']),
+  isActive: z.boolean().default(true),
 });
 
 export type LoginInput = z.infer<typeof loginSchema>;
-export type RegisterInput = z.infer<typeof registerSchema>; 
+export type RegisterInput = z.input<typeof registerSchema>; 
