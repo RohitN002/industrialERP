@@ -2,8 +2,8 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRegister } from "../hooks/useAuth";
-import { RegisterInput, registerSchema } from "../auth/auth.schema";
+import { useRegister } from "../../hooks/useAuth";
+import { RegisterInput, registerSchema } from "../../auth/auth.schema";
 import Link from "next/link";
 import router from "next/router";
 

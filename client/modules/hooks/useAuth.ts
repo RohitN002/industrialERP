@@ -5,6 +5,7 @@ import { useAuthStore } from "@/lib/store/auth.store";
 
 export function useLogin() {
   const  setToken  = useAuthStore((s)=>s.setToken);
+  const setRole= useAuthStore((s)=>s.setRole)
   return useMutation({
     mutationFn: (data: LoginInput) =>
       api("/auth/login", {
@@ -13,6 +14,7 @@ export function useLogin() {
          credentials: "include",
       }),
        onSuccess: (data:any) => {
+        setRole(data.setRole)
       setToken(data.accessToken);}
   });
 }
