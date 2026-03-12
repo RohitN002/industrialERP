@@ -22,6 +22,7 @@ export class AuthController {
     });
 
     return {
+      role: token?.role,
       accessToken: token?.tokens?.accessToken,
       message: token?.message,
     };

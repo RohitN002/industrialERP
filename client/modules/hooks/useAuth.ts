@@ -14,7 +14,7 @@ export function useLogin() {
          credentials: "include",
       }),
        onSuccess: (data:any) => {
-        setRole(data.setRole)
+        setRole(data.role)
       setToken(data.accessToken);}
   });
 }

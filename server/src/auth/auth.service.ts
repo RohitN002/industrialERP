@@ -23,8 +23,8 @@ export class AuthService {
       const tokens = await this.generateTokens(user.id, user.email);
       console.log('tokens', tokens);
       await this.updateRefreshToken(user.id, tokens.refreshToken);
-
-      return {message: "Login successful", tokens};
+const roles = user.roles.map(r => r.role.name);
+      return {message: "Login successful", tokens, role: roles};
     }
 
   async register(registerDto) {

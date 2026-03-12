@@ -1,45 +1,56 @@
 import { UserRole } from "@/shared/Enums/Role.enum"
-
-export interface AppRoute {
-  name: string
-  path: string
-  roles: UserRole[]
-}
+import { AppRoute } from "@/shared/interface/interface"
+import {
+  LayoutDashboard,
+  Package,
+  Factory,
+  Users,
+  Settings,
+  User,
+  Target,
+} from "lucide-react"
 
 export const routes: AppRoute[] = [
   {
     name: "Dashboard",
     path: "/dashboard",
+    icon: LayoutDashboard,
     roles: [UserRole.ADMIN, UserRole.EMPLOYEE],
   },
   {
     name: "Product",
     path: "/product",
+    icon: Package,
     roles: [UserRole.ADMIN, UserRole.EMPLOYEE],
   },
   {
     name: "Production",
     path: "/production",
+    icon: Factory,
     roles: [UserRole.ADMIN, UserRole.EMPLOYEE],
   },
   {
     name: "Customer",
     path: "/customer",
+    icon: Users,
     roles: [UserRole.ADMIN, UserRole.EMPLOYEE],
   },
   {
     name: "Employee",
     path: "/employee",
+    icon: User,
     roles: [UserRole.ADMIN],
   },
   {
     name: "Lead",
     path: "/lead",
+    icon: Target,
     roles: [UserRole.ADMIN, UserRole.EMPLOYEE],
   },
   {
     name: "Settings",
     path: "/settings",
-    roles: [UserRole.ADMIN, UserRole.EMPLOYEE],
+    icon: Settings,
+    roles: [UserRole.ADMIN],
   },
 ]
