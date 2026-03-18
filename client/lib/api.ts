@@ -8,7 +8,8 @@ export async function api<T>(
   showSuccess = false
 ): Promise<T> {
   const makeRequest = async (token?: string) => {
-    return fetch(`${process.env.NEXT_PUBLIC_API_URL}/api${url}`, {
+ 
+    return fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`, {
       ...options,
       headers: {
         "Content-Type": "application/json",
@@ -21,10 +22,10 @@ export async function api<T>(
   try {
     let token = useAuthStore.getState().accessToken;
 
-    let res = await makeRequest(token!);
-
+    let res = await makeRequest(token||undefined);
+const isAuthRoute = url.includes("/auth/login") || url.includes("/auth/signup");
     // 🔥 If token expired → try refresh
-    if (res.status === 401) {
+    if (res.status === 401 && !isAuthRoute) {
       const newToken = await refreshAccessToken();
 
       if (!newToken) {

@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 
 import { UserRole } from "@/shared/Enums/Role.enum"
 import { routes } from "@/lib/routes"
@@ -14,14 +14,12 @@ export default function Navbar() {
   const role = useAuthStore((state) => state.role)
   const pathname = usePathname()
 
-const roleSet = new Set(role)
-console.log("roleSet",roleSet)
+const roleSet = useMemo(() => new Set(role), [role])
 const allowedRoutes = useMemo(() => {
   return routes.filter((route) =>
     route.roles.some((r: any) => roleSet.has(r))
-  );
-}, [routes, roleSet]);
-console.log("allowedRoutes",allowedRoutes)
+  )
+}, [roleSet])
 
   return (
     <nav className="w-64 border-r h-screen p-4">
@@ -32,8 +30,9 @@ console.log("allowedRoutes",allowedRoutes)
 
           return (
             <li key={route.path}>
+
               <Link
-                href={route.path}
+               href={route.path ? `/dashboard/${route.path}` : "/dashboard"}
                 className={`flex items-center gap-3 p-2 rounded-md ${
                   active ? "bg-black text-white" : "hover:bg-gray-100"
                 }`}

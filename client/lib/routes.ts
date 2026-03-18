@@ -11,9 +11,9 @@ import {
 } from "lucide-react"
 
 export const routes: AppRoute[] = [
-  {
+  { 
     name: "Dashboard",
-    path: "/dashboard",
+    path: "",
     icon: LayoutDashboard,
     roles: [UserRole.ADMIN, UserRole.EMPLOYEE],
   },
