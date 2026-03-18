@@ -20,6 +20,12 @@ export class AuthController {
       path: '/auth/refresh',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
+    res.cookie('userId', token?.userId, {
+  httpOnly: true, // optional (depends if frontend needs access)
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'lax',
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
 
     return {
       role: token?.role,
@@ -33,9 +39,11 @@ export class AuthController {
     return this.authService.register(registerDto);
   }
   // @UseGuards(JwtRefreshGuard)
-  @Post('refresh')
+  @Post('refresh-token')
   refresh(@Req() req: any) {
-    return this.authService.refreshTokens(req.user.sub, req.user.refreshToken);
+     const refreshToken = req.cookies?.refreshToken;
+     const userId = req.cookies?.userId;
+    return this.authService.refreshTokens(userId, refreshToken);
   }
 
   @Post('logout')

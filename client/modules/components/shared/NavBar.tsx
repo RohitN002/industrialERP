@@ -6,18 +6,23 @@ import { usePathname } from "next/navigation"
 import { UserRole } from "@/shared/Enums/Role.enum"
 import { routes } from "@/lib/routes"
 import { useAuthStore } from "@/lib/store/auth.store"
+import { useMemo } from "react"
 
 
 
 export default function Navbar() {
   const role = useAuthStore((state) => state.role)
   const pathname = usePathname()
-console.log("role",role)
-console.log("routes value",routes.map((r) => r.roles))
- const allowedRoutes = routes.filter((route) =>
-  role?.some((r) => route.roles.includes(r))
-);
+
+const roleSet = new Set(role)
+console.log("roleSet",roleSet)
+const allowedRoutes = useMemo(() => {
+  return routes.filter((route) =>
+    route.roles.some((r: any) => roleSet.has(r))
+  );
+}, [routes, roleSet]);
 console.log("allowedRoutes",allowedRoutes)
+
   return (
     <nav className="w-64 border-r h-screen p-4">
       <ul className="space-y-2">

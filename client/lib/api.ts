@@ -1,25 +1,57 @@
 import toast from "react-hot-toast";
+import { useAuthStore } from "./store/auth.store";
+import { refreshAccessToken } from "./refresh-logic";
 
-export async function api<T>(url: string, options?: RequestInit) {
-  try {
-    const res = await fetch("http://localhost:8000/api" + url, {
+export async function api<T>(
+  url: string,
+  options?: RequestInit,
+  showSuccess = false
+): Promise<T> {
+  const makeRequest = async (token?: string) => {
+    return fetch(`${process.env.NEXT_PUBLIC_API_URL}/api${url}`, {
+      ...options,
       headers: {
         "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+        ...(options?.headers || {}),
       },
-      ...options,
     });
+  };
 
-    const data = await res.json(); 
-    if (!res.ok) {
-      toast.error(data?.message || "Request failed");
-      throw new Error(data?.message);
+  try {
+    let token = useAuthStore.getState().accessToken;
+
+    let res = await makeRequest(token!);
+
+    // 🔥 If token expired → try refresh
+    if (res.status === 401) {
+      const newToken = await refreshAccessToken();
+
+      if (!newToken) {
+        throw new Error("Session expired. Please login again.");
+      }
+
+      // retry request with new token
+      res = await makeRequest(newToken);
     }
 
-    toast.success(data?.message || "Success");
+    let data: any;
+    try {
+      data = await res.json();
+    } catch {
+      data = {};
+    }
+
+    if (!res.ok) {
+      throw new Error(data?.message || "Request failed");
+    }
+
+    if (showSuccess) {
+      toast.success(data?.message || "Success");
+    }
 
     return data as T;
   } catch (error: any) {
-    console.log(error);
     toast.error(error.message || "Request failed");
     throw error;
   }
