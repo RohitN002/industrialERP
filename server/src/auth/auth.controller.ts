@@ -21,11 +21,17 @@ export class AuthController {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     res.cookie('userId', token?.userId, {
-  httpOnly: true, // optional (depends if frontend needs access)
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: 'lax',
-  maxAge: 7 * 24 * 60 * 60 * 1000,
-});
+      httpOnly: true, // optional (depends if frontend needs access)
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+    res.cookie('token', token?.tokens?.accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
 
     return {
       role: token?.role,
@@ -40,10 +46,29 @@ export class AuthController {
   }
   // @UseGuards(JwtRefreshGuard)
   @Post('refresh-token')
-  refresh(@Req() req: any) {
-     const refreshToken = req.cookies?.refreshToken;
-     const userId = req.cookies?.userId;
-    return this.authService.refreshTokens(userId, refreshToken);
+  async refresh(
+    @Req() req: any,
+    @Res({ passthrough: true }) res: Response
+  ) {
+    const refreshToken = req.cookies?.refreshToken;
+    const userId = req.cookies?.userId;
+    const tokens = await this.authService.refreshTokens(userId, refreshToken);
+    
+    res.cookie('token', tokens?.accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+    res.cookie('refreshToken', tokens?.refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/auth/refresh',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+    
+    return tokens;
   }
 
   @Post('logout')

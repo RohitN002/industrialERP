@@ -20,18 +20,18 @@ export class AuthService {
       const isMatch = await bcrypt.compare(password, user?.passwordHash);
       if (!isMatch) throw new UnauthorizedException('Invalid credentials');
       // console.log('userid', user.id, 'user emial', user.email);
-      const tokens = await this.generateTokens(user.id, user.email);
+      const roles = user.roles ? user.roles.map(r => r.role.name) : [];
+      const tokens = await this.generateTokens(user.id, user.email, roles);
       console.log('tokens', tokens);
       await this.updateRefreshToken(user.id, tokens.refreshToken);
-const roles = user.roles.map(r => r.role.name);
       return {message: "Login successful", tokens, role: roles,userId:user.id};
     }
 
   async register(registerDto) {
     this.usersService.register(registerDto);
   }
-  async generateTokens(userId: string, email: string) {
-    const payload = { sub: userId, email };
+  async generateTokens(userId: string, email: string, roles: string[] = []) {
+    const payload = { sub: userId, email, roles };
     const refreshSecret = this.configService.get<string>('JWT_REFRESH_SECRET');
     const refreshExp = this.configService.get<string>('JWT_REFRESH_EXP');
 
@@ -68,7 +68,8 @@ const roles = user.roles.map(r => r.role.name);
 
     if (!match) throw new UnauthorizedException();
 
-    const tokens = await this.generateTokens(user.id, user.email);
+    const roles = (user as any).roles ? (user as any).roles.map(r => r.role.name) : [];
+    const tokens = await this.generateTokens(user.id, user.email, roles);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
 
     return tokens;

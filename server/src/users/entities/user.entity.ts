@@ -26,6 +26,13 @@ async findByEmail(email: string) {
   async findById(id: string): Promise<User | null> {
     return this.prisma.user.findUnique({
       where: { id },
+      include: {
+        roles: {
+          include: {
+            role: true
+          }
+        }
+      }
     });
   }
   async updateRefreshToken(userId, refreshToken) {

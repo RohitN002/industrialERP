@@ -7,9 +7,9 @@ import { EmployeeRepository } from './entities/employee.entity';
 export class EmployeeService {
   constructor(private readonly EmployeeRepo: EmployeeRepository) { }
   async create(createEmployeeDto: CreateEmployeeDto) {
-    const existingEmployee = await this.EmployeeRepo.findOne(createEmployeeDto.userId);
+    const existingEmployee = await this.EmployeeRepo.findByUserId(createEmployeeDto.userId);
     if (existingEmployee) {
-      throw new Error('Employee already exists');
+      throw new Error('Employee profile already exists for this user');
     }
 
     const newEmployee = await this.EmployeeRepo.create(createEmployeeDto);
