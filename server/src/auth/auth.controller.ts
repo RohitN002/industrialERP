@@ -4,7 +4,7 @@ import { JwtRefreshGuard } from './guards/refresh.guard';
 import type { Response } from 'express';
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
    @Post('login')
   async login(
@@ -12,12 +12,12 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response
   ) {
     const token = await this.authService.login(body.email, body.password);
-
+console.log("refresh token",token?.tokens?.refreshToken);
     res.cookie('refreshToken', token?.tokens?.refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      path: '/auth/refresh',
+      path: '/auth/refresh-token',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     res.cookie('userId', token?.userId, {
@@ -26,13 +26,6 @@ export class AuthController {
       sameSite: 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    res.cookie('token', token?.tokens?.accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-
     return {
       role: token?.role,
       accessToken: token?.tokens?.accessToken,
@@ -50,7 +43,9 @@ export class AuthController {
     @Req() req: any,
     @Res({ passthrough: true }) res: Response
   ) {
-    const refreshToken = req.cookies?.refreshToken;
+    console.log("refresh token hit");
+    console.log("cookies",req.cookies);
+    const refreshToken = req.cookies?.token || req.cookies?.refreshToken;
     const userId = req.cookies?.userId;
     const tokens = await this.authService.refreshTokens(userId, refreshToken);
     

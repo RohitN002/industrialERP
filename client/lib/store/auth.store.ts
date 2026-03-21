@@ -10,20 +10,14 @@ type AuthState = {
 };
 
 export const useAuthStore = create<AuthState>()(
-  persist(
+  
     (set) => ({
       accessToken: null,
       role: null,
       setRole: (role: string[] | null) => set({ role }),
       setToken: (token) => set({ accessToken: token }),
-      logout: () => set({ accessToken: null, role: null }),
+      logout: () => set({ accessToken: null, role: null, }),
     }),
-    {
-      name: "auth",
-      partialize: (state) => ({
-        accessToken: state.accessToken,
-        role: state.role,
-      }),
-    }
-  )
+   
+  
 );

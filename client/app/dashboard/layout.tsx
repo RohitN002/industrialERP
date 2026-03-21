@@ -1,6 +1,8 @@
 import Navbar from '@/modules/components/shared/NavBar'
+import { useAuthRedirect } from '@/modules/hooks/useAuthRedirect'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+
   return (
   <div className="flex h-screen">
       {/* Left Sidebar */}

@@ -58,8 +58,10 @@ export class AuthService {
   }
 
   async refreshTokens(userId: string, refreshToken: string) {
+    console.log("userId",userId);
+    console.log("refreshToken",refreshToken);
     const user = await this.usersService.findById(userId);
-
+console.log("db user data",user);
     if (!user || !user.refreshTokenHash) {
       throw new UnauthorizedException();
     }

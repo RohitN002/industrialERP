@@ -1,0 +1,82 @@
+1. Billing / Invoicing (Non-negotiable)
+GST-compliant invoices
+PDF + WhatsApp share
+Credit / cash tracking
+Simple UI (faster than Excel)
+
+2. Inventory Management (Keep it dead simple)
+Stock in/out
+Low stock alerts
+SKU management
+Basic warehouse (don’t over-engineer multi-warehouse yet)
+
+3. Sales + Orders
+Create orders quickly
+Convert order → invoice
+Track payments
+
+4. Expense Tracking
+Vendor payments
+Daily expense logs
+
+5. Basic Reports
+Daily sales
+Profit estimate
+Outstanding payments
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+🟡 PHASE 2 — Stickiness features
+
+This is what prevents churn.
+
+6. WhatsApp Integration (CRITICAL in India)
+Send invoices
+Payment reminders
+Order updates
+
+👉 This is a killer feature vs Odoo
+
+7. Credit / Udhar System
+Track who owes money
+Payment reminders
+
+👉 Small vendors care more about this than “analytics”
+
+8. Customer Management (Lite CRM)
+Customer history
+Frequent buyers
+Basic segmentation
+9. Multi-device sync (mobile-first)
+Most vendors don’t sit on laptops
+Android app is mandatory
+🔴 PHASE 3 — Differentiation (This is where you win)
+10. Automation (but simple)
+Auto-generate invoice from order
+Auto stock deduction
+11. Offline-first support
+Sync when internet is back
+
+👉 Massive advantage in India
+
+12. Voice input / local language
+Tamil / Hindi support
+Voice-based entries
+
+👉 This is your unfair advantage vs Odoo
+
+13. Embedded payments
+UPI / QR
+Payment reconciliation
