@@ -74,7 +74,7 @@ console.log("db user data",user);
     const tokens = await this.generateTokens(user.id, user.email, roles);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
 
-    return tokens;
+    return {tokens,userId:user.id,role:roles};
   }
 
   async logout(userId: string) {

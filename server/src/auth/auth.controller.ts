@@ -45,25 +45,27 @@ console.log("refresh token",token?.tokens?.refreshToken);
   ) {
     console.log("refresh token hit");
     console.log("cookies",req.cookies);
-    const refreshToken = req.cookies?.token || req.cookies?.refreshToken;
+    const refreshToken =  req.cookies?.refreshToken||req.cookies?.token ;
     const userId = req.cookies?.userId;
     const tokens = await this.authService.refreshTokens(userId, refreshToken);
-    
-    res.cookie('token', tokens?.accessToken, {
+    res.cookie('refreshToken', tokens?.tokens?.refreshToken, {
       httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/auth/refresh-token',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+       res.cookie('userId', tokens?.userId, {
+      httpOnly: true, // optional (depends if frontend needs access)
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    res.cookie('refreshToken', tokens?.refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/auth/refresh',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-    
-    return tokens;
+    return {
+      role: tokens?.role,
+      accessToken: tokens?.tokens?.accessToken,
+   
+    };
   }
 
   @Post('logout')

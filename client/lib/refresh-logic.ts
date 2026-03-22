@@ -27,7 +27,7 @@ console.log("refreshres", res)
       const newToken = data.accessToken;
 console.log("new token in refrshstrategy",newToken);
       useAuthStore.getState().setToken(newToken);
-
+useAuthStore.getState().setRole(data.role);
       return newToken;
     } catch (err) {
       console.log("err",err);

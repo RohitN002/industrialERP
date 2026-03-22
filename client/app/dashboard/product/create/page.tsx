@@ -9,12 +9,15 @@ export default function CreateProductPage() {
   const createMutation = useCreateProduct();
   const router = useRouter();
 
-  const handleSubmit = (data: any) => {
+  const handleSubmit = async (data: any) => {
     createMutation.mutate(data, {
       onSuccess: () => {
         toast.success("Product created successfully!");
         router.push("/dashboard/product");
       },
+      onError: (error) => {
+        toast.error(error.message);
+      }
     });
   };
 

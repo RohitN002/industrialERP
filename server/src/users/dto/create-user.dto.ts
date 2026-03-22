@@ -8,12 +8,13 @@
   IsEnum,
 } from 'class-validator';
 
-// Assuming you have a UserRole enum defined elsewhere
 export enum UserRole {
   ADMIN = 'ADMIN',
   USER = 'USER',
   EMPLOYEE = 'EMPLOYEE',
   CUSTOMER = 'CUSTOMER',
+  SUPPLIER = 'SUPPLIER',
+ 
 }
 
 export class CreateUserDto {

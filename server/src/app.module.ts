@@ -19,6 +19,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { DesignationModule } from './designation/designation.module';
 import { DepartmentModule } from './department/department.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { DepartmentModule } from './department/department.module';
     AttendanceModule,
     DesignationModule,
     DepartmentModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

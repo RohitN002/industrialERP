@@ -73,7 +73,11 @@ model Role {
   name      RoleType   @unique
   users     UserRole[]
 }
-
+model Category{
+  id String @id @default(uuid())
+  name String
+  products Product[]
+}
 model UserRole {
   userId String
   roleId String
@@ -129,18 +133,18 @@ model Product {
   id          String  @id @default(uuid())
   name        String
   sku         String  @unique
-  description String?
+  description String?   
   price       Decimal @db.Decimal(12,2)
   stockQuantity Int
   type        String
   unit        String?
-  category    String?
   supplier    String?
   imageUrl    String?
   saleItems       SaleItem[]
   purchaseItems   PurchaseItem[]
   productionItems ProductionItem[]
-
+  categoryId String
+  category Category @relation(fields: [categoryId], references: [id])
   // ✅ Correct inverse relation
   productionsAsFinished Production[] @relation("FinishedProduct")
 
