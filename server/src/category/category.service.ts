@@ -12,11 +12,17 @@ export class CategoryService {
     if (existing) {
       throw new ConflictException(`Category "${createCategoryDto.name}" already exists`);
     }
-    return this.categoryRepo.createCategory(createCategoryDto.name);
+    const newCategory= await this.categoryRepo.createCategory(createCategoryDto.name);
+    
+    return {message:"Category created successfully",data:newCategory};
   }
 
   async findAll() {
-    return this.categoryRepo.findAllCategories();
+    const categories = await this.categoryRepo.findAllCategories();
+  if(categories.length===0){
+  return {message:"Categories not found create a new one to get started",data:[]};
+  }
+    return {message:"Categories fetched successfully",data:categories};
   }
 
   async findOne(id: string) {
@@ -24,7 +30,7 @@ export class CategoryService {
     if (!category) {
       throw new NotFoundException(`Category with id "${id}" not found`);
     }
-    return category;
+    return {message:"Category fetched successfully",data:category};
   }
 
   async update(id: string, updateCategoryDto: UpdateCategoryDto) {
@@ -32,11 +38,13 @@ export class CategoryService {
     if (!updateCategoryDto.name) {
       throw new BadRequestException('name is required to update a category');
     }
-    return this.categoryRepo.updateCategory(id, updateCategoryDto.name);
+    const updatedCategory = await this.categoryRepo.updateCategory(id, updateCategoryDto.name);
+    return {message:"Category updated successfully",data:updatedCategory};
   }
 
   async remove(id: string) {
     await this.findOne(id); // throws NotFoundException if not found
-    return this.categoryRepo.deleteCategory(id);
+    await this.categoryRepo.deleteCategory(id);
+    return {message:"Category deleted successfully"};
   }
 }

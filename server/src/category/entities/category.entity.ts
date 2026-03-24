@@ -8,8 +8,9 @@ export class categoryRepository {
     async createCategory(name: string) {
         return this.prisma.category.create({ data: { name } });
     }
-    async findCategoryByName (name:string){
-        return this.prisma.category.findUnique({where:{name}})
+    async findCategoryByName(name: string) {
+        if (!name) return null;
+        return this.prisma.category.findFirst({ where: { name } });
     }
     async findAllCategories() {
         return this.prisma.category.findMany();

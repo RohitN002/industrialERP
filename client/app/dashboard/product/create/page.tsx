@@ -4,8 +4,12 @@ import ProductForm from "@/modules/components/product/ProductForm";
 import { useCreateProduct } from "@/modules/hooks/useProduct";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { useCategories } from "@/modules/hooks/useCategory";
+import { useSuppliers } from "@/modules/hooks/useSupplier";
 
 export default function CreateProductPage() {
+  const {data:categories,isLoading:categoryLoading,isError:categoryError} = useCategories();
+  const {data:suppliers,isLoading:supplierLoading,isError:supplierError} = useSuppliers();
   const createMutation = useCreateProduct();
   const router = useRouter();
 
