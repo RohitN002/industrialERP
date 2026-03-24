@@ -28,6 +28,7 @@ enum RoleType {
   PRODUCTION
   QUALITY
   CUSTOMER
+  SUPPLIER
 }
 
 enum ProductionStatus {
@@ -189,8 +190,16 @@ model Supplier {
   id        String  @id @default(uuid())
   userId String @unique
   user User @relation(fields: [userId], references: [id])
+
   phone     String
   address   String
+  city String
+  state String
+  pincode String
+  country String
+  contactPerson String
+  contactPersonPhone String
+  gst String
   createdAt DateTime @default(now())
 }
 model Sale {

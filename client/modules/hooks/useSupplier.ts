@@ -33,7 +33,7 @@ export function useCreateSupplier() {
     });
 }
 
-export function useUpdateSupplier(id: string) {
+export function useUpdateSupplier( id:string) {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: any) => api(`/supplier/${id}`, {
@@ -46,10 +46,10 @@ export function useUpdateSupplier(id: string) {
     });
 }
 
-export function useDeleteSupplier(id: string) {
+export function useDeleteSupplier() {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: () => api(`/supplier/${id}`, {
+        mutationFn: (id: string) => api(`/supplier/${id}`, {
             method: "DELETE",
         }),
         onSuccess: () => {

@@ -31,3 +31,24 @@ export type Category = CategoryInput & {
   id: string;
   createdAt: string;
 };
+
+export const supplierSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Invalid email"),
+  phone: z.string().min(1, "Phone is required"),
+  address: z.string().min(1, "Address is required"),
+  city: z.string().min(1, "City is required"),
+  state: z.string().min(1, "State is required"),
+  pincode: z.string().min(1, "Pincode is required"),
+  country: z.string().min(1, "Country is required"),
+  contactPerson: z.string().min(1, "Contact Person is required"),
+  contactPersonPhone: z.string().min(1, "Contact Person Phone is required"),
+  gst: z.string().min(1, "GST is required"),
+});
+
+export type SupplierInput = z.infer<typeof supplierSchema>;
+
+export type Supplier = SupplierInput & {
+  id: string;
+  createdAt: string;
+};

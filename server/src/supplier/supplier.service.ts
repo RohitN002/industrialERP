@@ -2,24 +2,18 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import { CreateSupplierDto } from './dto/create-supplier.dto';
 import { UpdateSupplierDto } from './dto/update-supplier.dto';
 import { SupplierRepository } from './entities/supplier.entity';
+import { PrismaService } from 'src/prisma/prisma.service';
+
 
 @Injectable()
 export class SupplierService {
-  constructor (private readonly supplierRepo: SupplierRepository) {}
- async  create(createSupplierDto: CreateSupplierDto) {
-  const existingSupplier = await this.supplierRepo.findSupplierByUserId(createSupplierDto.userId);
-
-if (existingSupplier) {
-  throw new ConflictException(`Supplier with userId "${createSupplierDto.userId}" already exists`);
+  constructor (private readonly supplierRepo: SupplierRepository,
+    private readonly prisma: PrismaService
+  ) {}
+async create(dto: CreateSupplierDto) {
+  const supplier = await this.supplierRepo.createSupplier(dto);
+  return {message:"Supplier created successfully",data:supplier};
 }
-
-const newSupplier = await this.supplierRepo.createSupplier(
-  createSupplierDto.userId,
-  String(createSupplierDto.phone),
-  String(createSupplierDto.address)
-);
-    return {message:"Supplier created successfully",data:newSupplier};
-  }
 
   async findAll() {
     const suppliers = await this.supplierRepo.findAllSuppliers();
@@ -44,8 +38,7 @@ const newSupplier = await this.supplierRepo.createSupplier(
     }
 const updatedSupplier = await this.supplierRepo.updateSupplier(
   id,
-  updateSupplierDto.phone,
-  updateSupplierDto.address
+  updateSupplierDto
 );
     return {message:"Supplier updated successfully",data:updatedSupplier};
   }
