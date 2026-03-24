@@ -20,6 +20,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DesignationModule } from './designation/designation.module';
 import { DepartmentModule } from './department/department.module';
 import { CategoryModule } from './category/category.module';
+import { SupplierModule } from './supplier/supplier.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { CategoryModule } from './category/category.module';
     DesignationModule,
     DepartmentModule,
     CategoryModule,
+    SupplierModule,
   ],
   controllers: [AppController],
   providers: [AppService],
