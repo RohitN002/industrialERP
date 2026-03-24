@@ -28,16 +28,6 @@ Outstanding payments
 
 
 
-
-
-
-
-
-
-
-
-
-
 🟡 PHASE 2 — Stickiness features
 
 This is what prevents churn.

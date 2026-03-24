@@ -6,7 +6,8 @@ import { ProductInput, productSchema, Product } from "../../product/product.sche
 import { useRouter } from "next/navigation";
 import { useSuppliers } from "@/modules/hooks/useSupplier";
 import { useCategories } from "@/modules/hooks/useCategory";
-
+import Select, { SingleValue } from "react-select";
+import { Controller } from "react-hook-form";
 interface ProductFormProps {
   initialData?: Product;
   onSubmit: (data: ProductInput) => void;
@@ -19,6 +20,7 @@ export default function ProductForm({ initialData, onSubmit, isLoading }: Produc
   const {data:suppliers,isLoading:supplierLoading,isError:supplierError} = useSuppliers();
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<ProductInput>({
@@ -38,7 +40,30 @@ export default function ProductForm({ initialData, onSubmit, isLoading }: Produc
       type: "finished_good"
     },
   });
-
+  const categoryOptions = categories?.map((cat) => ({
+    value: cat.id,
+    label: cat.name,
+  })) || [];
+  const supplierOptions = suppliers?.map((supplier) => ({
+    value: supplier.id,
+    label: supplier.name,
+  })) || [];
+  type CategoryOption = {
+  value: string;  // or number if your category IDs are numbers
+  label: string;
+};
+type SupplierOption = {
+  value: string;  // or number if your category IDs are numbers
+  label: string;
+};
+type FormData = {
+  category: string; // we'll store only the category id
+};
+ const options: CategoryOption[] =
+    categories?.map((cat) => ({
+      value: cat.id.toString(),
+      label: cat.name,
+    })) || [];
   return (
     <form
       onSubmit={handleSubmit((data: any) => onSubmit(data))}
@@ -110,22 +135,58 @@ export default function ProductForm({ initialData, onSubmit, isLoading }: Produc
           />
         </div>
         
-        <div>
-          <label className="block text-sm font-medium mb-1">Category</label>
-          <input
-            {...register("category")}
-            placeholder="Category"
-            className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
-          />
-        </div>
+       <div>
+        <label className="block text-sm font-medium mb-1">Category</label>
+         <Controller
+        name="category"
+        control={control}
+        render={({ field }) => {
+          // 🔥 Convert string -> option object
+          const selectedOption = options.find(
+            (opt) => opt.value === field.value
+          );
+
+          return (
+            <Select
+              options={options}
+              placeholder="Select category..."
+              className="text-black"
+              value={selectedOption || null} // ✅ FIX HERE
+              onChange={(option: SingleValue<CategoryOption>) =>
+                field.onChange(option?.value || "")
+              }
+              onBlur={field.onBlur}
+            />
+          );
+        }}
+      />
+      </div>
 
         <div>
           <label className="block text-sm font-medium mb-1">Supplier</label>
-          <input
-            {...register("supplier")}
-            placeholder="Supplier"
-            className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
-          />
+          <Controller
+        name="supplier"
+        control={control}
+        render={({ field }) => {
+          // 🔥 Convert string -> option object
+          const selectedOption = supplierOptions.find(
+            (opt) => opt.value === field.value
+          );
+
+          return (
+            <Select
+              options={supplierOptions}
+              placeholder="Select supplier..."
+              className="text-black"
+              value={selectedOption || null} // ✅ FIX HERE
+              onChange={(option: SingleValue<SupplierOption>) =>
+                field.onChange(option?.value || "")
+              }
+              onBlur={field.onBlur}
+            />
+          );
+        }}
+      />
         </div>
       </div>
       
