@@ -12,7 +12,8 @@ export default function CreateProductPage() {
   const {data:suppliers,isLoading:supplierLoading,isError:supplierError} = useSuppliers();
   const createMutation = useCreateProduct();
   const router = useRouter();
-
+// console.log("categories",categories)
+console.log("suppliers",suppliers)
   const handleSubmit = async (data: any) => {
     createMutation.mutate(data, {
       onSuccess: () => {

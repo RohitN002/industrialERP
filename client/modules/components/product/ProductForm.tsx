@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProductInput, productSchema, Product } from "../../product/product.schema";
 import { useRouter } from "next/navigation";
+import { useSuppliers } from "@/modules/hooks/useSupplier";
+import { useCategories } from "@/modules/hooks/useCategory";
 
 interface ProductFormProps {
   initialData?: Product;
@@ -13,7 +15,8 @@ interface ProductFormProps {
 
 export default function ProductForm({ initialData, onSubmit, isLoading }: ProductFormProps) {
   const router = useRouter();
-  
+  const {data:categories,isLoading:categoryLoading,isError:categoryError} = useCategories();
+  const {data:suppliers,isLoading:supplierLoading,isError:supplierError} = useSuppliers();
   const {
     register,
     handleSubmit,

@@ -19,3 +19,15 @@ export type Product = ProductInput & {
   id: string;
   createdAt: string;
 };
+
+export const categorySchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  description: z.string().optional(),
+});
+
+export type CategoryInput = z.infer<typeof categorySchema>;
+
+export type Category = CategoryInput & {
+  id: string;
+  createdAt: string;
+};

@@ -1,19 +1,22 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
+import { SupplierResponse } from "@/types/supplier.type";
 
 export function useSuppliers() {
     return useQuery({
         queryKey: ["suppliers"],
-        queryFn: () => api("/supplier", {
+        queryFn: async () => {const res=await api<SupplierResponse>("/supplier", {
             method: "GET",
-        }),
+        }); return res.data}
     });
 }
 
 export function useSupplier(id: string) {
     return useQuery({
         queryKey: ["supplier", id],
-        queryFn: () => api(`/supplier/${id}`),
+        queryFn: async () => {const res=await api<SupplierResponse>(`/supplier/${id}`, {
+            method: "GET",
+        }); return res.data}
     });
 }
 
