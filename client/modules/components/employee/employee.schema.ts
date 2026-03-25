@@ -10,3 +10,15 @@ export const employeeSchema = z.object({
 });
 
 export type EmployeeInput = z.infer<typeof employeeSchema>;
+
+export interface EmployeeResponse {
+    message:string;
+    data:{
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
+    roleId: string;
+    departmentId: string;}
+}

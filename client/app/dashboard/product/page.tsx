@@ -10,8 +10,7 @@ import { useAuthStore } from "@/lib/store/auth.store";
 export default function ProductPage() {
   const { data: products, isLoading, isError } = useProducts();
   const deleteMutation = useDeleteProduct();
-const accessToken = useAuthStore((state) => state.accessToken);
-console.log("access token",accessToken);
+
   const [confirmId, setConfirmId] = useState<string | null>(null);
 
   const handleDeleteConfirm = () => {
