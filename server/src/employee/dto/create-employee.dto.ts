@@ -1,15 +1,21 @@
-import { IsString, IsNotEmpty, IsOptional, IsEnum } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, MinLength } from 'class-validator';
 
 export class CreateEmployeeDto {
-    @IsString()
-    @IsNotEmpty()
-    userId: string;
+  // User fields
+  @IsEmail()
+  email: string;
 
-    @IsString()
-    @IsOptional()
-    designation?: string;
+  @IsNotEmpty()
+  @MinLength(6)
+  password: string; // plain password (you will hash it in service)
 
-    @IsString()
-    @IsOptional()
-    department?: string;
+  @IsNotEmpty()
+  name: string;
+
+  // Employee fields
+  @IsOptional()
+  designation?: string;
+
+  @IsOptional()
+  department?: string;
 }

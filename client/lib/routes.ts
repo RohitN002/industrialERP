@@ -30,7 +30,7 @@ export const routes: AppRoute[] = [
     roles: [UserRole.ADMIN, UserRole.EMPLOYEE],
   },
   {
-    name: "Customer",
+    name: "Client Management",
     path: "/customer",
     icon: Users,
     roles: [UserRole.ADMIN, UserRole.EMPLOYEE],
@@ -41,12 +41,12 @@ export const routes: AppRoute[] = [
     icon: User,
     roles: [UserRole.ADMIN],
   },
-  {
-    name: "Lead",
-    path: "/lead",
-    icon: Target,
-    roles: [UserRole.ADMIN, UserRole.EMPLOYEE],
-  },
+  // {
+  //   name: "Lead",
+  //   path: "/lead",
+  //   icon: Target,
+  //   roles: [UserRole.ADMIN, UserRole.EMPLOYEE],
+  // },
   {
     name: "Category",
     path: "/category",

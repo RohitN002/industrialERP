@@ -22,6 +22,7 @@
 /////////////////////
 
 enum RoleType {
+  EMPLOYEE
   ADMIN
   MANAGER
   SALES
