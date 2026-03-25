@@ -1,6 +1,6 @@
 "use client";
 
-import ProductForm from "@/modules/components/product/ProductForm";
+import ProductForm from "@/modules/components/forms/ProductForm";
 import { useCreateProduct } from "@/modules/hooks/useProduct";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";

@@ -13,7 +13,7 @@ export class EmployeeService {
     }
 
     const newEmployee = await this.EmployeeRepo.create(createEmployeeDto);
-    return newEmployee;
+    return { message: "Employee created successfully",data: newEmployee };
   }
 
   async findAll() {
