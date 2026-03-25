@@ -10,7 +10,6 @@ export default function EditSupplierPage(){
     const {data:supplier,isLoading,isError} = useSupplier(id);
     const updateMutation = useUpdateSupplier(id)
     const router = useRouter();
-    console.log("supplier",supplier)
     const handleSubmit= async(data:any)=>{
         updateMutation.mutate(data, {
             onSuccess: () => {

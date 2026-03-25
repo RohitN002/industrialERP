@@ -11,11 +11,13 @@ export async function api<T>(
  
     return fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`, {
       ...options,
+      cache: 'no-store',
       headers: {
         "Content-Type": "application/json",
         ...(token && { Authorization: `Bearer ${token}` }),
         ...(options?.headers || {}),
       },
+    
     });
   };
 

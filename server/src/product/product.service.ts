@@ -14,12 +14,12 @@ export class ProductService {
       throw new BadRequestException('Product already exists');
     }
     const newProduct=await this.productRepo.create(createProductDto);
-    return newProduct;
+    return {message:"Product created successfully",data:newProduct};
   }
 
   async findAll() {
     const products= await this.productRepo.findAll();
-    return products
+    return {message:"Products fetched successfully",data:products};
   }
 
   async findOne(id: string) {
@@ -27,7 +27,7 @@ export class ProductService {
     if(!product){
       throw new BadRequestException('No product found')
     }
-    return product;
+    return {message:"Product fetched successfully",data:product};
   }
 
   async update(id: string, updateProductDto: UpdateProductDto) {
@@ -36,7 +36,7 @@ export class ProductService {
       throw new BadRequestException('No product found')
     }
     const updatedProduct = await this.productRepo.update(id, updateProductDto)
-    return updatedProduct
+    return {message:"Product updated successfully",data:updatedProduct};
   }
 
   async remove(id: string) {
@@ -45,6 +45,6 @@ export class ProductService {
       throw new BadRequestException('No product found')
     }
     const deletedProduct = await this.productRepo.remove(id)
-    return deletedProduct
+    return {message:"Product deleted successfully"};
   }
 }

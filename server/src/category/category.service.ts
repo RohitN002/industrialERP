@@ -13,7 +13,7 @@ export class CategoryService {
       throw new ConflictException(`Category "${createCategoryDto.name}" already exists`);
     }
     const newCategory= await this.categoryRepo.createCategory(createCategoryDto.name);
-    
+    console.log("newCategory", newCategory)
     return {message:"Category created successfully",data:newCategory};
   }
 

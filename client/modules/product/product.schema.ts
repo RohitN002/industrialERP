@@ -8,8 +8,8 @@ export const productSchema = z.object({
   stockQuantity: z.coerce.number().min(0, "Stock Quantity must be at least 0"),
   type: z.enum(['raw_material', 'finished_good', 'spare_part']),
   unit: z.string().optional(),
-  category: z.string().optional(),
-  supplier: z.string().optional(),
+  categoryId: z.string().optional(),
+  supplierId: z.string().optional(),
   imageUrl: z.string().optional(),
 });
 
@@ -19,7 +19,10 @@ export type Product = ProductInput & {
   id: string;
   createdAt: string;
 };
-
+export type ProductResponse = Product & {
+  message: string;
+  data: Product[];
+};
 export const categorySchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().optional(),

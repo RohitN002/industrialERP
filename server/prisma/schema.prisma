@@ -140,7 +140,9 @@ model Product {
   stockQuantity Int
   type        String
   unit        String?
-  supplier    String?
+ supplierId  String?
+  supplier    Supplier? @relation(fields: [supplierId], references: [id])
+
   imageUrl    String?
   saleItems       SaleItem[]
   purchaseItems   PurchaseItem[]
@@ -190,7 +192,7 @@ model Supplier {
   id        String  @id @default(uuid())
   userId String @unique
   user User @relation(fields: [userId], references: [id])
-
+ products  Product[]
   phone     String
   address   String
   city String

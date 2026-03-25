@@ -1,43 +1,44 @@
-import { IsString, IsNotEmpty, IsNumber, IsOptional, IsEnum } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsNumber,
+  IsInt,
+  IsUUID,
+} from 'class-validator';
 
 export class CreateProductDto {
   @IsString()
-  @IsNotEmpty()
   name: string;
 
   @IsString()
-  @IsOptional()
-  description?: string;
-
-  @IsString()
-  @IsNotEmpty()
   sku: string;
 
-  @IsNumber()
-  @IsNotEmpty()
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+@IsNumber()
   price: number;
 
-  @IsNumber()
-  @IsNotEmpty()
+  @IsInt()
   stockQuantity: number;
 
-  @IsEnum(['raw_material', 'finished_good', 'spare_part'])
-  @IsNotEmpty()
+  @IsString()
   type: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   unit?: string;
 
-  @IsString()
   @IsOptional()
-  category?: string;
-
   @IsString()
-  @IsOptional()
-  supplier?: string;
-
-  @IsString()
-  @IsOptional()
   imageUrl?: string;
+
+  // ✅ Relations
+  @IsUUID()
+  categoryId: string;
+
+  @IsOptional()
+  @IsUUID()
+  supplierId?: string;
 }

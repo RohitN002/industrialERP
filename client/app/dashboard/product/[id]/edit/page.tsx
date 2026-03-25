@@ -6,8 +6,10 @@ import { useRouter, useParams } from "next/navigation";
 import toast from "react-hot-toast";
 
 export default function EditProductPage() {
-  const { id } = useParams() as { id: string };
-  const { data: product, isLoading } = useProduct(id);
+  const params = useParams() 
+  const id = params?.id as string;
+  console.log("id",id)
+  const { data: product, isLoading,isError } = useProduct(id);
   const updateMutation = useUpdateProduct();
   const router = useRouter();
 

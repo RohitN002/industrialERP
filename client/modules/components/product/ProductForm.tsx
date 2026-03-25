@@ -33,17 +33,13 @@ export default function ProductForm({ initialData, onSubmit, isLoading }: Produc
       stockQuantity: initialData.stockQuantity,
       type: initialData.type,
       unit: initialData.unit || "",
-      category: initialData.category || "",
-      supplier: initialData.supplier || "",
+      categoryId: initialData.categoryId || "",
+      supplierId: initialData.supplierId || "",
       imageUrl: initialData.imageUrl || "",
     } : {
       type: "finished_good"
     },
   });
-  const categoryOptions = categories?.map((cat) => ({
-    value: cat.id,
-    label: cat.name,
-  })) || [];
   const supplierOptions = suppliers?.map((supplier) => ({
     value: supplier.id,
     label: supplier.name,
@@ -56,14 +52,13 @@ type SupplierOption = {
   value: string;  // or number if your category IDs are numbers
   label: string;
 };
-type FormData = {
-  category: string; // we'll store only the category id
-};
+
  const options: CategoryOption[] =
     categories?.map((cat) => ({
       value: cat.id.toString(),
       label: cat.name,
     })) || [];
+
   return (
     <form
       onSubmit={handleSubmit((data: any) => onSubmit(data))}
@@ -138,7 +133,7 @@ type FormData = {
        <div>
         <label className="block text-sm font-medium mb-1">Category</label>
          <Controller
-        name="category"
+        name="categoryId"
         control={control}
         render={({ field }) => {
           // 🔥 Convert string -> option object
@@ -148,6 +143,7 @@ type FormData = {
 
           return (
             <Select
+              instanceId="category-select"
               options={options}
               placeholder="Select category..."
               className="text-black"
@@ -165,7 +161,7 @@ type FormData = {
         <div>
           <label className="block text-sm font-medium mb-1">Supplier</label>
           <Controller
-        name="supplier"
+        name="supplierId"
         control={control}
         render={({ field }) => {
           // 🔥 Convert string -> option object
@@ -175,6 +171,7 @@ type FormData = {
 
           return (
             <Select
+              instanceId="supplier-select" 
               options={supplierOptions}
               placeholder="Select supplier..."
               className="text-black"
