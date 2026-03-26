@@ -2,11 +2,10 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRegister } from "../../hooks/useAuth";
+import { useRegister } from "../../routes/useAuth";
 import { RegisterInput, registerSchema } from "../../auth/auth.schema";
 import Link from "next/link";
 import router from "next/router";
-
 
 export default function RegisterPage() {
   const registerMutation = useRegister();
@@ -59,20 +58,20 @@ export default function RegisterPage() {
           placeholder="Password"
           className="w-full border p-2 rounded"
         />
-       <select
-  {...register("roles")}
-  multiple
-  className="w-full border p-2 rounded"
->
-  <option value="ADMIN">ADMIN</option>
-  <option value="USER">USER</option>
-  <option value="EMPLOYEE">EMPLOYEE</option>
-  <option value="CUSTOMER">CUSTOMER</option>
-</select>
-    <label className="flex items-center gap-2">
-  <input type="checkbox" {...register("isActive")} />
-  Is Active
-</label>
+        <select
+          {...register("roles")}
+          multiple
+          className="w-full border p-2 rounded"
+        >
+          <option value="ADMIN">ADMIN</option>
+          <option value="USER">USER</option>
+          <option value="EMPLOYEE">EMPLOYEE</option>
+          <option value="CUSTOMER">CUSTOMER</option>
+        </select>
+        <label className="flex items-center gap-2">
+          <input type="checkbox" {...register("isActive")} />
+          Is Active
+        </label>
         {errors.password && (
           <p className="text-red-500 text-sm">{errors.password.message}</p>
         )}

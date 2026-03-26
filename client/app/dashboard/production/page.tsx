@@ -1,8 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { useProductions, useDeleteProduction } from "@/modules/hooks/useProduction";
-import { PageHeader, LoadingState, ErrorState, EmptyState, ConfirmDialog } from "@/modules/components/shared";
+import {
+  useProductions,
+  useDeleteProduction,
+} from "@/modules/routes/useProduction";
+import {
+  PageHeader,
+  LoadingState,
+  ErrorState,
+  EmptyState,
+  ConfirmDialog,
+} from "@/modules/components/shared";
 import { ProductionTable } from "@/modules/components/production";
 import toast from "react-hot-toast";
 

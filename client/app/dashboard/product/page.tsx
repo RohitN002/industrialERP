@@ -1,9 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { useProducts, useDeleteProduct } from "@/modules/hooks/useProduct";
+import { useProducts, useDeleteProduct } from "@/modules/routes/useProduct";
 import { Product } from "@/modules/product/product.schema";
-import { PageHeader, LoadingState, ErrorState, EmptyState, RowActions, ConfirmDialog } from "@/modules/components/shared";
+import {
+  PageHeader,
+  LoadingState,
+  ErrorState,
+  EmptyState,
+  RowActions,
+  ConfirmDialog,
+} from "@/modules/components/shared";
 import toast from "react-hot-toast";
 import { useAuthStore } from "@/lib/store/auth.store";
 
@@ -57,7 +64,10 @@ export default function ProductPage() {
               </thead>
               <tbody className="divide-y divide-gray-700">
                 {products.map((product: Product) => (
-                  <tr key={product.id} className="hover:bg-gray-700/30 transition-colors">
+                  <tr
+                    key={product.id}
+                    className="hover:bg-gray-700/30 transition-colors"
+                  >
                     <td className="p-4 font-medium">{product.name}</td>
                     <td className="p-4 text-gray-300">{product.sku}</td>
                     <td className="p-4 text-gray-300">
@@ -65,9 +75,13 @@ export default function ProductPage() {
                         {product.type.replace("_", " ")}
                       </span>
                     </td>
-                    <td className="p-4 text-gray-300">${Number(product.price).toFixed(2)}</td>
+                    <td className="p-4 text-gray-300">
+                      ${Number(product.price).toFixed(2)}
+                    </td>
                     <td className="p-4">
-                      <span className={`font-bold ${product.stockQuantity < 10 ? "text-red-400" : "text-green-400"}`}>
+                      <span
+                        className={`font-bold ${product.stockQuantity < 10 ? "text-red-400" : "text-green-400"}`}
+                      >
                         {product.stockQuantity}
                       </span>
                     </td>
@@ -75,7 +89,9 @@ export default function ProductPage() {
                       <RowActions
                         editHref={`/dashboard/product/${product.id}/edit`}
                         onDelete={() => setConfirmId(product.id)}
-                        isDeleting={deleteMutation.isPending && confirmId === product.id}
+                        isDeleting={
+                          deleteMutation.isPending && confirmId === product.id
+                        }
                       />
                     </td>
                   </tr>

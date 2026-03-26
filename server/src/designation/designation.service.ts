@@ -5,14 +5,20 @@ import { DesignationRepository } from './entities/designation.entity';
 
 @Injectable()
 export class DesignationService {
-  constructor(private designationRepository: DesignationRepository) { }
+  constructor(private designationRepository: DesignationRepository) {}
   async create(createDesignationDto: CreateDesignationDto) {
-    const existingDesignation = await this.designationRepository.findOne(createDesignationDto.name);
+    const existingDesignation = await this.designationRepository.findOne(
+      createDesignationDto.name,
+    );
     if (existingDesignation) {
       throw new Error('Designation already exists');
     }
-    const newDesignation = await this.designationRepository.create(createDesignationDto);
-    return newDesignation;
+    const newDesignation =
+      await this.designationRepository.create(createDesignationDto);
+    return {
+      message: 'Designation created successfully',
+      data: newDesignation,
+    };
   }
 
   async findAll() {
@@ -20,7 +26,7 @@ export class DesignationService {
     if (!designations) {
       throw new Error('Designation not found');
     }
-    return designations;
+    return { message: 'Designation found successfully', data: designations };
   }
 
   async findOne(id: string) {
@@ -28,24 +34,33 @@ export class DesignationService {
     if (!designation) {
       throw new Error('Designation not found');
     }
-    return designation;
+    return { message: 'Designation found successfully', data: designation };
   }
 
   async update(id: string, updateDesignationDto: UpdateDesignationDto) {
-    const Designation = await this.designationRepository.findOne(id)
+    const Designation = await this.designationRepository.findOne(id);
     if (!Designation) {
       throw new Error('Designation not found');
     }
-    const updatedDesignation = await this.designationRepository.update(id, updateDesignationDto);
-    return updatedDesignation;
+    const updatedDesignation = await this.designationRepository.update(
+      id,
+      updateDesignationDto,
+    );
+    return {
+      message: 'Designation updated successfully',
+      data: updatedDesignation,
+    };
   }
 
   async remove(id: string) {
-    const Designation = await this.designationRepository.findOne(id)
+    const Designation = await this.designationRepository.findOne(id);
     if (!Designation) {
       throw new Error('Designation not found');
     }
     const deletedDesignation = await this.designationRepository.remove(id);
-    return deletedDesignation;
+    return {
+      message: 'Designation deleted successfully',
+      data: deletedDesignation,
+    };
   }
 }

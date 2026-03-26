@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Role } from '@prisma/client';
+import { Role, RoleType } from '@prisma/client';
 
 @Injectable()
 export class RoleRepository {
@@ -8,6 +8,13 @@ export class RoleRepository {
 
   async create(data: any) {
     return this.prisma.role.create({ data });
+  }
+  async find(name: string) {
+    return this.prisma.role.findUnique({
+      where: {
+        name: RoleType[name as keyof typeof RoleType],
+      },
+    });
   }
 
   async findAll() {

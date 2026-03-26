@@ -2,26 +2,24 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useLogin } from "../../hooks/useAuth";
+import { useLogin } from "../../routes/useAuth";
 import { LoginInput, loginSchema } from "../../auth/auth.schema";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-
-
 export default function LoginPage() {
   const login = useLogin();
-const router = useRouter();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginInput>({
-    resolver: zodResolver(loginSchema), 
+    resolver: zodResolver(loginSchema),
   });
 
   const onSubmit = (data: LoginInput) => {
-     login.mutate(data, {
+    login.mutate(data, {
       onSuccess: () => {
         router.push("/dashboard");
       },

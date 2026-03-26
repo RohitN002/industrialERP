@@ -7,22 +7,45 @@ import { RoleRepository } from './entities/role.entity';
 export class RoleService {
   constructor(private readonly RoleRepo: RoleRepository) {}
   async create(createRoleDto: CreateRoleDto) {
-    return 'This action adds a new role';
+    const exisitingRole = await this.RoleRepo.find(createRoleDto.name);
+    if (exisitingRole) {
+      throw new Error('Role already exists');
+    }
+    const role = await this.RoleRepo.create(createRoleDto);
+    return { message: 'Role created sucessfully', data: role };
   }
 
   async findAll() {
-    return `This action returns all role`;
+    const roles = await this.RoleRepo.findAll();
+    if (!roles) {
+      throw new Error('Roles not found');
+    }
+    return { message: 'Roles fetched sucessfully', data: roles };
   }
 
   async findOne(id: string) {
-    return `This action returns a #${id} role`;
+    const role = await this.RoleRepo.findOne(id);
+    if (!role) {
+      throw new Error('Role not found');
+    }
+    return { message: 'Role fetched sucessfully', data: role };
   }
 
   async update(id: string, updateRoleDto: UpdateRoleDto) {
-    return `This action updates a #${id} role`;
+    const existingRole = await this.RoleRepo.findOne(id);
+    if (!existingRole) {
+      throw new Error('Role not found');
+    }
+    const role = await this.RoleRepo.update(id, updateRoleDto);
+    return { message: 'Role updated sucessfully', data: role };
   }
 
   async remove(id: string) {
-    return `This action removes a #${id} role`;
+    const existingRole = await this.RoleRepo.findOne(id);
+    if (!existingRole) {
+      throw new Error('Role not found');
+    }
+    const role = await this.RoleRepo.remove(id);
+    return { message: 'Role deleted sucessfully', data: role };
   }
 }

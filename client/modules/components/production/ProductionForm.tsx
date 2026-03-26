@@ -2,8 +2,12 @@
 
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ProductionInput, productionSchema, Production } from "../../production/production.schema";
-import { useProducts } from "../../hooks/useProduct";
+import {
+  ProductionInput,
+  productionSchema,
+  Production,
+} from "../../production/production.schema";
+import { useProducts } from "../../routes/useProduct";
 import { useRouter } from "next/navigation";
 import { Plus, Trash2 } from "lucide-react";
 
@@ -13,7 +17,11 @@ interface ProductionFormProps {
   isLoading?: boolean;
 }
 
-export default function ProductionForm({ initialData, onSubmit, isLoading }: ProductionFormProps) {
+export default function ProductionForm({
+  initialData,
+  onSubmit,
+  isLoading,
+}: ProductionFormProps) {
   const router = useRouter();
   const { data: products } = useProducts();
 
@@ -24,15 +32,20 @@ export default function ProductionForm({ initialData, onSubmit, isLoading }: Pro
     formState: { errors },
   } = useForm<ProductionInput>({
     resolver: zodResolver(productionSchema) as any,
-    defaultValues: initialData ? {
-      batchNo: initialData.batchNo,
-      status: initialData.status,
-      producedProductId: initialData.producedProductId,
-      items: initialData.items.map(i => ({ productId: i.productId, quantity: i.quantity })),
-    } : {
-      status: 'PLANNED',
-      items: [{ productId: "", quantity: 1 }],
-    },
+    defaultValues: initialData
+      ? {
+          batchNo: initialData.batchNo,
+          status: initialData.status,
+          producedProductId: initialData.producedProductId,
+          items: initialData.items.map((i) => ({
+            productId: i.productId,
+            quantity: i.quantity,
+          })),
+        }
+      : {
+          status: "PLANNED",
+          items: [{ productId: "", quantity: 1 }],
+        },
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -41,7 +54,8 @@ export default function ProductionForm({ initialData, onSubmit, isLoading }: Pro
   });
 
   // Split products by type if useful, or just show all
-  const finishedGoods = products?.filter(p => p.type === 'finished_good') || [];
+  const finishedGoods =
+    products?.filter((p) => p.type === "finished_good") || [];
 
   return (
     <form
@@ -50,41 +64,57 @@ export default function ProductionForm({ initialData, onSubmit, isLoading }: Pro
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Batch Number *</label>
+          <label className="block text-sm font-medium mb-1">
+            Batch Number *
+          </label>
           <input
             {...register("batchNo")}
             placeholder="e.g. BATCH-001"
             className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
           />
-          {errors.batchNo && <p className="text-red-500 text-sm mt-1">{errors.batchNo.message}</p>}
+          {errors.batchNo && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.batchNo.message}
+            </p>
+          )}
         </div>
 
         <div>
-           <label className="block text-sm font-medium mb-1">Status *</label>
-           <select 
-             {...register("status")}
-             className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
-           >
-             <option value="PLANNED">Planned</option>
-             <option value="IN_PROGRESS">In Progress</option>
-             <option value="COMPLETED">Completed</option>
-             <option value="REJECTED">Rejected</option>
-           </select>
-           {errors.status && <p className="text-red-500 text-sm mt-1">{errors.status.message}</p>}
+          <label className="block text-sm font-medium mb-1">Status *</label>
+          <select
+            {...register("status")}
+            className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
+          >
+            <option value="PLANNED">Planned</option>
+            <option value="IN_PROGRESS">In Progress</option>
+            <option value="COMPLETED">Completed</option>
+            <option value="REJECTED">Rejected</option>
+          </select>
+          {errors.status && (
+            <p className="text-red-500 text-sm mt-1">{errors.status.message}</p>
+          )}
         </div>
 
         <div className="md:col-span-2">
-           <label className="block text-sm font-medium mb-1">Produced Product * (Finished Good)</label>
-           <select 
-             {...register("producedProductId")}
-             className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
-           >
-             <option value="">-- Select Product --</option>
-             {finishedGoods.map(p => (
-               <option key={p.id} value={p.id}>{p.name} ({p.sku})</option>
-             ))}
-           </select>
-           {errors.producedProductId && <p className="text-red-500 text-sm mt-1">{errors.producedProductId.message}</p>}
+          <label className="block text-sm font-medium mb-1">
+            Produced Product * (Finished Good)
+          </label>
+          <select
+            {...register("producedProductId")}
+            className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
+          >
+            <option value="">-- Select Product --</option>
+            {finishedGoods.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name} ({p.sku})
+              </option>
+            ))}
+          </select>
+          {errors.producedProductId && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.producedProductId.message}
+            </p>
+          )}
         </div>
       </div>
 
@@ -101,19 +131,26 @@ export default function ProductionForm({ initialData, onSubmit, isLoading }: Pro
         </div>
 
         {fields.map((field, index) => (
-          <div key={field.id} className="flex flex-col md:flex-row gap-3 mb-3 items-start">
+          <div
+            key={field.id}
+            className="flex flex-col md:flex-row gap-3 mb-3 items-start"
+          >
             <div className="flex-1">
               <select
                 {...register(`items.${index}.productId` as const)}
                 className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
               >
                 <option value="">-- Select Material --</option>
-                {products?.map(p => (
-                  <option key={p.id} value={p.id}>{p.name} ({p.sku}) - {p.stockQuantity} in stock</option>
+                {products?.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name} ({p.sku}) - {p.stockQuantity} in stock
+                  </option>
                 ))}
               </select>
               {errors.items?.[index]?.productId && (
-                <p className="text-red-500 text-sm mt-1">{errors.items[index]?.productId?.message}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.items[index]?.productId?.message}
+                </p>
               )}
             </div>
             <div className="w-full md:w-32">
@@ -124,7 +161,9 @@ export default function ProductionForm({ initialData, onSubmit, isLoading }: Pro
                 className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
               />
               {errors.items?.[index]?.quantity && (
-                <p className="text-red-500 text-sm mt-1">{errors.items[index]?.quantity?.message}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.items[index]?.quantity?.message}
+                </p>
               )}
             </div>
             <button
@@ -155,7 +194,11 @@ export default function ProductionForm({ initialData, onSubmit, isLoading }: Pro
           disabled={isLoading}
           className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 disabled:opacity-50"
         >
-          {isLoading ? "Saving..." : initialData ? "Update Production" : "Create Production"}
+          {isLoading
+            ? "Saving..."
+            : initialData
+              ? "Update Production"
+              : "Create Production"}
         </button>
       </div>
     </form>

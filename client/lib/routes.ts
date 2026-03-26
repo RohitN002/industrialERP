@@ -1,5 +1,5 @@
-import { UserRole } from "@/shared/Enums/Role.enum"
-import { AppRoute } from "@/shared/interface/interface"
+import { UserRole } from "@/shared/Enums/Role.enum";
+import { AppRoute } from "@/shared/interface/interface";
 import {
   LayoutDashboard,
   Package,
@@ -8,10 +8,10 @@ import {
   Settings,
   User,
   Target,
-} from "lucide-react"
+} from "lucide-react";
 
 export const routes: AppRoute[] = [
-  { 
+  {
     name: "Dashboard",
     path: "",
     icon: LayoutDashboard,
@@ -41,17 +41,30 @@ export const routes: AppRoute[] = [
     icon: User,
     roles: [UserRole.ADMIN],
   },
-  // {
-  //   name: "Lead",
-  //   path: "/lead",
-  //   icon: Target,
-  //   roles: [UserRole.ADMIN, UserRole.EMPLOYEE],
-  // },
+
   {
     name: "Category",
     path: "/category",
     icon: Target,
     roles: [UserRole.ADMIN, UserRole.EMPLOYEE],
+  },
+  {
+    name: "Designation",
+    path: "/designation",
+    icon: Target,
+    roles: [UserRole.ADMIN, UserRole.EMPLOYEE],
+  },
+  {
+    name: "Role",
+    path: "/role",
+    icon: Target,
+    roles: [UserRole.ADMIN],
+  },
+  {
+    name: "Department",
+    path: "/department",
+    icon: Target,
+    roles: [UserRole.ADMIN],
   },
   {
     name: "Supplier",
@@ -65,4 +78,4 @@ export const routes: AppRoute[] = [
     icon: Settings,
     roles: [UserRole.ADMIN],
   },
-]
+];

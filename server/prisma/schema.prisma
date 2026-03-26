@@ -59,6 +59,7 @@ enum QualityStatus {
 model User {
   id            String   @id @default(uuid())
   email         String   @unique
+
   passwordHash  String
   isActive      Boolean  @default(true)
 name            String
@@ -82,14 +83,14 @@ model Category{
   products Product[]
 }
 model UserRole {
-  userId String
-  roleId String
+    userId String
+    roleId String
 
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  role   Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+    user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    role   Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
 
-  @@id([userId, roleId])
-}
+    @@id([userId, roleId])
+  }
 
 /////////////////////
 // EMPLOYEE & CUSTOMER
@@ -98,11 +99,21 @@ model UserRole {
 model Employee {
   id        String  @id @default(uuid())
   userId    String  @unique
-  user      User    @relation(fields: [userId], references: [id])
-
-  designation String?
-  department  String?
-
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mobileNumber  String   @unique
+  designationId String?
+  departmentId  String?
+  dateOfBirth DateTime?
+  gender String?
+fatherName String?
+  motherName String?
+  address String?
+  city String?
+  state String?
+  contactPerson String?
+  contactPersonPhone String?
+  pincode String?
+  country String?
   productions Production[]
   sales       Sale[]
   purchases   Purchase[]

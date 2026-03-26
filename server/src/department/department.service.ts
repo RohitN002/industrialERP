@@ -5,14 +5,17 @@ import { DepartmentRepository } from './entities/department.entity';
 
 @Injectable()
 export class DepartmentService {
-  constructor(private departmentRepository: DepartmentRepository) { }
+  constructor(private departmentRepository: DepartmentRepository) {}
   async create(createDepartmentDto: CreateDepartmentDto) {
-    const existingDepartment = await this.departmentRepository.findOne(createDepartmentDto.name);
+    const existingDepartment = await this.departmentRepository.findOne(
+      createDepartmentDto.name,
+    );
     if (existingDepartment) {
       throw new Error('Department already exists');
     }
-    const newDepartment = await this.departmentRepository.create(createDepartmentDto);
-    return newDepartment;
+    const newDepartment =
+      await this.departmentRepository.create(createDepartmentDto);
+    return { message: 'department created successfully', data: newDepartment };
   }
 
   async findAll() {
@@ -20,7 +23,7 @@ export class DepartmentService {
     if (!departments) {
       throw new Error('Department not found');
     }
-    return departments;
+    return { message: 'departments fetched successfully', data: departments };
   }
 
   async findOne(id: string) {
@@ -28,14 +31,33 @@ export class DepartmentService {
     if (!department) {
       throw new Error('Department not found');
     }
-    return department;
+    return { message: 'department fetched successfully', data: department };
   }
 
-  update(id: string, updateDepartmentDto: UpdateDepartmentDto) {
-    return `This action updates a #${id} department`;
+  async update(id: string, updateDepartmentDto: UpdateDepartmentDto) {
+    const existingDepartment = await this.departmentRepository.findOne(id);
+    if (!existingDepartment) {
+      throw new Error('Department not found');
+    }
+    const updatedDepartment = await this.departmentRepository.update(
+      id,
+      updateDepartmentDto,
+    );
+    return {
+      message: 'department updated successfully',
+      data: updatedDepartment,
+    };
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} department`;
+  async remove(id: string) {
+    const existingDepartment = await this.departmentRepository.findOne(id);
+    if (!existingDepartment) {
+      throw new Error('Department not found');
+    }
+    const deletedDepartment = await this.departmentRepository.remove(id);
+    return {
+      message: 'department deleted successfully',
+      data: deletedDepartment,
+    };
   }
 }
