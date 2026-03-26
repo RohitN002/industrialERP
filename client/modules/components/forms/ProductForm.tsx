@@ -12,6 +12,7 @@ import { useSuppliers } from "@/modules/routes/useSupplier";
 import { useCategories } from "@/modules/routes/useCategory";
 import Select, { SingleValue } from "react-select";
 import { Controller } from "react-hook-form";
+import { useEffect } from "react";
 interface ProductFormProps {
   initialData?: Product;
   onSubmit: (data: ProductInput) => void;
@@ -38,6 +39,7 @@ export default function ProductForm({
     register,
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<ProductInput>({
     resolver: zodResolver(productSchema) as any,
@@ -71,7 +73,11 @@ export default function ProductForm({
     value: string; // or number if your category IDs are numbers
     label: string;
   };
-
+  useEffect(() => {
+    if (initialData) {
+      reset(initialData);
+    }
+  }, [initialData, reset]);
   const options: CategoryOption[] =
     categories?.map((cat) => ({
       value: cat.id.toString(),

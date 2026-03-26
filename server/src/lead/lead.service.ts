@@ -5,7 +5,7 @@ import { LeadRepository } from './entities/lead.entity';
 
 @Injectable()
 export class LeadService {
-  constructor(private leadEntity: LeadRepository) { }
+  constructor(private leadEntity: LeadRepository) {}
 
   async create(createLeadDto: CreateLeadDto) {
     const existingLead = await this.leadEntity.findOne(createLeadDto.name);
@@ -13,7 +13,7 @@ export class LeadService {
       throw new Error('Lead already exists');
     }
     const newLead = await this.leadEntity.create(createLeadDto);
-    return newLead;
+    return { message: 'Lead created successfully', data: newLead };
   }
 
   async findAll() {
@@ -21,7 +21,7 @@ export class LeadService {
     if (!leads) {
       throw new Error('Lead not found');
     }
-    return leads;
+    return { message: 'Leads found successfully', data: leads };
   }
 
   async findOne(id: string) {
@@ -29,7 +29,7 @@ export class LeadService {
     if (!lead) {
       throw new NotFoundException(`Lead with ID ${id} not found`);
     }
-    return lead;
+    return { message: 'Lead found successfully', data: lead };
   }
 
   async update(id: string, updateLeadDto: UpdateLeadDto) {
@@ -38,7 +38,7 @@ export class LeadService {
       throw new NotFoundException(`Lead with ID ${id} not found`);
     }
     const updatedLead = await this.leadEntity.update(id, updateLeadDto);
-    return updatedLead;
+    return { message: 'Lead updated successfully', data: updatedLead };
   }
 
   async remove(id: string) {
@@ -47,6 +47,6 @@ export class LeadService {
       throw new NotFoundException(`Lead with ID ${id} not found`);
     }
     const deletedLead = await this.leadEntity.remove(id);
-    return deletedLead;
+    return { message: 'Lead deleted successfully', data: deletedLead };
   }
 }

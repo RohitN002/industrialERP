@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DepartmentInput, departmentSchema } from "./department.schema";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 interface DepartmentFormProps {
   onSubmit: (data: DepartmentInput) => void;
@@ -18,6 +19,7 @@ export function DepartmentForm({
 }: DepartmentFormProps) {
   const {
     register,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<DepartmentInput>({
@@ -26,8 +28,12 @@ export function DepartmentForm({
       name: initialData?.name || "",
     },
   });
+  useEffect(() => {
+    if (initialData) {
+      reset(initialData);
+    }
+  }, [initialData, reset]);
   const router = useRouter();
-  console.log("initialData", initialData);
   return (
     <form
       onSubmit={handleSubmit((data) => onSubmit(data))}

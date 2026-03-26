@@ -10,6 +10,7 @@ import { Controller } from "react-hook-form";
 import { useDepartment, useDepartments } from "@/modules/routes/useDepartment";
 import { useRole, useRoles } from "@/modules/routes/useRole";
 import { useDesignations } from "@/modules/routes/useDesignation";
+import { useEffect } from "react";
 
 export default function EmployeeForm({
   initialData,
@@ -41,6 +42,7 @@ export default function EmployeeForm({
     register,
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<EmployeeInput>({
     resolver: zodResolver(employeeSchema) as any,
@@ -84,6 +86,11 @@ export default function EmployeeForm({
       label: designation.name,
     })) || [];
   console.log(initialData);
+  useEffect(() => {
+  if (initialData) {
+    reset(initialData);
+  }
+}, [initialData, reset]);
   return (
     <form
       onSubmit={handleSubmit((data) => onSubmit(data))}

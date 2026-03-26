@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DesignationInput, designationSchema } from "./designation.schema";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 interface DesignationFormProps {
   initialData?: DesignationInput;
@@ -20,6 +21,7 @@ export default function DesignationForm({
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<DesignationInput>({
     resolver: zodResolver(designationSchema) as any,
@@ -29,7 +31,11 @@ export default function DesignationForm({
         }
       : {},
   });
-
+  useEffect(() => {
+    if (initialData) {
+      reset(initialData);
+    }
+  }, [initialData, reset]);
   return (
     <form
       onSubmit={handleSubmit((data: any) => onSubmit(data))}

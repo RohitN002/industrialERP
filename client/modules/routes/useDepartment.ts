@@ -34,12 +34,16 @@ export function useDepartment(id: string) {
 
 export function useCreateDepartment() {
   const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: (data: DepartmentInput) =>
-      api<Department>("/departments", {
+    mutationFn: async (data: DepartmentInput) => {
+      const res = await api<DepartmentResponse>("/departments", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
-      }),
+      });
+      return res.data;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["departments"] });
     },
@@ -56,7 +60,7 @@ export function useUpdateDepartment() {
       id: string;
       data: Partial<DepartmentInput>;
     }) =>
-      api<Department>(`/departments/${id}`, {
+      api<DepartmentResponse>(`/departments/${id}`, {
         method: "PATCH",
         body: JSON.stringify(data),
       }),

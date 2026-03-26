@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { RoleInput, Roleschema } from "./role.schema";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function RoleForm({
   initialData,
@@ -17,6 +18,7 @@ export default function RoleForm({
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<RoleInput>({
     resolver: zodResolver(Roleschema) as any,
@@ -26,6 +28,11 @@ export default function RoleForm({
         }
       : {},
   });
+  useEffect(() => {
+    if (initialData) {
+      reset(initialData);
+    }
+  }, [initialData, reset]);
   const router = useRouter();
   return (
     <form onSubmit={handleSubmit((data: any) => onSubmit(data))}>

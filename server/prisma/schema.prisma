@@ -343,12 +343,19 @@ model Lead {
   company     String?
   source      String?
   status      LeadStatus @default(NEW)
-
+  address String?
+  city String?
+  state String?
+  pincode String?
+  country String?
+  contactPerson String?
+  contactPersonPhone String?
+  gst String?
   assignedToId String?
   assignedTo   Employee?  @relation("AssignedLeads", fields: [assignedToId], references: [id])
 
-  createdById String
-  createdBy   Employee   @relation("CreatedLeads", fields: [createdById], references: [id])
+  createdById String?
+  createdBy   Employee?   @relation("CreatedLeads", fields: [createdById], references: [id])
 @@index([assignedToId])
   @@index([createdById])
   createdAt   DateTime   @default(now())

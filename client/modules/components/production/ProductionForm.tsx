@@ -10,6 +10,7 @@ import {
 import { useProducts } from "../../routes/useProduct";
 import { useRouter } from "next/navigation";
 import { Plus, Trash2 } from "lucide-react";
+import { useEffect } from "react";
 
 interface ProductionFormProps {
   initialData?: Production;
@@ -28,6 +29,7 @@ export default function ProductionForm({
   const {
     register,
     control,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<ProductionInput>({
@@ -52,7 +54,11 @@ export default function ProductionForm({
     control,
     name: "items",
   });
-
+  useEffect(() => {
+    if (initialData) {
+      reset(initialData);
+    }
+  }, [initialData, reset]);
   // Split products by type if useful, or just show all
   const finishedGoods =
     products?.filter((p) => p.type === "finished_good") || [];
