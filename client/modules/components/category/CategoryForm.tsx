@@ -13,7 +13,6 @@ export default function CategoryForm({
   isLoading,
 }: any) {
   const router = useRouter();
-  console.log("initialData", initialData);
   const {
     register,
     handleSubmit,
