@@ -1,29 +1,32 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
-import { ProductInput, Product, ProductResponse } from "../product/product.schema";
+import {
+  ProductInput,
+  Product,
+  ProductResponse,
+} from "../product/product.schema";
 
 export function useProducts() {
   return useQuery({
     queryKey: ["products"],
-    queryFn: async() =>{
+    queryFn: async () => {
       const res = await api<ProductResponse>("/product", {
         method: "GET",
-      })
-         return res.data
-        },
- 
+      });
+      return res.data;
+    },
   });
 }
 
 export function useProduct(id: string) {
   return useQuery({
     queryKey: ["product", id],
-    queryFn: async() =>{
+    queryFn: async () => {
       const res = await api<ProductResponse>(`/product/${id}`, {
         method: "GET",
-      })
-         return res.data
-        },
+      });
+      return res.data;
+    },
     enabled: !!id,
   });
 }

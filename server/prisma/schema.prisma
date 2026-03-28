@@ -15,7 +15,6 @@
   }
 
 
-  
 
 /////////////////////
 // ENUMS
@@ -117,14 +116,29 @@ fatherName String?
   productions Production[]
   sales       Sale[]
   purchases   Purchase[]
+   assignedOrders Order[] @relation("AssignedOrders")
+  createdOrders  Order[] @relation("CreatedOrders")
+   orders        OrderEmployee[]
   inspections QualityInspection[]
-  leads       Lead[] @relation("AssignedLeads")
-  createdLeads Lead[] @relation("CreatedLeads")
+  leads       Client[] @relation("AssignedLeads")
+  createdLeads Client[] @relation("CreatedLeads")
 attendances  Attendance[]
   createdAt   DateTime @default(now())
     @@index([userId])
 }
 
+model OrderEmployee {
+  id          String   @id @default(uuid())
+
+  orderId     String
+  employeeId  String
+  role        String   
+
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  employee    Employee @relation(fields: [employeeId], references: [id])
+
+  @@unique([orderId, employeeId, role]) // optional but useful
+}
 model Customer {
   id        String  @id @default(uuid())
   userId    String? @unique
@@ -154,7 +168,7 @@ model Product {
   unit        String?
  supplierId  String?
   supplier    Supplier? @relation(fields: [supplierId], references: [id])
-
+ orderItems OrderItem[]
   imageUrl    String?
   saleItems       SaleItem[]
   purchaseItems   PurchaseItem[]
@@ -335,7 +349,7 @@ model Department{
   id String @id @default(uuid())
   name String
 }
-model Lead {
+model Client {
   id          String     @id @default(uuid())
   name        String
   email       String?
@@ -353,11 +367,75 @@ model Lead {
   gst String?
   assignedToId String?
   assignedTo   Employee?  @relation("AssignedLeads", fields: [assignedToId], references: [id])
-
+  orders Order[]
   createdById String?
   createdBy   Employee?   @relation("CreatedLeads", fields: [createdById], references: [id])
 @@index([assignedToId])
   @@index([createdById])
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+}
+
+model Order {
+  id String @id @default(uuid())
+
+  // Relations to employees
+  assignedToId String?
+  assignedTo Employee? @relation("AssignedOrders", fields: [assignedToId], references: [id])
+  createdById String?
+  createdBy Employee? @relation("CreatedOrders", fields: [createdById], references: [id])
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Customer / sales info
+ clientId String?
+  client Client? @relation(fields: [clientId], references: [id])
+  orderNumber String @unique
+  orderDate DateTime @default(now())
+  expectedDeliveryDate DateTime?
+  status String @default("Pending") // Pending, Confirmed, Shipped, Delivered, Cancelled
+  priority String?
+
+  // Financial fields (calculated in application)
+  subTotal Decimal @db.Decimal(12,2) @default(0) // sum of items unitPrice * quantity
+  totalDiscount Decimal @db.Decimal(12,2) @default(0) // sum of item discounts
+  totalTax Decimal @db.Decimal(12,2) @default(0)      // sum of item taxes
+  totalAmount Decimal @db.Decimal(12,2) @default(0)   // subTotal - totalDiscount + totalTax
+  paymentStatus String @default("Unpaid")
+  paymentMethod String?
+  currency String @default("INR")
+
+  // Shipping info
+  billingAddress String?
+  shippingAddress String?
+  shippingCity String?
+  shippingState String?
+  shippingCountry String?
+  shippingPincode String?
+  shippingContact String?
+  shippingPhone String?
+shippingMethod String?
+shippingCost Decimal @db.Decimal(12,2) @default(0)
+  // Relations
+  items OrderItem[]
+  employees OrderEmployee[]
+grandTotal Decimal @db.Decimal(12,2) @default(0)
+  // Optional notes
+  notes String?
+}
+
+model OrderItem {
+  id String @id @default(uuid())
+  orderId String
+  productId String
+  quantity Int?
+  unitPrice Decimal? @db.Decimal(12,2)
+  discount Decimal @db.Decimal(12,2) @default(0) // per item
+  tax Decimal @db.Decimal(12,2) @default(0)      // per item
+  total Decimal @db.Decimal(12,2) @default(0)    // calculated: (unitPrice*quantity - discount + tax)
+  
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
 }

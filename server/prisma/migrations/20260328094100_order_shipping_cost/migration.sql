@@ -1,0 +1,7 @@
+-- AlterTable
+ALTER TABLE "Order" ADD COLUMN     "grandTotal" DECIMAL(12,2) NOT NULL DEFAULT 0,
+ADD COLUMN     "shippingCost" DECIMAL(12,2) NOT NULL DEFAULT 0;
+
+-- AlterTable
+ALTER TABLE "OrderItem" ALTER COLUMN "quantity" DROP NOT NULL,
+ALTER COLUMN "unitPrice" DROP NOT NULL;

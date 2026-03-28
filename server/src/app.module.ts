@@ -21,6 +21,7 @@ import { DesignationModule } from './designation/designation.module';
 import { DepartmentModule } from './department/department.module';
 import { CategoryModule } from './category/category.module';
 import { SupplierModule } from './supplier/supplier.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { SupplierModule } from './supplier/supplier.module';
     DepartmentModule,
     CategoryModule,
     SupplierModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],

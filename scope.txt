@@ -13,7 +13,7 @@ Basic warehouse (don’t over-engineer multi-warehouse yet)
 3. Sales + Orders
 Create orders quickly
 Convert order → invoice
-Track payments
+Track payments  
 
 4. Expense Tracking
 Vendor payments
@@ -25,7 +25,7 @@ Profit estimate
 Outstanding payments
 
    
-
+ 
 
 
 🟡 PHASE 2 — Stickiness features
@@ -49,13 +49,17 @@ Payment reminders
 Customer history
 Frequent buyers
 Basic segmentation
+
 9. Multi-device sync (mobile-first)
 Most vendors don’t sit on laptops
 Android app is mandatory
+
 🔴 PHASE 3 — Differentiation (This is where you win)
+
 10. Automation (but simple)
 Auto-generate invoice from order
 Auto stock deduction
+
 11. Offline-first support
 Sync when internet is back
 

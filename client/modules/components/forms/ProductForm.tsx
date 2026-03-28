@@ -80,7 +80,7 @@ export default function ProductForm({
   }, [initialData, reset]);
   const options: CategoryOption[] =
     categories?.map((cat) => ({
-      value: cat.id.toString(),
+      value: cat.id,
       label: cat.name,
     })) || [];
 
@@ -183,16 +183,26 @@ export default function ProductForm({
               );
 
               return (
-                <Select
-                  instanceId="category-select"
-                  options={options}
-                  placeholder="Select category..."
-                  className="text-black"
-                  value={selectedOption || null}
-                  onChange={(option: SingleValue<CategoryOption>) =>
-                    field.onChange(option?.value || "")
-                  }
-                  onBlur={field.onBlur}
+                <Controller
+                  name="categoryId"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      instanceId="category-select"
+                      options={options}
+                      placeholder="Select category..."
+                      className="text-black"
+                      isSearchable
+                      value={
+                        options.find((opt) => opt.value === field.value) || null
+                      }
+                      onChange={
+                        (option: SingleValue<CategoryOption>) =>
+                          field.onChange(option?.value) // keep as string
+                      }
+                      onBlur={field.onBlur}
+                    />
+                  )}
                 />
               );
             }}

@@ -4,24 +4,10 @@ import ProductForm from "@/modules/components/forms/ProductForm";
 import { useCreateProduct } from "@/modules/routes/useProduct";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { useCategories } from "@/modules/routes/useCategory";
-import { useSuppliers } from "@/modules/routes/useSupplier";
 
 export default function CreateProductPage() {
-  const {
-    data: categories,
-    isLoading: categoryLoading,
-    isError: categoryError,
-  } = useCategories();
-  const {
-    data: suppliers,
-    isLoading: supplierLoading,
-    isError: supplierError,
-  } = useSuppliers();
   const createMutation = useCreateProduct();
   const router = useRouter();
-  // console.log("categories",categories)
-  console.log("suppliers", suppliers);
   const handleSubmit = async (data: any) => {
     createMutation.mutate(data, {
       onSuccess: () => {
