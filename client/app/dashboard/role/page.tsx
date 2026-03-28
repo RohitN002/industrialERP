@@ -65,6 +65,7 @@ export default function RolePage() {
 
                     <td className="p-4">
                       <RowActions
+                        viewHref={`/dashboard/role/${role.id}/view`}
                         editHref={`/dashboard/role/${role.id}/edit`}
                         onDelete={() => setConfirmId(role.id)}
                         isDeleting={

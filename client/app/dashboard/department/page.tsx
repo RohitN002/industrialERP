@@ -68,6 +68,7 @@ export default function DepartmentPage() {
 
                     <td className="p-4">
                       <RowActions
+                        viewHref={`/dashboard/department/${department.id}/view`}
                         editHref={`/dashboard/department/${department.id}/edit`}
                         onDelete={() => setConfirmId(department.id)}
                         isDeleting={

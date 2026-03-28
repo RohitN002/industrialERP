@@ -84,6 +84,7 @@ export default function SupplierPage() {
                     <td className="p-4 font-medium">{supplier.gst}</td>
                     <td className="p-4">
                       <RowActions
+                        viewHref={`/dashboard/supplier/${supplier.id}/view`}
                         editHref={`/dashboard/supplier/${supplier.id}/edit`}
                         onDelete={() => setConfirmId(supplier.id)}
                         isDeleting={

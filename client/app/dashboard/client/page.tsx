@@ -71,6 +71,7 @@ export default function ClientPage() {
                     <td className="p-4">
                       <RowActions
                         editHref={`/dashboard/client/${client.id}/edit`}
+                        viewHref={`/dashboard/client/${client.id}/view`}
                         onDelete={() => setConfirmId(client.id)}
                         isDeleting={
                           deleteMutation.isPending && confirmId === client.id

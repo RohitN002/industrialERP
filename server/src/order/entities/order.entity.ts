@@ -9,7 +9,7 @@ export class OrderRepository {
 
     if (!clientId) throw new Error('clientId is required to create an order');
 
-    return await this.prisma.$transaction(async (tx) => {
+    return await this.prisma.$transaction(async (tx: any) => {
       // 1️⃣ Fetch the Lead for billing info
       const client = await tx.client.findUnique({
         where: { id: clientId },
@@ -73,11 +73,11 @@ export class OrderRepository {
       return order;
     });
   }
-  async findAll(query?: { status?: string; leadId?: string }) {
+  async findAll(query?: { status?: string; clientId?: string }) {
     return this.prisma.order.findMany({
       where: {
         ...(query?.status && { status: query.status }),
-        ...(query?.leadId && { leadId: query.leadId }),
+        ...(query?.clientId && { clientId: query.clientId }),
       },
       include: {
         items: {
@@ -85,7 +85,7 @@ export class OrderRepository {
             product: true,
           },
         },
-        lead: true,
+        client: true,
         assignedTo: true,
         createdBy: true,
       },
@@ -103,7 +103,7 @@ export class OrderRepository {
             product: true,
           },
         },
-        lead: true,
+        client: true,
         assignedTo: true,
         createdBy: true,
       },

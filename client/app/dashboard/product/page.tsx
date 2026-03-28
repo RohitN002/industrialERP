@@ -87,6 +87,7 @@ export default function ProductPage() {
                     </td>
                     <td className="p-4">
                       <RowActions
+                        viewHref={`/dashboard/product/${product.id}/view`}
                         editHref={`/dashboard/product/${product.id}/edit`}
                         onDelete={() => setConfirmId(product.id)}
                         isDeleting={

@@ -112,6 +112,7 @@ export default function EmployeePage() {
                     <td className="p-4 text-gray-300">{employee.address}</td>
                     <td className="p-4">
                       <RowActions
+                        viewHref={`/dashboard/employee/${employee.id}/view`}
                         editHref={`/dashboard/employee/${employee.id}/edit`}
                         onDelete={() => setConfirmId(employee.id)}
                         isDeleting={

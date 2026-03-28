@@ -74,6 +74,7 @@ export default function DesignationPage() {
                     <td className="p-4 font-medium">{designation.name}</td>
                     <td className="p-4">
                       <RowActions
+                        viewHref={`/dashboard/designation/${designation.id}/view`}
                         editHref={`/dashboard/designation/${designation.id}/edit`}
                         onDelete={() => setConfirmId(designation.id)}
                         isDeleting={

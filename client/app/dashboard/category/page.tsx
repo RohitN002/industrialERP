@@ -62,6 +62,7 @@ export default function CategoryPage() {
                     <td className="p-4 font-medium">{category.name}</td>
                     <td className="p-4">
                       <RowActions
+                        viewHref={`/dashboard/category/${category.id}/view`}
                         editHref={`/dashboard/category/${category.id}/edit`}
                         onDelete={() => setConfirmId(category.id)}
                         isDeleting={
