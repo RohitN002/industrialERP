@@ -42,7 +42,7 @@ export type OrderSchemaType = z.infer<typeof OrderSchema>;
 
 export type Order = {
   _id: string;
-  customerId: string;
+  clientId: string;
   orderNumber: string;
   orderDate: string;
   expectedDeliveryDate: string;

@@ -99,6 +99,7 @@ export default function SupplierPage() {
           </div>
         )}
       </div>
+      ``
       <ConfirmDialog
         isOpen={!!confirmId}
         title="Delete Supplier"

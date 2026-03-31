@@ -33,7 +33,7 @@ export function useUpdateOrder() {
   return useMutation({
     mutationFn: (data) =>
       api("/orders", {
-        method: "PUT",
+        method: "PATCH",
         body: JSON.stringify(data),
       }),
     onSuccess: () => {

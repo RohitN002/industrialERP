@@ -104,7 +104,7 @@ export default function OrderPage() {
                 >
                   <td className="p-4 font-medium">{order.orderNumber}</td>
                   <td className="p-4 text-gray-300">
-                    {clientMap[order.leadId] || "N/A"}
+                    {clientMap[order.clientId] || "N/A"}
                   </td>
                   <td className="p-4 text-gray-300">
                     Rs.{Number(order.grandTotal).toFixed(2)}
