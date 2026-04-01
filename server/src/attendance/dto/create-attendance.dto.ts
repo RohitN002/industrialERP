@@ -1,23 +1,17 @@
-import { IsEnum, IsNotEmpty, IsString, IsUUID } from "class-validator";
-
+import { IsEnum, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class CreateAttendanceDto {
-    @IsNotEmpty()
+  @IsNotEmpty()
+  status: string;
 
-    status: string;
+  @IsNotEmpty()
+  @IsUUID()
+  userId: string;
 
-    @IsNotEmpty()
-    @IsUUID()
-    userId: string;
-
-    @IsNotEmpty()
-    @IsUUID()
-    createdById: string;
-
-    @IsNotEmpty()
-    items: {
-        productId: string;
-        quantity: number;
-        unitPrice: number;
-    }[];
+  @IsNotEmpty()
+  date: Date;
+  @IsNotEmpty()
+  checkIn?: Date;
+  @IsNotEmpty()
+  checkOut?: Date;
 }

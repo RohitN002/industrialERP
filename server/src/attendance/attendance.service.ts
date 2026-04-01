@@ -5,32 +5,52 @@ import { AttendanceRepository } from './entities/attendance.entity';
 
 @Injectable()
 export class AttendanceService {
-  constructor(
-    private readonly attendanceRepository: AttendanceRepository
-  ) { }
+  constructor(private readonly attendanceRepository: AttendanceRepository) {}
+
   async create(createAttendanceDto: CreateAttendanceDto) {
-    const existingAttendance = await this.attendanceRepository.findOne(createAttendanceDto.userId);
+    const existingAttendance = await this.attendanceRepository.findOne(
+      createAttendanceDto.userId,
+    );
     if (existingAttendance) {
       throw new Error('Attendance already exists');
     }
-    const newAttendance = await this.attendanceRepository.create(createAttendanceDto);
-    return newAttendance;
+    const newAttendance =
+      await this.attendanceRepository.create(createAttendanceDto);
+    return { message: 'Attendance created successfully', data: newAttendance };
   }
-
+  async createBulk(createAttendanceDto: CreateAttendanceDto[]) {
+    const newAttendance =
+      await this.attendanceRepository.createBulk(createAttendanceDto);
+    return { message: 'User data created Sucessfully', data: newAttendance };
+  }
   async findAll() {
     const attendances = await this.attendanceRepository.findAll();
-    if (!attendances) {
-      throw new Error('Attendance not found');
-    }
-    return attendances;
+    // if (!attendances) {
+    //   throw new Error('Attendance not found');
+    // }
+    return {
+      message: 'Attendance details fetched successfully',
+      data: attendances,
+    };
   }
-
+  async findMonthlyAttendance(month: number, year: number) {
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', month, year);
+    const Attendance =
+      await this.attendanceRepository.findMonthlyAttendanceGrouped(month, year);
+    // if (!Attendance) {
+    //   throw new Error('Attendance not found');
+    // }
+    return {
+      message: 'Attendance details fetched successfully',
+      data: Attendance,
+    };
+  }
   async findOne(id: string) {
     const attendance = await this.attendanceRepository.findOne(id);
     if (!attendance) {
       throw new Error('Attendance not found');
     }
-    return attendance;
+    return { message: 'Attendance found successfully', data: attendance };
   }
 
   async update(id: string, updateAttendanceDto: UpdateAttendanceDto) {
@@ -38,8 +58,14 @@ export class AttendanceService {
     if (!attendance) {
       throw new Error('Attendance not found');
     }
-    const updatedAttendance = await this.attendanceRepository.update(id, updateAttendanceDto);
-    return updatedAttendance;
+    const updatedAttendance = await this.attendanceRepository.update(
+      id,
+      updateAttendanceDto,
+    );
+    return {
+      message: 'Attendance updated successfully',
+      data: updatedAttendance,
+    };
   }
 
   async remove(id: string) {
@@ -48,6 +74,9 @@ export class AttendanceService {
       throw new Error('Attendance not found');
     }
     const deletedAttendance = await this.attendanceRepository.remove(id);
-    return deletedAttendance;
+    return {
+      message: 'Attendance deleted successfully',
+      data: deletedAttendance,
+    };
   }
 }

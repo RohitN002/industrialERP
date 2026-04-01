@@ -116,6 +116,7 @@ fatherName String?
   productions Production[]
   sales       Sale[]
   purchases   Purchase[]
+  shiftAssignments ShiftAssignment[]
    assignedOrders Order[] @relation("AssignedOrders")
   createdOrders  Order[] @relation("CreatedOrders")
    orders        OrderEmployee[]
@@ -332,14 +333,72 @@ enum AttendanceStatus {
   PRESENT
   ABSENT
   LATE
+  HALF_DAY
+  ON_LEAVE
+  WEEKEND
   HOLIDAY
 }
-model Attendance{
-  id String @id @default(uuid())
-  userId String
-   employee    Employee         @relation(fields: [userId], references: [id])
-  date DateTime @default(now())
-  status AttendanceStatus @default(PRESENT)
+model Shift {
+  id            String   @id @default(uuid())
+
+  name          String   // "General Shift", "Night Shift"
+
+  startTime     String   // "09:00"
+  endTime       String   // "18:00"
+
+  isOvernight   Boolean  @default(false)
+
+  graceInMin    Int      @default(0)  // allowed late minutes
+  graceOutMin   Int      @default(0)  // early leave tolerance
+
+  minHalfDayMin Int?     // below this = half day
+  minFullDayMin Int?     // required for full day
+  assignments ShiftAssignment[]
+  attendances Attendance[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+model ShiftAssignment {
+  id        String   @id @default(uuid())
+
+  userId    String
+  employee  Employee @relation(fields: [userId], references: [id])
+
+  shiftId   String
+  shift     Shift    @relation(fields: [shiftId], references: [id])
+
+  date      DateTime // IMPORTANT: per-day assignment
+
+  @@unique([userId, date])
+}
+enum AttendanceSource {
+  MANUAL
+  BIOMETRIC
+  SYSTEM
+}
+model Attendance {
+  id            String   @id @default(uuid())
+
+  userId        String
+  employee      Employee @relation(fields: [userId], references: [id])
+
+  date DateTime @db.Date
+
+  status        AttendanceStatus
+
+  checkIn       DateTime?
+  checkOut      DateTime?
+
+  workedMinutes Int?     // derived or stored for performance
+  workedHours Int?
+  shiftId       String?
+  shift         Shift?   @relation(fields: [shiftId], references: [id])
+
+  source AttendanceSource @default(MANUAL)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([userId, date])
 }
 model Designation{
   id String @id @default(uuid())
