@@ -93,7 +93,6 @@ export default function OrderPage() {
                 <th className="p-4 font-medium">Client</th>
                 <th className="p-4 font-medium">Grand Total</th>
                 <th className="p-4 font-medium">Actions</th>
-                <th className="p-4 font-medium">Print</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700">
@@ -113,19 +112,12 @@ export default function OrderPage() {
                     <RowActions
                       editHref={`/dashboard/order/${order.id}/edit`}
                       viewHref={`/dashboard/order/${order.id}/view`}
+                      printHref={`/dashboard/order/${order.id}/print`}
                       onDelete={() => setConfirmId(order.id)}
                       isDeleting={
                         deleteMutation.isPending && confirmId === order.id
                       }
                     />
-                  </td>
-                  <td className="p-4">
-                    <button
-                      onClick={() => handlePrint(order.id)}
-                      className="hover:text-blue-400 transition-colors"
-                    >
-                      <Printer size={18} />
-                    </button>
                   </td>
                 </tr>
               ))}

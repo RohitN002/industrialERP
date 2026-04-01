@@ -1,123 +1,237 @@
 "use client";
 
-import React from "react";
-
-type ReceiptProps = {
-  receipt: any;
+type InvoiceProps = {
+  invoice: any;
 };
 
-export default function Receipt({ receipt }: ReceiptProps) {
+export default function GSTInvoice() {
+  const invoice = {
+    id: "inv_2026_0001",
+    invoiceNumber: "INV-2026-0001",
+    invoiceDate: "2026-03-29T07:28:47.721Z",
+    placeOfSupply: "Tamil Nadu",
+    currency: "INR",
+    status: "ISSUED",
+
+    company: {
+      name: "Your Company Pvt Ltd",
+      gstin: "33ABCDE1234F1Z5",
+      address: "Coimbatore, Tamil Nadu, India",
+      state: "Tamil Nadu",
+      stateCode: "33",
+    },
+
+    customer: {
+      name: "ROHIT N",
+      gstin: "33AAACR5055K1ZP",
+      address: "Naickenpalayam Post, Coimbatore",
+      state: "Tamil Nadu",
+      stateCode: "33",
+      phone: "07010302030",
+    },
+
+    shipping: {
+      address: "Naickenpalayam Post",
+      city: "Coimbatore",
+      state: "Tamil Nadu",
+      pincode: "641020",
+      country: "India",
+    },
+
+    items: [
+      {
+        id: "item_1",
+        name: "No 2 Prod",
+        sku: "strye4",
+        hsn: "7208",
+        quantity: 1,
+        unit: "NOS",
+
+        rate: 451200,
+        taxable: 451200,
+
+        gstRate: 18,
+
+        cgst: 40608,
+        sgst: 40608,
+        igst: 0,
+
+        total: 532416,
+      },
+    ],
+
+    summary: {
+      taxable: 451200,
+      cgst: 40608,
+      sgst: 40608,
+      igst: 0,
+      totalTax: 81216,
+      grandTotal: 532416,
+      total: 532416,
+    },
+
+    amountInWords:
+      "Five Lakh Thirty Two Thousand Four Hundred Sixteen Rupees Only",
+
+    payment: {
+      status: "UNPAID",
+      method: null,
+      dueDate: "2026-04-15",
+      terms: "Net 15",
+    },
+
+    bankDetails: {
+      accountName: "Your Company Pvt Ltd",
+      accountNumber: "XXXXXXX1234",
+      ifsc: "HDFC0001234",
+      bankName: "HDFC Bank",
+      upiId: "yourcompany@upi",
+    },
+
+    meta: {
+      notes: "Goods once sold will not be taken back.",
+      terms: "Subject to Coimbatore jurisdiction.",
+      isReverseCharge: false,
+    },
+
+    audit: {
+      version: 1,
+      createdAt: "2026-03-29T07:28:47.721Z",
+      updatedAt: "2026-03-29T07:28:47.721Z",
+      createdBy: "user_123",
+      immutable: true,
+    },
+  };
   return (
-    <div className="max-w-4xl mx-auto bg-white text-black p-8 print:p-4 text-sm">
+    <div className="max-w-5xl mx-auto bg-white text-black p-8 text-xs print:p-4">
       {/* HEADER */}
-      <div className="flex justify-between items-start border-b pb-4">
+      <div className="border-b pb-4 flex justify-between">
         <div>
-          <h1 className="text-xl font-bold">Your Company Name</h1>
-          <p className="text-xs text-gray-600">Coimbatore, Tamil Nadu, India</p>
-          <p className="text-xs text-gray-600">GSTIN: XXXXXXXX</p>
+          <h1 className="text-lg font-bold">{invoice.company.name}</h1>
+          <p>{invoice.company.address}</p>
+          <p>GSTIN: {invoice.company.gstin}</p>
         </div>
 
         <div className="text-right">
-          <h2 className="text-lg font-semibold">RECEIPT</h2>
-          <p>Receipt No: {receipt.orderNumber}</p>
-          <p>Date: {formatDate(receipt.orderDate)}</p>
-          <p>Status: {receipt.status}</p>
+          <h2 className="text-lg font-semibold">TAX INVOICE</h2>
+          <p>Invoice No: {invoice.invoiceNumber}</p>
+          <p>Date: {formatDate(invoice.invoiceDate)}</p>
+          <p>Place of Supply: {invoice.placeOfSupply}</p>
         </div>
       </div>
 
       {/* CUSTOMER */}
-      <div className="grid grid-cols-2 gap-6 mt-6 border-b pb-4">
+      <div className="grid grid-cols-2 gap-6 mt-4 border-b pb-4">
         <div>
-          <h3 className="font-semibold mb-1">Billing To</h3>
-          <p>{receipt.client.name}</p>
-          <p>{receipt.client.phone}</p>
-          <p>{receipt.billingAddress}</p>
+          <h3 className="font-semibold">Bill To</h3>
+          <p>{invoice.customer.name}</p>
+          <p>{invoice.customer.address}</p>
+          <p>GSTIN: {invoice.customer.gstin || "-"}</p>
         </div>
 
         <div>
-          <h3 className="font-semibold mb-1">Shipping To</h3>
-          <p>{receipt.shippingAddress}</p>
-          <p>{receipt.shippingCity}</p>
-          <p>{receipt.shippingPincode}</p>
+          <h3 className="font-semibold">Ship To</h3>
+          <p>{invoice.shipping.address}</p>
+          <p>{invoice.shipping.state}</p>
         </div>
       </div>
 
-      {/* ITEMS */}
-      <div className="mt-6">
-        <table className="w-full border-collapse text-xs">
-          <thead>
-            <tr className="border-b">
-              <th className="text-left py-2">#</th>
-              <th className="text-left">Item</th>
-              <th className="text-left">SKU</th>
-              <th className="text-right">Qty</th>
-              <th className="text-right">Price</th>
-              <th className="text-right">Total</th>
+      {/* ITEMS TABLE */}
+      <table className="w-full mt-4 border text-xs">
+        <thead>
+          <tr className="bg-gray-100 border">
+            <th className="p-2">#</th>
+            <th>Description</th>
+            <th>HSN/SAC</th>
+            <th>Qty</th>
+            <th>Rate</th>
+            <th>Taxable</th>
+            <th>CGST</th>
+            <th>SGST</th>
+            <th>IGST</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {invoice.items.map((item: any, i: number) => (
+            <tr key={i} className="border">
+              <td className="p-2">{i + 1}</td>
+              <td>{item.name}</td>
+              <td>{item.hsn}</td>
+              <td className="text-right">{item.quantity}</td>
+              <td className="text-right">{formatCurrency(item.rate)}</td>
+              <td className="text-right">{formatCurrency(item.taxable)}</td>
+              <td className="text-right">{formatCurrency(item.cgst)}</td>
+              <td className="text-right">{formatCurrency(item.sgst)}</td>
+              <td className="text-right">{formatCurrency(item.igst)}</td>
+              <td className="text-right font-medium">
+                {formatCurrency(item.total)}
+              </td>
             </tr>
-          </thead>
+          ))}
+        </tbody>
+      </table>
 
-          <tbody>
-            {receipt.items.map((item: any, index: number) => (
-              <tr key={item.id} className="border-b">
-                <td className="py-2">{index + 1}</td>
-                <td>{item.product.name}</td>
-                <td>{item.product.sku}</td>
-                <td className="text-right">{item.quantity}</td>
-                <td className="text-right">{formatCurrency(item.unitPrice)}</td>
-                <td className="text-right">{formatCurrency(item.total)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* TOTALS */}
-      <div className="flex justify-end mt-6">
-        <div className="w-64 space-y-2 text-sm">
+      {/* TAX SUMMARY */}
+      <div className="flex justify-end mt-4">
+        <div className="w-80 space-y-1">
           <div className="flex justify-between">
-            <span>Subtotal</span>
-            <span>{formatCurrency(receipt.subTotal)}</span>
+            <span>Taxable Amount</span>
+            <span>{formatCurrency(invoice.summary.taxable)}</span>
           </div>
 
           <div className="flex justify-between">
-            <span>Discount</span>
-            <span>{formatCurrency(receipt.totalDiscount)}</span>
+            <span>CGST</span>
+            <span>{formatCurrency(invoice.summary.cgst)}</span>
           </div>
 
           <div className="flex justify-between">
-            <span>Tax</span>
-            <span>{formatCurrency(receipt.totalTax)}</span>
+            <span>SGST</span>
+            <span>{formatCurrency(invoice.summary.sgst)}</span>
           </div>
 
           <div className="flex justify-between">
-            <span>Shipping</span>
-            <span>{formatCurrency(receipt.shippingCost)}</span>
+            <span>IGST</span>
+            <span>{formatCurrency(invoice.summary.igst)}</span>
           </div>
 
-          <div className="border-t pt-2 flex justify-between font-semibold">
+          <div className="border-t pt-2 flex justify-between font-bold">
             <span>Grand Total</span>
-            <span>{formatCurrency(receipt.grandTotal)}</span>
+            <span>{formatCurrency(invoice.summary?.total)}</span>
           </div>
         </div>
+      </div>
+
+      {/* AMOUNT IN WORDS */}
+      <div className="mt-4">
+        <p className="text-xs">Amount in Words: {invoice.amountInWords}</p>
       </div>
 
       {/* FOOTER */}
-      <div className="mt-10 border-t pt-4 text-xs text-gray-600">
-        <p>Notes: {receipt.notes || "-"}</p>
-        <p className="mt-2">Thank you for your business.</p>
+      <div className="mt-8 grid grid-cols-2 text-xs">
+        <div>
+          <p>Terms & Conditions:</p>
+          <p>{invoice.meta?.terms || "Standard terms apply."}</p>
+        </div>
+
+        <div className="text-right">
+          <p>For {invoice.company.name}</p>
+          <div className="h-16" />
+          <p>Authorized Signatory</p>
+        </div>
       </div>
     </div>
   );
 }
 
-/* ---------------- UTILITIES ---------------- */
+/* ---------- UTILS ---------- */
 
-function formatCurrency(value: string | number) {
-  const num = typeof value === "string" ? Number(value) : value;
+function formatCurrency(value: number) {
   return new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
-  }).format(num);
+  }).format(value / 100); // assuming paise
 }
 
 function formatDate(date: string) {

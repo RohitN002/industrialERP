@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { Edit, Trash2, Loader2, Eye } from "lucide-react";
+import { Edit, Trash2, Loader2, Eye, Printer } from "lucide-react";
 
 interface RowActionsProps {
   editHref: string;
   viewHref: string;
+  printHref?: string;
   onDelete: () => void;
   isDeleting?: boolean;
 }
@@ -11,6 +12,7 @@ interface RowActionsProps {
 export default function RowActions({
   editHref,
   viewHref,
+  printHref,
   onDelete,
   isDeleting = false,
 }: RowActionsProps) {
@@ -30,6 +32,7 @@ export default function RowActions({
       >
         <Eye size={18} />
       </Link>
+
       <button
         onClick={onDelete}
         disabled={isDeleting}
@@ -42,6 +45,15 @@ export default function RowActions({
           <Trash2 size={18} />
         )}
       </button>
+      {printHref && (
+        <Link
+          href={printHref}
+          aria-label="Print"
+          className="hover:text-blue-400 transition-colors"
+        >
+          <Printer size={18} />
+        </Link>
+      )}
     </div>
   );
 }
