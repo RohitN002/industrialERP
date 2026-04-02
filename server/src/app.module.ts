@@ -22,6 +22,7 @@ import { DepartmentModule } from './department/department.module';
 import { CategoryModule } from './category/category.module';
 import { SupplierModule } from './supplier/supplier.module';
 import { OrderModule } from './order/order.module';
+import { PayrollModule } from './payroll/payroll.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { OrderModule } from './order/order.module';
     CategoryModule,
     SupplierModule,
     OrderModule,
+    PayrollModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -44,6 +44,11 @@ enum SaleStatus {
   SHIPPED
   CANCELLED
 }
+enum SalaryType {
+  MONTHLY
+  DAILY
+  HOURLY
+}
 
 enum QualityStatus {
   PENDING
@@ -137,9 +142,11 @@ model SalaryStructure {
   employeeId  String
   employee    Employee @relation(fields: [employeeId], references: [id])
 
-  baseSalary  Int      // monthly base
-  perDayRate  Int?     // optional if daily wage
-  perHourRate Int?     // optional
+  type        SalaryType
+
+  baseSalary  Int?
+  perDayRate  Int?
+  perHourRate Int?
 
   effectiveFrom DateTime
   effectiveTo   DateTime?
@@ -164,7 +171,10 @@ model Payroll {
   grossSalary     Int
   deductions      Int
   netSalary       Int
-
+  salaryType     SalaryType
+  baseSalary     Int?
+  perDayRate     Int?
+  perHourRate    Int?
   status PayrollStatus @default(PENDING)
 adjustments PayrollAdjustment[]
   generatedAt DateTime @default(now())
