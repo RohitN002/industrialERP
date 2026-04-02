@@ -36,14 +36,26 @@ export default function editAttendance() {
   }, [attendance]);
 
   const calculateWorkedHours = () => {
+    if (!form.checkIn || !form.checkOut) return "0 hrs 0 mins";
+
     const checkIn = new Date(form.checkIn);
     const checkOut = new Date(form.checkOut);
-    const diff = checkOut.getTime() - checkIn.getTime();
+
+    const inTime = checkIn.getTime();
+    const outTime = checkOut.getTime();
+
+    const diff = outTime - inTime;
+
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    return `${hours} hrs ${minutes} mins`;
+    if (!Number.isFinite(diff) || diff <= 0) {
+      return "0 hrs 0 mins";
+    } else {
+      console.log("false");
+      return `${hours} hrs ${minutes} mins`;
+    }
   };
-
+  console.log("calculated work hours", calculateWorkedHours());
   function formatTime(date: string | Date) {
     const d = new Date(date);
     return d.toISOString().slice(11, 16); // HH:mm
@@ -53,8 +65,21 @@ export default function editAttendance() {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) {
     const { name, value } = e.target;
+    // if (name === "checkOut" && form.checkIn) {
+    //   const checkIn = new Date(form.checkIn);
+    //   const checkOut = new Date(value);
+
+    //   const maxAllowed = new Date(checkIn);
+    //   maxAllowed.setDate(maxAllowed.getDate() + 1);
+
+    //   if (checkOut < checkIn || checkOut > maxAllowed) {
+    //     alert("Check-out must be within 24 hours of check-in");
+    //     return;
+    //   }
+    // }
     setForm((prev: any) => ({
       ...prev,
+
       [name]: value,
     }));
   }
@@ -82,6 +107,21 @@ export default function editAttendance() {
       },
     );
   };
+  const baseDate = new Date(attendance?.date);
+
+  const formatDateTimeLocal = (date: Date) => {
+    const pad = (n: number) => String(n).padStart(2, "0");
+
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  };
+  const startOfDay = new Date(baseDate);
+
+  startOfDay.setHours(0, 0, 0, 0);
+  const endOfDay = new Date(baseDate);
+  endOfDay.setHours(23, 59, 0, 0);
+  const endOfNextDay = new Date(baseDate);
+  endOfNextDay.setDate(endOfNextDay.getDate() + 1);
+  endOfNextDay.setHours(23, 59, 0, 0);
   if (!attendance) return <div>Loading...</div>;
   return (
     <div>
@@ -117,8 +157,10 @@ export default function editAttendance() {
             <div>
               <label className="font-semibold">Check In</label>
               <input
-                type="time"
+                type="datetime-local"
                 name="checkIn"
+                min={formatDateTimeLocal(startOfDay)}
+                max={formatDateTimeLocal(endOfDay)}
                 value={form.checkIn}
                 onChange={handleChange}
                 className="border p-2 rounded w-full"
@@ -129,8 +171,10 @@ export default function editAttendance() {
             <div>
               <label className="font-semibold">Check Out</label>
               <input
-                type="time"
+                type="datetime-local"
                 name="checkOut"
+                min={form.checkIn || formatDateTimeLocal(startOfDay)}
+                max={formatDateTimeLocal(endOfNextDay)}
                 value={form.checkOut}
                 onChange={handleChange}
                 className="border p-2 rounded w-full"

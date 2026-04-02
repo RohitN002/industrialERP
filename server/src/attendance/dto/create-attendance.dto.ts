@@ -27,4 +27,8 @@ export class CreateAttendanceDto {
   @IsDate()
   @Type(() => Date)
   checkOut?: Date;
+  @IsOptional()
+  workedHours?: number;
+  @IsOptional()
+  workedMinutes?: number;
 }

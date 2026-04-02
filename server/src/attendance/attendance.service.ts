@@ -68,6 +68,21 @@ export class AttendanceService {
     if (!attendance) {
       throw new Error('Attendance not found');
     }
+    if (updateAttendanceDto?.checkIn && updateAttendanceDto?.checkOut) {
+      const checkIn = new Date(updateAttendanceDto.checkIn);
+      const checkOut = new Date(updateAttendanceDto.checkOut);
+
+      const diff = checkOut.getTime() - checkIn.getTime();
+
+      if (!Number.isFinite(diff) || diff <= 0) {
+        throw new Error('Invalid check-in/check-out');
+      }
+
+      const workedMinutes = Math.floor(diff / (1000 * 60));
+
+      updateAttendanceDto.workedMinutes = workedMinutes;
+      updateAttendanceDto.workedHours = workedMinutes / 60;
+    }
     const updatedAttendance = await this.attendanceRepository.update(
       id,
       updateAttendanceDto,
