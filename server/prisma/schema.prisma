@@ -101,7 +101,8 @@ model Employee {
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   mobileNumber  String   @unique
  
- 
+   salaryStructures SalaryStructure[]
+  payrolls         Payroll[]
   dateOfBirth DateTime?
   gender String?
 fatherName String?
@@ -131,7 +132,66 @@ attendances  Attendance[]
   createdAt   DateTime @default(now())
     @@index([userId])
 }
+model SalaryStructure {
+  id          String   @id @default(uuid())
+  employeeId  String
+  employee    Employee @relation(fields: [employeeId], references: [id])
 
+  baseSalary  Int      // monthly base
+  perDayRate  Int?     // optional if daily wage
+  perHourRate Int?     // optional
+
+  effectiveFrom DateTime
+  effectiveTo   DateTime?
+
+  createdAt DateTime @default(now())
+}
+
+model Payroll {
+  id          String   @id @default(uuid())
+
+  employeeId  String
+  employee    Employee @relation(fields: [employeeId], references: [id])
+
+  month       Int
+  year        Int
+
+  totalDays       Int
+  presentDays     Int
+  absentDays      Int
+  workedMinutes   Int
+
+  grossSalary     Int
+  deductions      Int
+  netSalary       Int
+
+  status PayrollStatus @default(PENDING)
+adjustments PayrollAdjustment[]
+  generatedAt DateTime @default(now())
+
+  @@unique([employeeId, month, year])
+}
+enum PayrollStatus {
+  PENDING
+  GENERATED
+  PAID
+  FAILED
+}
+enum AdjustmentType {
+  BONUS
+  DEDUCTION
+}
+model PayrollAdjustment {
+  id         String   @id @default(uuid())
+  payrollId  String
+  payroll    Payroll  @relation(fields: [payrollId], references: [id])
+
+  type       AdjustmentType // BONUS | DEDUCTION
+  amount     Int
+  reason     String?
+
+  createdAt DateTime @default(now())
+}
 model OrderEmployee {
   id          String   @id @default(uuid())
 
