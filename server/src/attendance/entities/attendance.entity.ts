@@ -167,6 +167,16 @@ export class AttendanceRepository {
     });
   }
 
+  async attendanceDetails(userId: string, date: string) {
+    return this.prisma.attendance.findUnique({
+      where: {
+        userId_date: {
+          userId: userId,
+          date: new Date(date),
+        },
+      },
+    });
+  }
   async update(id: string, data: any) {
     return this.prisma.attendance.update({ where: { id }, data });
   }

@@ -1,4 +1,12 @@
-import { IsEnum, IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsDate,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 export class CreateAttendanceDto {
   @IsNotEmpty()
@@ -10,8 +18,13 @@ export class CreateAttendanceDto {
 
   @IsNotEmpty()
   date: Date;
-  @IsNotEmpty()
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
   checkIn?: Date;
-  @IsNotEmpty()
+
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
   checkOut?: Date;
 }

@@ -6,13 +6,22 @@ import {
   AttendanceResponse,
 } from "../../modules/components/attendance/attendance.schema";
 
-export function useAttendances() {
+export function useAttendances({
+  month,
+  year,
+}: {
+  month: number;
+  year: number;
+}) {
   return useQuery({
-    queryKey: ["attendance"],
+    queryKey: ["attendance", month, year],
     queryFn: async () => {
-      const res = await api<AttendanceResponse>("/attendance", {
-        method: "GET",
-      });
+      const res = await api<AttendanceResponse>(
+        `/attendance/monthly?month=${month}&year=${year}`,
+        {
+          method: "GET",
+        },
+      );
       return res.data;
     },
   });
@@ -31,6 +40,21 @@ export function useAttendance(id: string) {
   });
 }
 
+export function useGetAttendance(id: string, date: string) {
+  return useQuery({
+    queryKey: ["attendance", id, date],
+    queryFn: async () => {
+      const res = await api<AttendanceResponse>(
+        `/attendance/day/${id}/${date}`,
+        {
+          method: "GET",
+        },
+      );
+      return res.data;
+    },
+    enabled: !!id,
+  });
+}
 export function useCreateAttendance() {
   const queryClient = useQueryClient();
   return useMutation({

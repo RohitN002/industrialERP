@@ -45,6 +45,9 @@ export class AttendanceService {
       data: Attendance,
     };
   }
+  async findDayAttendance(userId, date) {
+    await this.attendanceRepository.attendanceDetails(userId, date);
+  }
   async findOne(id: string) {
     const attendance = await this.attendanceRepository.findOne(id);
     if (!attendance) {

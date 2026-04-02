@@ -34,6 +34,13 @@ export class AttendanceController {
   findOne(@Param('id') id: string) {
     return this.attendanceService.findOne(id);
   }
+  @Get('/day')
+  async findDayAttendance(
+    @Query('userId') userId: string,
+    @Query('date') date: string,
+  ) {
+    return this.attendanceService.findDayAttendance(userId, date);
+  }
   @Get('/monthly')
   findMonthlyAttendance(
     @Query('month') month: string,
