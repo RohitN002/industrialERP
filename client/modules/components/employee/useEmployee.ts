@@ -1,6 +1,6 @@
 import { api } from "@/lib/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { EmployeeInput, EmployeeResponse } from "./employee.schema";
+import { Employee, EmployeeInput, EmployeeResponse } from "./employee.schema";
 
 export function useEmployees() {
   return useQuery({
@@ -18,7 +18,7 @@ export function useEmployee(id: string) {
   return useQuery({
     queryKey: ["employee", id],
     queryFn: async () => {
-      const res = await api<EmployeeResponse>(`/employee/${id}`, {
+      const res = await api<Employee>(`/employee/${id}`, {
         method: "GET",
       });
       return res.data;

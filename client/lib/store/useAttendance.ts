@@ -44,17 +44,15 @@ export function useGetAttendance(id: string, date: string) {
   return useQuery({
     queryKey: ["attendance", id, date],
     queryFn: async () => {
-      const res = await api<AttendanceResponse>(
-        `/attendance/day/${id}/${date}`,
-        {
-          method: "GET",
-        },
-      );
+      const res = await api<any>(`/attendance/day?userId=${id}&date=${date}`, {
+        method: "GET",
+      });
       return res.data;
     },
     enabled: !!id,
   });
 }
+
 export function useCreateAttendance() {
   const queryClient = useQueryClient();
   return useMutation({

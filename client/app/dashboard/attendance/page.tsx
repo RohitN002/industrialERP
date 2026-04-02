@@ -12,6 +12,7 @@ import {
   PageHeader,
   RowActions,
 } from "@/modules/components/shared";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Attendance() {
@@ -27,7 +28,9 @@ export default function Attendance() {
   const getDaysInMonth = (year: number, month: number) => {
     return new Date(year, month, 0).getDate(); // month is 1-based
   };
-
+  const formattedDate = (date: string) => {
+    return new Date(date).toISOString().split("T")[0];
+  };
   const getLocalDay = (dateStr: string) => {
     const d = new Date(dateStr);
     return d.getUTCDate(); // force UTC to avoid timezone bugs
@@ -40,8 +43,9 @@ export default function Attendance() {
   };
   const year = 2026;
   const month = 3;
-
+  const router = useRouter();
   const daysInMonth = getDaysInMonth(year, month);
+
   return (
     <div>
       <PageHeader
@@ -124,7 +128,9 @@ export default function Attendance() {
                         emp.attendance?.find(
                           (a: any) => new Date(a.date).getUTCDate() === day,
                         )?.status;
-
+                      const date = emp.attendance?.find(
+                        (a: any) => new Date(a.date).getUTCDate() === day,
+                      )?.date;
                       return (
                         <td key={day} className="p-2 text-center">
                           <span
@@ -138,6 +144,11 @@ export default function Attendance() {
                                 ? "bg-yellow-600"
                                 : "bg-gray-700"
                         }`}
+                            onClick={() =>
+                              router.push(
+                                `/dashboard/attendance/${emp.employeeId}/${formattedDate(date)}/edit`,
+                              )
+                            }
                           >
                             {status?.[0] || "-"}
                           </span>

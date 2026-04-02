@@ -100,8 +100,8 @@ model Employee {
   userId    String  @unique
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   mobileNumber  String   @unique
-  designationId String?
-  departmentId  String?
+ 
+ 
   dateOfBirth DateTime?
   gender String?
 fatherName String?
@@ -121,6 +121,10 @@ fatherName String?
   createdOrders  Order[] @relation("CreatedOrders")
    orders        OrderEmployee[]
   inspections QualityInspection[]
+  designationId String?
+  designation   Designation? @relation(fields: [designationId], references: [id])
+  departmentId String?
+  department    Department?  @relation(fields: [departmentId], references: [id])
   leads       Client[] @relation("AssignedLeads")
   createdLeads Client[] @relation("CreatedLeads")
 attendances  Attendance[]
@@ -403,10 +407,12 @@ model Attendance {
 model Designation{
   id String @id @default(uuid())
   name String
+  employees Employee[]
 }
 model Department{
   id String @id @default(uuid())
   name String
+  employees Employee[]
 }
 model Client {
   id          String     @id @default(uuid())

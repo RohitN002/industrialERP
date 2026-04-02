@@ -23,6 +23,11 @@ export type EmployeeInput = z.infer<typeof employeeSchema>;
 
 export interface EmployeeResponse {
   message: string;
+  data: Employee[];
+}
+
+export interface Employee {
+  message: string;
   data: {
     id: string;
     gender: string;
@@ -42,5 +47,5 @@ export interface EmployeeResponse {
     contactPerson: string;
     contactPersonPhone: string;
     gst: string;
-  }[];
+  };
 }

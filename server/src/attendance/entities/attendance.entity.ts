@@ -175,8 +175,31 @@ export class AttendanceRepository {
           date: new Date(date),
         },
       },
+      include: {
+        employee: {
+          select: {
+            user: {
+              select: {
+                name: true,
+                email: true,
+              },
+            },
+            designation: {
+              select: {
+                name: true,
+              },
+            },
+            department: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
     });
   }
+
   async update(id: string, data: any) {
     return this.prisma.attendance.update({ where: { id }, data });
   }

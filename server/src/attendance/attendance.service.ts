@@ -34,7 +34,6 @@ export class AttendanceService {
     };
   }
   async findMonthlyAttendance(month: number, year: number) {
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', month, year);
     const Attendance =
       await this.attendanceRepository.findMonthlyAttendanceGrouped(month, year);
     // if (!Attendance) {
@@ -45,8 +44,16 @@ export class AttendanceService {
       data: Attendance,
     };
   }
-  async findDayAttendance(userId, date) {
-    await this.attendanceRepository.attendanceDetails(userId, date);
+  async findDayAttendance(userId: string, date: string) {
+    console.log(userId, date);
+    const attendance = await this.attendanceRepository.attendanceDetails(
+      userId,
+      date,
+    );
+    return {
+      message: 'Attendance details fetched successfully',
+      data: attendance,
+    };
   }
   async findOne(id: string) {
     const attendance = await this.attendanceRepository.findOne(id);

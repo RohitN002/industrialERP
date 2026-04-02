@@ -21,6 +21,9 @@ export default function EditProductPage() {
           toast.success("Product updated successfully!");
           router.push("/dashboard/product");
         },
+        onError: () => {
+          toast.error("Failed to update product");
+        },
       },
     );
   };

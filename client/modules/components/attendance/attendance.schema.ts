@@ -5,12 +5,10 @@ export interface Attendance {
   id: string;
   employeeId: string;
 
-  // business date (not timestamp)
   date: Date;
 
   status: AttendanceStatus;
 
-  // actual event timestamps (UTC)
   checkIn?: Date;
   checkOut?: Date;
 
@@ -31,5 +29,10 @@ export type AttendanceInput = z.infer<typeof attendanceSchema>;
 
 export interface AttendanceResponse {
   data: Attendance[];
+  message: string;
+}
+
+export interface GetAttendance {
+  data: Attendance;
   message: string;
 }
