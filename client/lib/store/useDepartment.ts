@@ -3,7 +3,7 @@ import {
   Department,
   DepartmentInput,
   DepartmentResponse,
-} from "../components/department/department.schema";
+} from "../../modules/components/department/department.schema";
 import { api } from "@/lib/api";
 
 export function useDepartments() {

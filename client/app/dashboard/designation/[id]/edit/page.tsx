@@ -4,7 +4,7 @@ import DesignationForm from "@/modules/components/designation/DesignationForm";
 import {
   useDesignationById,
   useUpdateDesignation,
-} from "@/modules/routes/useDesignation";
+} from "@/lib/store/useDesignation";
 import { useRouter, useParams } from "next/navigation";
 import toast from "react-hot-toast";
 

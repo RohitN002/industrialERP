@@ -7,9 +7,9 @@ import { useRouter } from "next/navigation";
 
 import Select, { SingleValue } from "react-select";
 import { Controller } from "react-hook-form";
-import { useDepartment, useDepartments } from "@/modules/routes/useDepartment";
-import { useRole, useRoles } from "@/modules/routes/useRole";
-import { useDesignations } from "@/modules/routes/useDesignation";
+import { useDepartment, useDepartments } from "@/lib/store/useDepartment";
+import { useRole, useRoles } from "@/lib/store/useRole";
+import { useDesignations } from "@/lib/store/useDesignation";
 import { useEffect } from "react";
 
 export default function EmployeeForm({
@@ -87,10 +87,10 @@ export default function EmployeeForm({
     })) || [];
   console.log(initialData);
   useEffect(() => {
-  if (initialData) {
-    reset(initialData);
-  }
-}, [initialData, reset]);
+    if (initialData) {
+      reset(initialData);
+    }
+  }, [initialData, reset]);
   return (
     <form
       onSubmit={handleSubmit((data) => onSubmit(data))}

@@ -3,10 +3,10 @@
 import {
   useDeleteDesignation,
   useDesignations,
-} from "@/modules/routes/useDesignation";
+} from "@/lib/store/useDesignation";
 import { useState } from "react";
 import DesignationForm from "@/modules/components/designation/DesignationForm";
-import { useCreateDesignation } from "@/modules/routes/useDesignation";
+import { useCreateDesignation } from "@/lib/store/useDesignation";
 import {
   ConfirmDialog,
   EmptyState,

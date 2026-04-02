@@ -2,7 +2,7 @@
 
 import RoleForm from "@/modules/components/role/RoleForm";
 import { ErrorState, LoadingState } from "@/modules/components/shared";
-import { useRole, useUpdateRole } from "@/modules/routes/useRole";
+import { useRole, useUpdateRole } from "@/lib/store/useRole";
 import { useParams, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 

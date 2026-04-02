@@ -3,7 +3,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   ClientManagementInput,
   ClientManagementResponse,
-} from "../components/clientMangement/client.schema";
+} from "../../modules/components/clientMangement/client.schema";
 import { queryClient } from "@/lib/query-client";
 
 export function useClients() {

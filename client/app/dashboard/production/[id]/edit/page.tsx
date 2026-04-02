@@ -1,10 +1,7 @@
 "use client";
 
 import ProductionForm from "@/modules/components/production/ProductionForm";
-import {
-  useProduction,
-  useUpdateProduction,
-} from "@/modules/routes/useProduction";
+import { useProduction, useUpdateProduction } from "@/lib/store/useProduction";
 import { useRouter, useParams } from "next/navigation";
 import toast from "react-hot-toast";
 

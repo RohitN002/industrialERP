@@ -1,6 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
-import { ProductionInput, Production } from "../production/production.schema";
+import {
+  ProductionInput,
+  Production,
+} from "../../modules/production/production.schema";
 
 export function useProductions() {
   return useQuery({
@@ -40,7 +43,13 @@ export function useCreateProduction() {
 export function useUpdateProduction() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<ProductionInput> }) =>
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: Partial<ProductionInput>;
+    }) =>
       api<Production>(`/production/${id}`, {
         method: "PATCH",
         body: JSON.stringify(data),

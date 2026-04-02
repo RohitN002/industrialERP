@@ -1,10 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  useProductions,
-  useDeleteProduction,
-} from "@/modules/routes/useProduction";
+import { useProductions, useDeleteProduction } from "@/lib/store/useProduction";
 import {
   PageHeader,
   LoadingState,

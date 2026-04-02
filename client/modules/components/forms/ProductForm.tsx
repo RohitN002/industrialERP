@@ -8,8 +8,8 @@ import {
   Product,
 } from "../../product/product.schema";
 import { useRouter } from "next/navigation";
-import { useSuppliers } from "@/modules/routes/useSupplier";
-import { useCategories } from "@/modules/routes/useCategory";
+import { useSuppliers } from "@/lib/store/useSupplier";
+import { useCategories } from "@/lib/store/useCategory";
 import Select, { SingleValue } from "react-select";
 import { Controller } from "react-hook-form";
 import { useEffect } from "react";

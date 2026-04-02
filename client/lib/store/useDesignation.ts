@@ -3,7 +3,7 @@ import {
   Designation,
   DesignationInput,
   DesignationResponse,
-} from "../components/designation/designation.schema";
+} from "../../modules/components/designation/designation.schema";
 import { api } from "@/lib/api";
 
 export function useDesignations() {

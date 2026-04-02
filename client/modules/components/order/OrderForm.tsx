@@ -4,8 +4,8 @@ import { OrderSchema, OrderSchemaType } from "./order.schema";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useProducts } from "@/modules/routes/useProduct";
-import { useClients } from "@/modules/routes/useClientMangement";
+import { useProducts } from "@/lib/store/useProduct";
+import { useClients } from "@/lib/store/useClientMangement";
 import { useEffect, useMemo } from "react";
 import Select, { SingleValue } from "react-select";
 

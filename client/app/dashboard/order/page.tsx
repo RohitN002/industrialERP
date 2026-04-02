@@ -8,9 +8,9 @@ import {
   PageHeader,
   RowActions,
 } from "@/modules/components/shared";
-import { useClients } from "@/modules/routes/useClientMangement";
-import { useDeleteOrder, useOrders } from "@/modules/routes/useOrder";
-import { useProducts } from "@/modules/routes/useProduct";
+import { useClients } from "@/lib/store/useClientMangement";
+import { useDeleteOrder, useOrders } from "@/lib/store/useOrder";
+import { useProducts } from "@/lib/store/useProduct";
 import { Printer } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";

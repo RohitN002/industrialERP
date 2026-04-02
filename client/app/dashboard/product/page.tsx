@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useProducts, useDeleteProduct } from "@/modules/routes/useProduct";
+import { useProducts, useDeleteProduct } from "@/lib/store/useProduct";
 import { Product } from "@/modules/product/product.schema";
 import {
   PageHeader,

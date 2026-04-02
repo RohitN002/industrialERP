@@ -1,7 +1,7 @@
 "use client";
 
 import CategoryForm from "@/modules/components/category/CategoryForm";
-import { useCategory, useUpdateCategory } from "@/modules/routes/useCategory";
+import { useCategory, useUpdateCategory } from "@/lib/store/useCategory";
 import { useParams, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 

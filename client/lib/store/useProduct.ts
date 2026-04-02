@@ -4,7 +4,7 @@ import {
   ProductInput,
   Product,
   ProductResponse,
-} from "../product/product.schema";
+} from "../../modules/product/product.schema";
 
 export function useProducts() {
   return useQuery({

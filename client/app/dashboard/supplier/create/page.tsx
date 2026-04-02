@@ -1,7 +1,7 @@
 "use client";
 import CategoryForm from "@/modules/components/category/CategoryForm";
 import SupplierForm from "@/modules/components/supplier/SupplierForm";
-import { useCreateSupplier } from "@/modules/routes/useSupplier";
+import { useCreateSupplier } from "@/lib/store/useSupplier";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 

@@ -1,6 +1,6 @@
 "use client";
 import ReciptTemplate from "@/modules/components/print/ReciptTemplate";
-import { useOrder } from "@/modules/routes/useOrder";
+import { useOrder } from "@/lib/store/useOrder";
 import { useParams } from "next/navigation";
 
 export default function PrintOrder() {

@@ -2,7 +2,7 @@
 
 import { OrderForm } from "@/modules/components/order/OrderForm";
 import { ErrorState, LoadingState } from "@/modules/components/shared";
-import { useOrder, useUpdateOrder } from "@/modules/routes/useOrder";
+import { useOrder, useUpdateOrder } from "@/lib/store/useOrder";
 import { useParams, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 

@@ -1,5 +1,5 @@
 import Navbar from "@/modules/components/shared/NavBar";
-import { useAuthRedirect } from "@/modules/routes/useAuthRedirect";
+import { useAuthRedirect } from "@/lib/store/useAuthRedirect";
 
 export default function DashboardLayout({
   children,

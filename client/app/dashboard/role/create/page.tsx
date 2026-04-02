@@ -1,7 +1,7 @@
 "use client";
 
 import RoleForm from "@/modules/components/role/RoleForm";
-import { useCreateRole } from "@/modules/routes/useRole";
+import { useCreateRole } from "@/lib/store/useRole";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 

@@ -1,10 +1,7 @@
 "use client";
 
 import ClientForm from "@/modules/components/clientMangement/ClientForm";
-import {
-  useClient,
-  useUpdateClient,
-} from "@/modules/routes/useClientMangement";
+import { useClient, useUpdateClient } from "@/lib/store/useClientMangement";
 import { useParams, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 

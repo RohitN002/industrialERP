@@ -9,7 +9,7 @@ import {
   PageHeader,
   RowActions,
 } from "@/modules/components/shared";
-import { useDeleteRole, useRoles } from "@/modules/routes/useRole";
+import { useDeleteRole, useRoles } from "@/lib/store/useRole";
 import { useState } from "react";
 import toast from "react-hot-toast";
 

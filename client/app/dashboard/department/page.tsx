@@ -9,10 +9,7 @@ import {
   PageHeader,
   RowActions,
 } from "@/modules/components/shared";
-import {
-  useDeleteDepartment,
-  useDepartments,
-} from "@/modules/routes/useDepartment";
+import { useDeleteDepartment, useDepartments } from "@/lib/store/useDepartment";
 import { useState } from "react";
 import toast from "react-hot-toast";
 

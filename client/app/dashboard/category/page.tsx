@@ -7,7 +7,7 @@ import {
   PageHeader,
   RowActions,
 } from "@/modules/components/shared";
-import { useCategories, useDeleteCategory } from "@/modules/routes/useCategory";
+import { useCategories, useDeleteCategory } from "@/lib/store/useCategory";
 import { useState } from "react";
 import toast from "react-hot-toast";
 

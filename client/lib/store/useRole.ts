@@ -1,6 +1,10 @@
 import { api } from "@/lib/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Role, RoleInput, RoleResponse } from "../components/role/role.schema";
+import {
+  Role,
+  RoleInput,
+  RoleResponse,
+} from "../../modules/components/role/role.schema";
 
 export function useRoles() {
   return useQuery({

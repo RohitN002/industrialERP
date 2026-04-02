@@ -1,7 +1,7 @@
 "use client";
 
 import ProductForm from "@/modules/components/forms/ProductForm";
-import { useProduct, useUpdateProduct } from "@/modules/routes/useProduct";
+import { useProduct, useUpdateProduct } from "@/lib/store/useProduct";
 import { useRouter, useParams } from "next/navigation";
 import toast from "react-hot-toast";
 
@@ -56,4 +56,3 @@ export default function EditProductPage() {
     </div>
   );
 }
-  

@@ -7,7 +7,7 @@ import {
   productionSchema,
   Production,
 } from "../../production/production.schema";
-import { useProducts } from "../../routes/useProduct";
+import { useProducts } from "../../../lib/store/useProduct";
 import { useRouter } from "next/navigation";
 import { Plus, Trash2 } from "lucide-react";
 import { useEffect } from "react";

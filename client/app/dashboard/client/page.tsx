@@ -8,10 +8,7 @@ import {
   PageHeader,
   RowActions,
 } from "@/modules/components/shared";
-import {
-  useClients,
-  useDeleteClient,
-} from "@/modules/routes/useClientMangement";
+import { useClients, useDeleteClient } from "@/lib/store/useClientMangement";
 import { useState } from "react";
 import toast from "react-hot-toast";
 

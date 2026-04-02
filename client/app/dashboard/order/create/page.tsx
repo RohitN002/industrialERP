@@ -1,7 +1,7 @@
 "use client";
 
 import { OrderForm } from "@/modules/components/order/OrderForm";
-import { useCreateOrder } from "@/modules/routes/useOrder";
+import { useCreateOrder } from "@/lib/store/useOrder";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 

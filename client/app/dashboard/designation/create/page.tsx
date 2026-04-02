@@ -1,7 +1,7 @@
 "use client";
 
 import DesignationForm from "@/modules/components/designation/DesignationForm";
-import { useCreateDesignation } from "@/modules/routes/useDesignation";
+import { useCreateDesignation } from "@/lib/store/useDesignation";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 

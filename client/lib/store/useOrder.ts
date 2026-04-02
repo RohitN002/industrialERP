@@ -1,6 +1,6 @@
 import { api } from "@/lib/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { OrderResponse } from "../components/order/order.schema";
+import { OrderResponse } from "../../modules/components/order/order.schema";
 
 export function useOrders() {
   return useQuery({

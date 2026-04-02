@@ -12,8 +12,8 @@ import {
   PageHeader,
   RowActions,
 } from "@/modules/components/shared";
-import { useDepartments } from "@/modules/routes/useDepartment";
-import { useDesignations } from "@/modules/routes/useDesignation";
+import { useDepartments } from "@/lib/store/useDepartment";
+import { useDesignations } from "@/lib/store/useDesignation";
 import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 

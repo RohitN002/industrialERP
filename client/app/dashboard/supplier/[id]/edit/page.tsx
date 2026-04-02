@@ -1,6 +1,6 @@
 "use client";
 import SupplierForm from "@/modules/components/supplier/SupplierForm";
-import { useSupplier, useUpdateSupplier } from "@/modules/routes/useSupplier";
+import { useSupplier, useUpdateSupplier } from "@/lib/store/useSupplier";
 import { useParams, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 

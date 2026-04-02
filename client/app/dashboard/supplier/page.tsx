@@ -7,7 +7,7 @@ import {
   PageHeader,
   RowActions,
 } from "@/modules/components/shared";
-import { useDeleteSupplier, useSuppliers } from "@/modules/routes/useSupplier";
+import { useDeleteSupplier, useSuppliers } from "@/lib/store/useSupplier";
 import { useState } from "react";
 import toast from "react-hot-toast";
 export default function SupplierPage() {

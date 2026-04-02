@@ -1,10 +1,7 @@
 "use client";
 
 import { DepartmentForm } from "@/modules/components/department/DepartmentForm";
-import {
-  useDepartment,
-  useUpdateDepartment,
-} from "@/modules/routes/useDepartment";
+import { useDepartment, useUpdateDepartment } from "@/lib/store/useDepartment";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
