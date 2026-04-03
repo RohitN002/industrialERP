@@ -1,8 +1,12 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useProducts } from "@/lib/store/useProduct";
+import { ErrorState, LoadingState } from "@/modules/components/shared";
 
 export default function CreateQuotePage() {
+  const { id } = useParams();
+
   const router = useRouter();
   return (
     <div>
