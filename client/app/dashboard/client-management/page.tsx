@@ -11,6 +11,7 @@ import {
 import { useClients, useDeleteClient } from "@/lib/store/useClientMangement";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 export default function ClientPage() {
   const { data: clients, isLoading, isError } = useClients();
@@ -33,7 +34,7 @@ export default function ClientPage() {
     <div className="flex-1 ">
       <PageHeader
         title="Clients"
-        createHref="/dashboard/client/create"
+        createHref="/dashboard/client-management/create"
         createLabel="Add Client"
       />
       <div className="bg-gray-800 rounded-xl shadow overflow-hidden border border-gray-700">
@@ -52,6 +53,7 @@ export default function ClientPage() {
                   <th className="p-4 font-medium">Email</th>
                   <th className="p-4 font-medium">Phone</th>
                   <th className="p-4 font-medium">Address</th>
+                  <th className="p-4 font-medium">Create Quote</th>
                   <th className="p-4 font-medium text-right">Actions</th>
                 </tr>
               </thead>
@@ -66,9 +68,18 @@ export default function ClientPage() {
                     <td className="p-4 text-gray-300">{client.phone}</td>
                     <td className="p-4 text-gray-300">{client.address}</td>
                     <td className="p-4">
+                      {" "}
+                      <Link
+                        href={`/dashboard/client-management/${client.id}/quote`}
+                        className="text-blue-500 hover:text-blue-600"
+                      >
+                        Create Quote
+                      </Link>
+                    </td>
+                    <td className="p-4">
                       <RowActions
-                        editHref={`/dashboard/client/${client.id}/edit`}
-                        viewHref={`/dashboard/client/${client.id}/view`}
+                        editHref={`/dashboard/client-management/${client.id}/edit`}
+                        viewHref={`/dashboard/client-management/${client.id}/view`}
                         onDelete={() => setConfirmId(client.id)}
                         isDeleting={
                           deleteMutation.isPending && confirmId === client.id
