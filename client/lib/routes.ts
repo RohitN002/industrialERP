@@ -37,7 +37,7 @@ export const routes: AppRoute[] = [
   },
   {
     name: "Client Management",
-    path: "/client",
+    path: "/client-management",
     icon: Users,
     roles: [UserRole.ADMIN, UserRole.EMPLOYEE],
   },
