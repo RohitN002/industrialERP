@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Req, Res,} from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtRefreshGuard } from './guards/refresh.guard';
 import type { Response } from 'express';
@@ -6,18 +6,15 @@ import type { Response } from 'express';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-   @Post('login')
-  async login(
-    @Body() body: any,
-    @Res({ passthrough: true }) res: Response
-  ) {
+  @Post('login')
+  async login(@Body() body: any, @Res({ passthrough: true }) res: Response) {
     const token = await this.authService.login(body.email, body.password);
-console.log("refresh token",token?.tokens?.refreshToken);
+    console.log('refresh token', token?.tokens?.refreshToken);
     res.cookie('refreshToken', token?.tokens?.refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      path: '/auth/refresh-token',
+      // path: '/refresh-token',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     res.cookie('userId', token?.userId, {
@@ -39,13 +36,10 @@ console.log("refresh token",token?.tokens?.refreshToken);
   }
   // @UseGuards(JwtRefreshGuard)
   @Post('refresh-token')
-  async refresh(
-    @Req() req: any,
-    @Res({ passthrough: true }) res: Response
-  ) {
-    console.log("refresh token hit");
-    console.log("cookies",req.cookies);
-    const refreshToken =  req.cookies?.refreshToken||req.cookies?.token ;
+  async refresh(@Req() req: any, @Res({ passthrough: true }) res: Response) {
+    console.log('refresh token hit');
+    console.log('cookies', req.cookies);
+    const refreshToken = req.cookies?.refreshToken || req.cookies?.token;
     const userId = req.cookies?.userId;
     const tokens = await this.authService.refreshTokens(userId, refreshToken);
     res.cookie('refreshToken', tokens?.tokens?.refreshToken, {
@@ -55,7 +49,7 @@ console.log("refresh token",token?.tokens?.refreshToken);
       path: '/auth/refresh-token',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-       res.cookie('userId', tokens?.userId, {
+    res.cookie('userId', tokens?.userId, {
       httpOnly: true, // optional (depends if frontend needs access)
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -64,7 +58,6 @@ console.log("refresh token",token?.tokens?.refreshToken);
     return {
       role: tokens?.role,
       accessToken: tokens?.tokens?.accessToken,
-   
     };
   }
 
