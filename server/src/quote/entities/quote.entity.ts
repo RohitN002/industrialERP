@@ -19,7 +19,6 @@ export class QuoteRepository {
         throw new Error('Invalid clientId');
       }
 
-      // 🔴 2. Calculate totals (NEVER trust frontend)
       let subTotal = new Prisma.Decimal(0);
       let discountTotal = new Prisma.Decimal(0);
       let taxTotal = new Prisma.Decimal(0);
@@ -52,13 +51,11 @@ export class QuoteRepository {
 
       const grandTotal = subTotal.minus(discountTotal).plus(taxTotal);
 
-      // 🔴 3. Generate quote number (simple version — fix later with sequence)
       const quoteCount = await tx.quote.count();
       const quoteNumber = `Q-${new Date().getFullYear()}-${String(
         quoteCount + 1,
       ).padStart(5, '0')}`;
 
-      // 🔴 4. Create quote + items
       const quote = await tx.quote.create({
         data: {
           quoteNumber,
