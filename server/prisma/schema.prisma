@@ -564,7 +564,7 @@ grandTotal Decimal @db.Decimal(12,2) @default(0)
 }
 model Quote {
   id              String   @id @default(uuid())
-
+  quoteName       String  @unique
   quoteNumber     String   @unique
   version         Int      @default(1)
 

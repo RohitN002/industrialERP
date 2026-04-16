@@ -41,6 +41,9 @@ export class CreateQuoteDto {
   @IsUUID()
   clientId: string;
 
+  @IsString()
+  quoteName: string;
+
   @IsOptional()
   @IsDateString()
   expiryDate?: string;

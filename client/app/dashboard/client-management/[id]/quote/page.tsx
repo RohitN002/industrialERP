@@ -13,6 +13,7 @@ export default function QuotePage() {
         createHref={`/dashboard/client-management/${clientId}/quote/create`}
         createLabel="Add Quote"
       />
+
       <h1>Quote Page</h1>
     </div>
   );
