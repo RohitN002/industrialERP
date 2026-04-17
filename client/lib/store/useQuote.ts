@@ -6,7 +6,8 @@ export function useQuotesByClientId(clientId: string) {
   return useQuery({
     queryKey: ["quotes", clientId],
     queryFn: async () => {
-      const res = await api<QuoteResponse>(`/quote/client/${clientId}`, {
+      console.log("clientId", clientId);
+      const res = await api<QuoteResponse>(`/quotes/client/${clientId}`, {
         method: "GET",
       });
       return res.data;

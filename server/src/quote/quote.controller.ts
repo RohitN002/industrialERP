@@ -11,7 +11,7 @@ import { QuoteService } from './quote.service';
 import { CreateQuoteDto } from './dto/create-quote.dto';
 import { UpdateQuoteDto } from './dto/update-quote.dto';
 
-@Controller('quote')
+@Controller('quotes')
 export class QuoteController {
   constructor(private readonly quoteService: QuoteService) {}
 
@@ -20,9 +20,9 @@ export class QuoteController {
     return this.quoteService.create(createQuoteDto);
   }
 
-  @Get()
-  findAll() {
-    return this.quoteService.findAll();
+  @Get('client/:clientId')
+  findByClientId(@Param('clientId') clientId: string) {
+    return this.quoteService.findByClientId(clientId);
   }
 
   @Get(':id')

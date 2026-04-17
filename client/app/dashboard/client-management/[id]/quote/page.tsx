@@ -15,13 +15,15 @@ import toast from "react-hot-toast";
 
 export default function QuotePage() {
   const params = useParams();
-  const clientId = params.clientId;
+  console.log("params", params);
+  const clientId = String(params.id);
+  console.log("clientId", clientId);
   const {
     data: quotes,
     isLoading,
     isError,
     error,
-  } = useQuotesByClientId(clientId as string);
+  } = useQuotesByClientId(clientId);
   const deleteMutation = useDeleteQuote();
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const handleDeleteConfirm = () => {
@@ -49,7 +51,7 @@ export default function QuotePage() {
           <LoadingState message="Loading Quotes" />
         ) : isError ? (
           <ErrorState message="Error Loading Quotes" />
-        ) : quotes?.length === 0 ? (
+        ) : (quotes && quotes?.length === 0) || !quotes ? (
           <EmptyState message="No Quotes Found" />
         ) : (
           <div>

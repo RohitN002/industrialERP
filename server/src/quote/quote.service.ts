@@ -10,8 +10,8 @@ export class QuoteService {
     return 'This action adds a new quote';
   }
 
-  async findAll() {
-    const quotes = await this.quoteRepository.findAll();
+  async findByClientId(clientId: string) {
+    const quotes = await this.quoteRepository.findByClientId(clientId);
     if (quotes.length === 0) {
       //  return ('No quotes found');
     }

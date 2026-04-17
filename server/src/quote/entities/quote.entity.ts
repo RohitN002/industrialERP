@@ -93,8 +93,9 @@ export class QuoteRepository {
     });
   }
 
-  async findAll() {
+  async findByClientId(clientId: string) {
     return this.prisma.quote.findMany({
+      where: { clientId },
       include: {
         items: true,
       },
