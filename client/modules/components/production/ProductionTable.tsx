@@ -28,7 +28,10 @@ export default function ProductionTable({
         </thead>
         <tbody className="divide-y divide-gray-700">
           {productions.map((prod) => (
-            <tr key={prod.id} className="hover:bg-gray-700/30 transition-colors">
+            <tr
+              key={prod.id}
+              className="hover:bg-gray-700/30 transition-colors"
+            >
               <td className="p-4 font-bold">{prod.batchNo}</td>
               <td className="p-4 text-gray-300">
                 {prod.producedProduct?.name ?? "Unknown"}
@@ -46,6 +49,7 @@ export default function ProductionTable({
               <td className="p-4">
                 <RowActions
                   editHref={`/dashboard/production/${prod.id}/edit`}
+                  viewHref={`/dashboard/production/${prod.id}/view`}
                   onDelete={() => onDelete(prod.id)}
                   isDeleting={deletingId === prod.id}
                 />

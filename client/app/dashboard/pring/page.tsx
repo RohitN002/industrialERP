@@ -53,9 +53,5 @@ export default function print() {
     notes: "Thank you for your business.",
   };
 
-  return (
-    <div>
-      <ReceiptTemplate receipt={receipt} />
-    </div>
-  );
+  return <div>{/* <ReceiptTemplate receipt={receipt} /> */}</div>;
 }
