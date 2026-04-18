@@ -6,11 +6,6 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 export default function CreateClientPage() {
-  const {
-    data: clients,
-    isLoading: clientsLoading,
-    isError: clientsIsError,
-  } = useClients();
   const router = useRouter();
   const createMutation = useCreateClient();
   const handleSubmit = (data: any) => {

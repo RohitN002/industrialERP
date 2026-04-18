@@ -9,9 +9,11 @@ import Select from "react-select";
 import { useMemo } from "react";
 
 export default function QuoteForm({
+  initialData,
   onSubmit,
   isLoading,
 }: {
+  initialData?: any;
   onSubmit: (data: any) => void;
   isLoading: boolean;
 }) {
@@ -28,6 +30,15 @@ export default function QuoteForm({
     formState: { errors },
   } = useForm({
     resolver: zodResolver(quoteSchema) as any,
+    defaultValues: initialData
+      ? {
+          expiryDate: initialData.expiryDate,
+          currency: initialData.currency,
+          notes: initialData.notes,
+          terms: initialData.terms,
+          items: initialData.items,
+        }
+      : {},
   });
   const { fields, append, remove } = useFieldArray({
     control,
