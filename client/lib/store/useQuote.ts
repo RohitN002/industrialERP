@@ -33,7 +33,7 @@ export function useCreateQuote() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: any) =>
-      api("/quote", {
+      api("/quotes", {
         method: "POST",
         body: JSON.stringify(data),
       }),

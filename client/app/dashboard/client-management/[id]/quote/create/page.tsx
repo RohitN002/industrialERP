@@ -10,12 +10,12 @@ import toast from "react-hot-toast";
 export default function CreateQuotePage() {
   const paramas = useParams();
   const clientId = String(paramas.id);
-  console.log("clientId", clientId);
   const { data: products, isLoading, isError } = useProducts();
   const createMutation = useCreateQuote();
 
   const router = useRouter();
   const handleSubmit = (data: any) => {
+    console.log("data", JSON.stringify(data));
     createMutation.mutate(data, {
       onSuccess: () => {
         toast.success("Quote created successfully!");
@@ -34,7 +34,11 @@ export default function CreateQuotePage() {
           Fill in the details to create a new quote.
         </p>
       </div>
-      <QuoteForm onSubmit={handleSubmit} isLoading={createMutation.isPending} />
+      <QuoteForm
+        onSubmit={handleSubmit} 
+        clientId={clientId}
+        isLoading={createMutation.isPending}
+      />
     </div>
   );
 }

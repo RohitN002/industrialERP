@@ -54,33 +54,67 @@ export default function QuotePage() {
         ) : (quotes && quotes?.length === 0) || !quotes ? (
           <EmptyState message="No Quotes Found" />
         ) : (
-          <div>
-            <table>
-              <thead>
-                <tr>
-                  <th>Quote Number</th>
-                  <th>Quote Name</th>
-                  <th>Expiry Date</th>
-                  <th>Currency</th>
-                  <th>Sub Total</th>
-                  <th>Discount Total</th>
-                  <th>Tax Total</th>
-                  <th>Grand Total</th>
-                  <th>Actions</th>
+          <div className="overflow-x-auto bg-[#F8FAFC] rounded-lg border border-[#E2E8F0]">
+            <table className="w-full">
+              <thead className="bg-[#FFFFFF]">
+                <tr className="border-b border-[#E2E8F0]">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-[#475569] uppercase tracking-wider">
+                    Quote Number
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-[#475569] uppercase tracking-wider">
+                    Quote Name
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-[#475569] uppercase tracking-wider">
+                    Expiry Date
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-[#475569] uppercase tracking-wider">
+                    Currency
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-[#475569] uppercase tracking-wider">
+                    Sub Total
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-[#475569] uppercase tracking-wider">
+                    Discount Total
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-[#475569] uppercase tracking-wider">
+                    Tax Total
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-[#475569] uppercase tracking-wider">
+                    Grand Total
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-[#475569] uppercase tracking-wider">
+                    Actions
+                  </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="bg-[#FFFFFF]">
                 {quotes?.map((quote: any) => (
                   <tr key={quote.id}>
-                    <td>{quote.quoteNumber}</td>
-                    <td>{quote.quoteName}</td>
-                    <td>{quote.expiryDate}</td>
-                    <td>{quote.currency}</td>
-                    <td>{quote.subTotal}</td>
-                    <td>{quote.discountTotal}</td>
-                    <td>{quote.taxTotal}</td>
-                    <td>{quote.grandTotal}</td>
-                    <td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[#475569]">
+                      {quote.quoteNumber}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[#475569]">
+                      {quote.quoteName}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[#475569]">
+                      {quote.expiryDate}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[#475569]">
+                      {quote.currency}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[#475569]">
+                      {quote.subTotal}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[#475569]">
+                      {quote.discountTotal}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[#475569]">
+                      {quote.taxTotal}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[#475569]">
+                      {quote.grandTotal}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[#475569]">
                       <RowActions
                         editHref={`/dashboard/client-management/${clientId}/quote/${quote.id}/edit`}
                         viewHref={`/dashboard/client-management/${clientId}/quote/${quote.id}`}

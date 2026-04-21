@@ -1,8 +1,9 @@
 import z from "zod";
 
 export const quoteSchema = z.object({
-  clientId: z.string().min(1, "Client is required"),
+  clientId: z.string().optional(),
   expiryDate: z.string().min(1, "Expiry date is required"),
+  quoteName: z.string().min(1, "Quote name is required"),
   currency: z.string().min(1, "Currency is required"),
   notes: z.string().min(1, "Notes is required"),
   terms: z.string().min(1, "Terms is required"),
@@ -24,7 +25,8 @@ export type QuoteItemSchemaType = z.infer<typeof quoteSchema>["items"][0];
 export type Quote = {
   id: string;
   referenceNo: string;
-  clientId: string;
+  quoteName: string;
+  clientId?: string;
   client: string;
   expiryDate: string;
   currency: string;

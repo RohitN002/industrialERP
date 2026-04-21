@@ -38,9 +38,6 @@ class CreateQuoteItemDto {
 }
 
 export class CreateQuoteDto {
-  @IsUUID()
-  clientId: string;
-
   @IsString()
   quoteName: string;
 

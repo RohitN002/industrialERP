@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { QuoteService } from './quote.service';
 import { CreateQuoteDto } from './dto/create-quote.dto';
@@ -16,7 +17,11 @@ export class QuoteController {
   constructor(private readonly quoteService: QuoteService) {}
 
   @Post()
-  create(@Body() createQuoteDto: CreateQuoteDto) {
+  create(
+    @Body() createQuoteDto: CreateQuoteDto,
+    @Query('clientId') clientId: string,
+  ) {
+    console.log('createQuoteDto', createQuoteDto);
     return this.quoteService.create(createQuoteDto);
   }
 
