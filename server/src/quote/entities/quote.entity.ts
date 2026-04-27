@@ -7,11 +7,11 @@ import { Prisma } from '@prisma/client';
 export class QuoteRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createQuote(dto: CreateQuoteDto) {
+  async createQuote(dto: CreateQuoteDto, clientID: string) {
     return this.prisma.$transaction(async (tx) => {
       // 🔴 1. Validate client exists
       const client = await tx.client.findUnique({
-        where: { id: dto.clientId },
+        where: { id: clientID },
         select: { id: true },
       });
 
@@ -59,7 +59,7 @@ export class QuoteRepository {
       const quote = await tx.quote.create({
         data: {
           quoteNumber,
-          clientId: dto.clientId,
+          clientId: clientID,
           expiryDate: dto.expiryDate,
           currency: dto.currency ?? 'INR',
 

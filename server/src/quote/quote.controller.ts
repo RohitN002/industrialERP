@@ -22,7 +22,7 @@ export class QuoteController {
     @Query('clientId') clientId: string,
   ) {
     console.log('createQuoteDto', createQuoteDto);
-    return this.quoteService.create(createQuoteDto);
+    return this.quoteService.create(createQuoteDto, clientId);
   }
 
   @Get('client/:clientId')

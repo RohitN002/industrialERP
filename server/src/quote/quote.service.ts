@@ -6,8 +6,12 @@ import { QuoteRepository } from './entities/quote.entity';
 @Injectable()
 export class QuoteService {
   constructor(private readonly quoteRepository: QuoteRepository) {}
-  create(createQuoteDto: CreateQuoteDto) {
-    return 'This action adds a new quote';
+  async create(createQuoteDto: CreateQuoteDto, clientId: string) {
+    const createdQuote = await this.quoteRepository.createQuote(
+      createQuoteDto,
+      clientId,
+    );
+    return { message: 'quote created sucessfully', data: createdQuote };
   }
 
   async findByClientId(clientId: string) {
