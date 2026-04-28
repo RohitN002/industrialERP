@@ -47,8 +47,8 @@ export function useUpdateQuote() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: any) =>
-      api(`/quote/${data.id}`, {
-        method: "PUT",
+      api(`/quotes/${data.id}`, {
+        method: "PATCH",
         body: JSON.stringify(data),
       }),
     onSuccess: () => {
@@ -61,7 +61,7 @@ export function useQuoteById(id: string) {
   return useQuery({
     queryKey: ["quote", id],
     queryFn: async () => {
-      const res = await api<QuoteResponse>(`/quote/${id}`, {
+      const res = await api<QuoteResponse>(`/quotes/${id}`, {
         method: "GET",
       });
       return res.data;

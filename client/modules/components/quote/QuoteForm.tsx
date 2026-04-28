@@ -39,7 +39,7 @@ export default function QuoteForm({
           quoteName: initialData.quoteName,
           expiryDate: initialData.expiryDate,
           currency: initialData.currency,
-          description: initialData.description,
+          notes: initialData.notes,
           terms: initialData.terms,
           items: initialData.items,
         }
@@ -84,12 +84,12 @@ export default function QuoteForm({
         <input type="text" {...register("currency")} />
       </div>
       <div>
-        <label htmlFor="description">Description</label>
-        <input type="text" {...register("description")} />
+        <label htmlFor="notes">Notes</label>
+        <textarea {...register("notes")} />
       </div>
       <div>
-        <label htmlFor="terms">Terms</label>
-        <input type="text" {...register("terms")} />
+        <label htmlFor="terms">Terms & Conditions</label>
+        <textarea {...register("terms")} />
       </div>
       <div className="bg-green-700">
         <div className="flex justify-between items-center">
@@ -101,6 +101,7 @@ export default function QuoteForm({
                 productId: "",
                 quantity: 1,
                 unitPrice: 0,
+                description: "",
               })
             }
           >
@@ -190,7 +191,7 @@ export default function QuoteForm({
       <button type="button" onClick={() => router.back()}>
         Cancel
       </button>
-      <button type="submit">Create Quote</button>
+      <button type="submit">{isLoading ? "Updating..." : "Submit"}</button>
     </form>
   );
 }

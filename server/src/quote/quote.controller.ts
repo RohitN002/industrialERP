@@ -32,11 +32,14 @@ export class QuoteController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
+    console.log('id', id);
     return this.quoteService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateQuoteDto: UpdateQuoteDto) {
+    console.log('updateQuoteDto', updateQuoteDto);
+    console.log('id', id);
     return this.quoteService.update(id, updateQuoteDto);
   }
 

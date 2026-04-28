@@ -1,0 +1,4 @@
+error exeptions ,
+better ui ux 
+login logout issue clearence  session based access control
+responsive design   

@@ -23,6 +23,7 @@ export class QuoteService {
   }
 
   async findOne(id: string) {
+    console.log('id', id);
     const quote = await this.quoteRepository.findOne(id);
     if (!quote) {
       //  return ('No quote found');
@@ -32,6 +33,7 @@ export class QuoteService {
 
   async update(id: string, updateQuoteDto: UpdateQuoteDto) {
     const validQuote = await this.quoteRepository.findOne(id);
+    console.log('validQuote', validQuote);
     if (!validQuote) {
       throw new Error('Invalid quoteId');
     }

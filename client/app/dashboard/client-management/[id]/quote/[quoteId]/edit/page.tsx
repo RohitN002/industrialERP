@@ -10,7 +10,8 @@ import QuoteForm from "@/modules/components/quote/QuoteForm";
 export default function EditQuotePage() {
   const router = useRouter();
   const params = useParams();
-  const quoteId = String(params.clientId);
+  const quoteId = String(params.quoteId);
+  console.log("quoteId", quoteId);
   const { data: quote, isLoading: isLoadingQuote } = useQuoteById(quoteId);
   const updateMutation = useUpdateQuote();
   const handleSubmit = (data: QuoteSchemaType) => {
