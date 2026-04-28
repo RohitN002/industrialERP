@@ -39,7 +39,7 @@ export default function QuoteForm({
           quoteName: initialData.quoteName,
           expiryDate: initialData.expiryDate,
           currency: initialData.currency,
-          notes: initialData.notes,
+          description: initialData.description,
           terms: initialData.terms,
           items: initialData.items,
         }
@@ -84,8 +84,8 @@ export default function QuoteForm({
         <input type="text" {...register("currency")} />
       </div>
       <div>
-        <label htmlFor="notes">Notes</label>
-        <input type="text" {...register("notes")} />
+        <label htmlFor="description">Description</label>
+        <input type="text" {...register("description")} />
       </div>
       <div>
         <label htmlFor="terms">Terms</label>
@@ -161,6 +161,9 @@ export default function QuoteForm({
                 valueAsNumber: true,
               })}
             />
+            <br />
+            <label htmlFor="description">Description</label>
+            <input type="text" {...register(`items.${index}.description`)} />
             {/* {errors.items?.[index]?.unitPrice && (
                 <p>{errors.items[index]?.unitPrice?.message}</p>
               )} */}

@@ -39,7 +39,7 @@ export class QuoteRepository {
 
         return {
           productId: item.productId,
-          description: item.description,
+          description: item?.description,
           quantity,
           unitPrice,
           discount,
@@ -59,6 +59,7 @@ export class QuoteRepository {
       const quote = await tx.quote.create({
         data: {
           quoteNumber,
+          quoteName: dto.quoteName,
           clientId: clientID,
           expiryDate: dto.expiryDate,
           currency: dto.currency ?? 'INR',
@@ -83,7 +84,6 @@ export class QuoteRepository {
       return quote;
     });
   }
-
   async findOne(id: string) {
     return this.prisma.quote.findUnique({
       where: { id },

@@ -32,8 +32,8 @@ export function useDeleteQuote() {
 export function useCreateQuote() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: any) =>
-      api("/quotes", {
+    mutationFn: ({ data, clientId }: { data: any; clientId: string }) =>
+      api(`/quotes?clientId=${clientId}`, {
         method: "POST",
         body: JSON.stringify(data),
       }),

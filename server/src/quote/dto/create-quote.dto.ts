@@ -8,6 +8,7 @@ import {
   IsEnum,
   IsDecimal,
   Min,
+  IsNumber,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -17,16 +18,16 @@ class CreateQuoteItemDto {
   productId?: string;
 
   @IsString()
-  //   @IsOptional()
-  description: string;
+  @IsOptional()
+  description?: string;
 
-  @IsDecimal()
+  @IsNumber()
   @Min(0)
-  quantity: string; // use string for Decimal safety
+  quantity: number;
 
-  @IsDecimal()
+  @IsNumber()
   @Min(0)
-  unitPrice: string;
+  unitPrice: number;
 
   @IsOptional()
   @IsDecimal()
