@@ -64,14 +64,14 @@ export default function Attendance() {
           <div className="overflow-x-auto">
             <table className="min-w-full border-collapse text-sm">
               <thead>
-                <tr className="bg-gray-900 text-gray-400">
+                <tr className="bg-(--surfaceHover) text-(--textPrimary)">
                   {/* Sticky Employee Column */}
-                  <th className="p-3 text-left sticky left-0 bg-gray-900 z-10">
+                  <th className="p-3 text-left sticky left-0 z-10 bg-(--surfaceHover) text-(--textPrimary)">
                     Employee
                   </th>
-                  <th className="p-3 text-center">P</th>
-                  <th className="p-3 text-center">A</th>
-                  <th className="p-3 text-center">L</th>
+                  <th className="p-3 text-center text-(--textPrimary)">P</th>
+                  <th className="p-3 text-center text-(--textPrimary)">A</th>
+                  <th className="p-3 text-center text-(--textPrimary)">L</th>
 
                   {/* Dynamic Days */}
                   {Array.from({ length: daysInMonth }).map((_, i) => {
@@ -81,7 +81,7 @@ export default function Attendance() {
                       <th key={day} className="p-2 text-center min-w-[60px]">
                         <div className="flex flex-col">
                           <span>{day}</span>
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-(--textSecondary)">
                             {getWeekday(year, month, day)}
                           </span>
                         </div>

@@ -35,14 +35,14 @@ export default function ProductPage() {
   };
 
   return (
-    <div className="flex-1 p-6 text-gray-100">
+    <div className="flex-1 p-6 text-(--textPrimary)">
       <PageHeader
         title="Products"
         createHref="/dashboard/product/create"
         createLabel="Add Product"
       />
 
-      <div className="bg-gray-800 rounded-xl shadow overflow-hidden border border-gray-700">
+      <div className="bg-(--surface) rounded-xl shadow overflow-hidden border border-(--border)">
         {isLoading ? (
           <LoadingState message="Loading products..." />
         ) : isError ? (
@@ -53,29 +53,35 @@ export default function ProductPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-gray-900 border-b border-gray-700 text-sm uppercase tracking-wider text-gray-400">
-                  <th className="p-4 font-medium">Name</th>
-                  <th className="p-4 font-medium">SKU</th>
-                  <th className="p-4 font-medium">Type</th>
-                  <th className="p-4 font-medium">Price</th>
-                  <th className="p-4 font-medium">Stock</th>
-                  <th className="p-4 font-medium text-right">Actions</th>
+                <tr className="bg-(--surface) text-sm font-semibold tracking-wider text-(--text-primary)">
+                  <th className="p-4 font-medium text-(--textPrimary)">Name</th>
+                  <th className="p-4 font-medium text-(--textPrimary)">SKU</th>
+                  <th className="p-4 font-medium text-(--textPrimary)">Type</th>
+                  <th className="p-4 font-medium text-(--textPrimary)">
+                    Price
+                  </th>
+                  <th className="p-4 font-medium text-(--textPrimary)">
+                    Stock
+                  </th>
+                  <th className="p-4 font-medium text-right text-(--textPrimary)">
+                    Actions
+                  </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-700">
+              <tbody className="divide-y divide-(--border)">
                 {products.map((product: Product) => (
                   <tr
                     key={product.id}
-                    className="hover:bg-gray-700/30 transition-colors"
+                    className="hover:bg-(--surfaceHover) transition-colors"
                   >
                     <td className="p-4 font-medium">{product.name}</td>
-                    <td className="p-4 text-gray-300">{product.sku}</td>
-                    <td className="p-4 text-gray-300">
-                      <span className="px-2 py-1 bg-gray-700 rounded-full text-xs">
+                    <td className="p-4 text-(--textPrimary)">{product.sku}</td>
+                    <td className="p-4 text-(--textPrimary)">
+                      <span className="px-2 py-1 bg-(--surface) rounded-full text-xs">
                         {product.type.replace("_", " ")}
                       </span>
                     </td>
-                    <td className="p-4 text-gray-300">
+                    <td className="p-4 text-(--textPrimary)">
                       ${Number(product.price).toFixed(2)}
                     </td>
                     <td className="p-4">

@@ -225,11 +225,22 @@ export default function editAttendance() {
             </p>
           </div>
         </div>
+        <div className="flex justify-end gap-2 mt-4">
+          <button
+            onClick={() => router.back()}
+            className="bg-(--background) text-(--textPrimary) p-2 rounded-md"
+          >
+            cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleSubmit}
+            className="bg-(--primary) text-(--textPrimary) p-2 rounded-md"
+          >
+            Save
+          </button>{" "}
+        </div>
       </div>
-      <button onClick={() => router.back()}>cancel</button>
-      <button type="button" onClick={handleSubmit}>
-        Save
-      </button>
     </div>
   );
 }

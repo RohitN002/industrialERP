@@ -8,6 +8,7 @@ import { routes } from "@/lib/routes";
 import { useAuthStore } from "@/lib/store/auth.store";
 import { useMemo } from "react";
 import { LogOut } from "lucide-react";
+import { ThemeController } from "../theme/ThemeController";
 
 export default function Navbar() {
   const role = useAuthStore((state) => state.role);
@@ -22,18 +23,20 @@ export default function Navbar() {
   const router = useRouter();
 
   return (
-    <nav className="w-64 border-r h-screen p-4">
+    <nav className="w-64 bg-(--surface) border-(--border) h-screen p-4">
       <ul className="space-y-2">
+        <ThemeController />
         {allowedRoutes.map((route) => {
           const Icon = route.icon;
           const active = pathname.startsWith(route.path);
-
           return (
             <li key={route.path}>
               <Link
                 href={route.path ? `/dashboard/${route.path}` : "/dashboard"}
                 className={`flex items-center gap-3 p-2 rounded-md ${
-                  active ? "bg-black text-white" : "hover:bg-gray-500"
+                  active
+                    ? "bg-(--primary) text-white"
+                    : "hover:bg-(--surfaceHover) text-(--textSecondary)"
                 }`}
               >
                 {Icon && <Icon size={18} />}
