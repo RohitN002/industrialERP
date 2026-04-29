@@ -7,7 +7,7 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="flex h-screen">
-      <div className="w-64 bg-(--background) border-(--border) h-screen p-4">
+      <div className="w-74 bg-(--background) border-(--border)   p-4">
         <Navbar />
       </div>
       <main className="flex-1 overflow-auto p-4 bg-(--background)">

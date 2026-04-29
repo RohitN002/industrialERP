@@ -53,17 +53,13 @@ export default function ProductPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-(--surface) text-sm font-semibold tracking-wider text-(--text-primary)">
-                  <th className="p-4 font-medium text-(--textPrimary)">Name</th>
-                  <th className="p-4 font-medium text-(--textPrimary)">SKU</th>
-                  <th className="p-4 font-medium text-(--textPrimary)">Type</th>
-                  <th className="p-4 font-medium text-(--textPrimary)">
-                    Price
-                  </th>
-                  <th className="p-4 font-medium text-(--textPrimary)">
-                    Stock
-                  </th>
-                  <th className="p-4 font-medium text-right text-(--textPrimary)">
+                <tr className="bg-(--surface) font-bold tracking-wider text-(--text-primary)">
+                  <th className="p-4 font-bold text-(--textPrimary)">Name</th>
+                  <th className="p-4 font-bold text-(--textPrimary)">SKU</th>
+                  <th className="p-4 font-bold text-(--textPrimary)">Type</th>
+                  <th className="p-4 font-bold text-(--textPrimary)">Price</th>
+                  <th className="p-4 font-bold text-(--textPrimary)">Stock</th>
+                  <th className="p-4 font-bold text-right text-(--textPrimary)">
                     Actions
                   </th>
                 </tr>
@@ -72,21 +68,26 @@ export default function ProductPage() {
                 {products.map((product: Product) => (
                   <tr
                     key={product.id}
-                    className="hover:bg-(--surfaceHover) transition-colors"
+                    className="hover:bg-(--surfaceHover) transition-colors text-(--text-secondary)"
                   >
-                    <td className="p-4 font-medium">{product.name}</td>
-                    <td className="p-4 text-(--textPrimary)">{product.sku}</td>
-                    <td className="p-4 text-(--textPrimary)">
-                      <span className="px-2 py-1 bg-(--surface) rounded-full text-xs">
+                    <td className="p-4 font-medium ">{product.name}</td>
+
+                    <td className="p-4 font-medium ">{product.sku}</td>
+
+                    <td className="p-4">
+                      <span className="px-2 py-1 bg-(--surface)  font-medium ">
                         {product.type.replace("_", " ")}
                       </span>
                     </td>
-                    <td className="p-4 text-(--textPrimary)">
+
+                    {/* Changed price to be more prominent */}
+                    <td className="p-4 font-medium">
                       ${Number(product.price).toFixed(2)}
                     </td>
+
                     <td className="p-4">
                       <span
-                        className={`font-bold ${product.stockQuantity < 10 ? "text-red-400" : "text-green-400"}`}
+                        className={`font-medium ${product.stockQuantity < 10 ? "text-red-400" : "text-green-400"}`}
                       >
                         {product.stockQuantity}
                       </span>

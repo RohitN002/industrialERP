@@ -23,20 +23,20 @@ export default function Navbar() {
   const router = useRouter();
 
   return (
-    <nav className="w-64 bg-(--surface) border-(--border) h-screen p-4">
+    <nav className=" border-(--border) h-screen p-4 bg-(--surface) overflow-auto">
       <ul className="space-y-2">
         <ThemeController />
         {allowedRoutes.map((route) => {
           const Icon = route.icon;
           const active = pathname.startsWith(route.path);
           return (
-            <li key={route.path}>
+            <li key={route.path} className="p-2">
               <Link
                 href={route.path ? `/dashboard/${route.path}` : "/dashboard"}
-                className={`flex items-center gap-3 p-2 rounded-md ${
+                className={`flex items-center gap-3 px-3 py-2 rounded-md ${
                   active
                     ? "bg-(--primary) text-white"
-                    : "hover:bg-(--surfaceHover) text-(--textSecondary)"
+                    : "hover:bg-(--surfaceHover) text-(--text-secondary)"
                 }`}
               >
                 {Icon && <Icon size={18} />}
@@ -45,18 +45,17 @@ export default function Navbar() {
             </li>
           );
         })}
-        <li key="logout">
-          <button
-            onClick={() => {
-              useAuthStore.getState().logout();
-              router.push("/login");
-            }}
-            className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-500 w-full"
-          >
-            <LogOut size={18} />
-            Logout
-          </button>
-        </li>
+
+        <button
+          onClick={() => {
+            useAuthStore.getState().logout();
+            router.push("/login");
+          }}
+          className="flex items-center gap-3 p-2 rounded-md  w-full text-(--text-secondary)"
+        >
+          <LogOut size={18} />
+          Logout
+        </button>
       </ul>
     </nav>
   );
