@@ -25,7 +25,7 @@ export default function EditProductionPage() {
 
   if (isLoading) {
     return (
-      <div className="p-8 text-center text-gray-400">
+      <div className="p-8 text-center text-(--text-secondary)">
         Loading production data...
       </div>
     );
@@ -33,17 +33,17 @@ export default function EditProductionPage() {
 
   if (!production) {
     return (
-      <div className="p-8 text-center text-red-400">
+      <div className="p-8 text-center text-(--error)">
         Production batch not found.
       </div>
     );
   }
 
   return (
-    <div className="flex-1 p-6 text-gray-100 max-w-4xl mx-auto w-full">
+    <div className="flex-1 p-6 text-(--text-primary) max-w-4xl mx-auto w-full">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">Edit Production Batch</h1>
-        <p className="text-gray-400 text-sm mt-1">
+        <h1 className="text-2xl font-bold text-(--text-primary)">Edit Production Batch</h1>
+        <p className="text-(--text-secondary) text-sm mt-1">
           Modify the status or raw material allocations for this run.
         </p>
       </div>

@@ -37,7 +37,7 @@ export default function ClientPage() {
         createHref="/dashboard/client-management/create"
         createLabel="Add Client"
       />
-      <div className="bg-gray-800 rounded-xl shadow overflow-hidden border border-gray-700">
+      <div className="bg-(--surface) rounded-xl shadow overflow-hidden border border-(--border)">
         {isLoading ? (
           <LoadingState message="Loading clients..." />
         ) : isError ? (
@@ -48,7 +48,7 @@ export default function ClientPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-gray-900 border-b border-gray-700 text-sm uppercase tracking-wider text-gray-400">
+                <tr className="bg-(--surface-3) border-b border-(--border) text-sm uppercase tracking-wider text-(--text-secondary)">
                   <th className="p-4 font-medium">Name</th>
                   <th className="p-4 font-medium">Email</th>
                   <th className="p-4 font-medium">Phone</th>
@@ -57,21 +57,21 @@ export default function ClientPage() {
                   <th className="p-4 font-medium text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-700">
+              <tbody className="divide-y divide-(--border)">
                 {clients.map((client: any) => (
                   <tr
                     key={client.id}
-                    className="hover:bg-gray-700/30 transition-colors"
+                    className="hover:bg-(--hover) transition-colors"
                   >
                     <td className="p-4 font-medium">{client.name}</td>
-                    <td className="p-4 text-gray-300">{client.email}</td>
-                    <td className="p-4 text-gray-300">{client.phone}</td>
-                    <td className="p-4 text-gray-300">{client.address}</td>
+                    <td className="p-4 text-(--text-secondary)">{client.email}</td>
+                    <td className="p-4 text-(--text-secondary)">{client.phone}</td>
+                    <td className="p-4 text-(--text-secondary)">{client.address}</td>
                     <td className="p-4">
                       {" "}
                       <Link
                         href={`/dashboard/client-management/${client.id}/quote`}
-                        className="text-blue-500 hover:text-blue-600"
+                        className="text-(--primary) hover:opacity-80"
                       >
                         Create Quote
                       </Link>

@@ -4,11 +4,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EmployeeInput, employeeSchema } from "./employee.schema";
 import { useRouter } from "next/navigation";
-
 import Select, { SingleValue } from "react-select";
 import { Controller } from "react-hook-form";
-import { useDepartment, useDepartments } from "@/lib/store/useDepartment";
-import { useRole, useRoles } from "@/lib/store/useRole";
+import { useDepartments } from "@/lib/store/useDepartment";
+import { useRoles } from "@/lib/store/useRole";
 import { useDesignations } from "@/lib/store/useDesignation";
 import { useEffect } from "react";
 
@@ -22,21 +21,9 @@ export default function EmployeeForm({
   isLoading?: boolean;
 }) {
   const router = useRouter();
-  const {
-    data: departments,
-    isLoading: departmentLoading,
-    isError: departmentError,
-  } = useDepartments();
-  const {
-    data: roles,
-    isLoading: roleLoading,
-    isError: roleError,
-  } = useRoles();
-  const {
-    data: designations,
-    isLoading: desginationLoading,
-    isError: designationError,
-  } = useDesignations();
+  const { data: departments } = useDepartments();
+  const { data: roles } = useRoles();
+  const { data: designations } = useDesignations();
 
   const {
     register,
@@ -69,11 +56,13 @@ export default function EmployeeForm({
         }
       : {},
   });
+
   const roleOptions =
     roles?.map((role) => ({
       value: role.id.toString(),
       label: role.name,
     })) || [];
+
   const departmentOptions =
     departments?.map((department) => ({
       value: department.id.toString(),
@@ -85,253 +74,296 @@ export default function EmployeeForm({
       value: designation.id.toString(),
       label: designation.name,
     })) || [];
-  console.log(initialData);
+
   useEffect(() => {
     if (initialData) {
       reset(initialData);
     }
   }, [initialData, reset]);
+
+  // ─── Shared style tokens ───────────────────────────────────────────
+  const inputClass =
+    "w-full border border-(--border) bg-(--surface-2) text-(--text-primary) p-2 rounded placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--focus)]";
+  const labelClass = "block text-(--text-primary) text-sm font-semibold mb-1";
+  const errorClass = "text-(--error) text-sm mt-1";
+  const sectionHeading =
+    "text-(--text-primary) text-base font-semibold mb-3 pb-1 border-b border-(--border)";
+
   return (
     <form
       onSubmit={handleSubmit((data) => onSubmit(data))}
-      className="w-full space-y-4 rounded-xl bg-gray-800 p-6 shadow text-white"
+      className="w-full space-y-6 rounded-xl bg-(--surface) p-6 shadow"
     >
+      {/* ── Personal Info ───────────────────────────────────── */}
       <div>
-        <label className="block text-sm font-medium mb-1">Name *</label>
-        <input
-          {...register("name")}
-          placeholder="Name"
-          className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
-        />
-        {errors.name && (
-          <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
-        )}
+        <h2 className={sectionHeading}>Personal Information</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className={labelClass}>Name *</label>
+            <input
+              {...register("name")}
+              placeholder="Full name"
+              className={inputClass}
+            />
+            {errors.name && <p className={errorClass}>{errors.name.message}</p>}
+          </div>
+
+          <div>
+            <label className={labelClass}>Email *</label>
+            <input
+              {...register("email")}
+              type="email"
+              placeholder="email@example.com"
+              className={inputClass}
+            />
+            {errors.email && (
+              <p className={errorClass}>{errors.email.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className={labelClass}>Phone *</label>
+            <input
+              {...register("mobileNumber")}
+              placeholder="+91 XXXXX XXXXX"
+              className={inputClass}
+            />
+            {errors.mobileNumber && (
+              <p className={errorClass}>{errors.mobileNumber.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className={labelClass}>Gender</label>
+            <select {...register("gender")} className={inputClass}>
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+            {errors.gender && (
+              <p className={errorClass}>{errors.gender.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className={labelClass}>Date of Birth</label>
+            <input
+              type="date"
+              {...register("dateOfBirth", { valueAsDate: true })}
+              className={inputClass}
+            />
+            {errors.dateOfBirth && (
+              <p className={errorClass}>{errors.dateOfBirth.message}</p>
+            )}
+          </div>
+        </div>
       </div>
+
+      {/* ── Address ─────────────────────────────────────────── */}
       <div>
-        <label className="block text-sm font-medium mb-1">Email *</label>
-        <input
-          {...register("email")}
-          placeholder="Email"
-          className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
-        />
-        {errors.email && (
-          <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-        )}
+        <h2 className={sectionHeading}>Address</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="md:col-span-2">
+            <label className={labelClass}>Address *</label>
+            <input
+              {...register("address")}
+              placeholder="Street address"
+              className={inputClass}
+            />
+            {errors.address && (
+              <p className={errorClass}>{errors.address.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className={labelClass}>City</label>
+            <input
+              {...register("city")}
+              placeholder="City"
+              className={inputClass}
+            />
+            {errors.city && <p className={errorClass}>{errors.city.message}</p>}
+          </div>
+
+          <div>
+            <label className={labelClass}>State</label>
+            <input
+              {...register("state")}
+              placeholder="State"
+              className={inputClass}
+            />
+            {errors.state && (
+              <p className={errorClass}>{errors.state.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className={labelClass}>Pincode</label>
+            <input
+              {...register("pincode")}
+              placeholder="Pincode"
+              className={inputClass}
+            />
+            {errors.pincode && (
+              <p className={errorClass}>{errors.pincode.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className={labelClass}>Country</label>
+            <input
+              {...register("country")}
+              placeholder="Country"
+              className={inputClass}
+            />
+            {errors.country && (
+              <p className={errorClass}>{errors.country.message}</p>
+            )}
+          </div>
+        </div>
       </div>
+
+      {/* ── Family & Emergency ──────────────────────────────── */}
       <div>
-        <label className="block text-sm font-medium mb-1">Phone *</label>
-        <input
-          {...register("mobileNumber")}
-          placeholder="Phone"
-          className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
-        />
-        {errors.mobileNumber && (
-          <p className="text-red-500 text-sm mt-1">
-            {errors.mobileNumber.message}
-          </p>
-        )}
+        <h2 className={sectionHeading}>Family & Emergency Contact</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className={labelClass}>Father's Name</label>
+            <input
+              {...register("fatherName")}
+              placeholder="Father's name"
+              className={inputClass}
+            />
+            {errors.fatherName && (
+              <p className={errorClass}>{errors.fatherName.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className={labelClass}>Mother's Name</label>
+            <input
+              {...register("motherName")}
+              placeholder="Mother's name"
+              className={inputClass}
+            />
+            {errors.motherName && (
+              <p className={errorClass}>{errors.motherName.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className={labelClass}>Emergency Contact Person</label>
+            <input
+              {...register("contactPerson")}
+              placeholder="Contact person name"
+              className={inputClass}
+            />
+            {errors.contactPerson && (
+              <p className={errorClass}>{errors.contactPerson.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className={labelClass}>Emergency Contact Phone</label>
+            <input
+              type="number"
+              {...register("contactPersonPhone")}
+              placeholder="Phone number"
+              className={inputClass}
+            />
+            {errors.contactPersonPhone && (
+              <p className={errorClass}>{errors.contactPersonPhone.message}</p>
+            )}
+          </div>
+        </div>
       </div>
+
+      {/* ── Work Details ────────────────────────────────────── */}
       <div>
-        <label htmlFor="gender">Gender</label>
-        <select
-          {...register("gender")}
-          className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
+        <h2 className={sectionHeading}>Work Details</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className={labelClass}>Designation</label>
+            <Controller
+              name="designationId"
+              control={control}
+              render={({ field }: any) => {
+                const selectedOption = designationOptions.find(
+                  (opt) => opt.value === field.value,
+                );
+                return (
+                  <Select
+                    instanceId="designation-select"
+                    options={designationOptions}
+                    placeholder="Select designation..."
+                    className="text-black"
+                    value={selectedOption || null}
+                    onChange={(option: SingleValue<any>) =>
+                      field.onChange(option?.value || "")
+                    }
+                    onBlur={field.onBlur}
+                  />
+                );
+              }}
+            />
+            {errors.designationId && (
+              <p className={errorClass}>{errors.designationId.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className={labelClass}>Department</label>
+            <Controller
+              name="departmentId"
+              control={control}
+              render={({ field }: any) => {
+                const selectedOption = departmentOptions.find(
+                  (opt) => opt.value === field.value,
+                );
+                return (
+                  <Select
+                    instanceId="department-select"
+                    options={departmentOptions}
+                    placeholder="Select department..."
+                    value={selectedOption || null}
+                    onChange={(option: SingleValue<any>) =>
+                      field.onChange(option?.value || "")
+                    }
+                    onBlur={field.onBlur}
+                    className="text-black"
+                  />
+                );
+              }}
+            />
+            {errors.departmentId && (
+              <p className={errorClass}>{errors.departmentId.message}</p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Actions ─────────────────────────────────────────── */}
+      <div className="flex justify-end space-x-2 pt-2">
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="px-4 py-2 rounded font-medium text-sm border border-(--border) bg-(--btn-secondary) text-(--btn-secondary-text) hover:opacity-80 transition-opacity cursor-pointer"
         >
-          <option value="">Select Gender</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-          <option value="Other">Other</option>
-        </select>
-        {errors.gender && (
-          <p className="text-red-500 text-sm mt-1">{errors.gender.message}</p>
-        )}
+          Cancel
+        </button>
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="px-4 py-2 rounded font-medium text-sm bg-(--btn-primary) text-(--btn-text-white) hover:bg-(--btn-primary-hover) disabled:opacity-50 transition-colors cursor-pointer"
+        >
+          {isLoading
+            ? "Saving..."
+            : initialData
+              ? "Update Employee"
+              : "Create Employee"}
+        </button>
       </div>
-      <div>
-        <label htmlFor="dateOfBirth">Date of Birth</label>
-        <input
-          type="date"
-          {...register("dateOfBirth", { valueAsDate: true })}
-          className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
-        />
-        {errors.dateOfBirth && (
-          <p className="text-red-500 text-sm mt-1">
-            {errors.dateOfBirth.message}
-          </p>
-        )}
-      </div>
-      <div>
-        <label className="block text-sm font-medium mb-1">Address *</label>
-        <input
-          {...register("address")}
-          placeholder="Address"
-          className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
-        />
-        {errors.address && (
-          <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>
-        )}
-      </div>
-      <div>
-        <label>city</label>
-        <input
-          {...register("city")}
-          className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
-        />
-        {errors.city && (
-          <p className="text-red-500 text-sm mt-1">{errors.city.message}</p>
-        )}
-      </div>
-      <div>
-        <label>state</label>
-        <input
-          {...register("state")}
-          className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
-        />
-        {errors.state && (
-          <p className="text-red-500 text-sm mt-1">{errors.state.message}</p>
-        )}
-      </div>
-      <div>
-        <label>pincode</label>
-        <input
-          {...register("pincode")}
-          className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
-        />
-        {errors.pincode && (
-          <p className="text-red-500 text-sm mt-1">{errors.pincode.message}</p>
-        )}
-      </div>
-      <div>
-        <label>country</label>
-        <input
-          {...register("country")}
-          className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
-        />
-        {errors.country && (
-          <p className="text-red-500 text-sm mt-1">{errors.country.message}</p>
-        )}
-      </div>
-      <div>
-        <label>fatherName</label>
-        <input
-          {...register("fatherName")}
-          className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
-        />
-        {errors.fatherName && (
-          <p className="text-red-500 text-sm mt-1">
-            {errors.fatherName.message}
-          </p>
-        )}
-      </div>
-      <div>
-        <label>motherName</label>
-        <input
-          {...register("motherName")}
-          className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
-        />
-        {errors.motherName && (
-          <p className="text-red-500 text-sm mt-1">
-            {errors.motherName.message}
-          </p>
-        )}
-      </div>
-      <div>
-        <label>contactPerson</label>
-        <input
-          {...register("contactPerson")}
-          className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
-        />
-        {errors.contactPerson && (
-          <p className="text-red-500 text-sm mt-1">
-            {errors.contactPerson.message}
-          </p>
-        )}
-      </div>
-      <div>
-        <label>contactPersonPhone</label>
-        <input
-          type="number"
-          {...register("contactPersonPhone")}
-          className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
-        />
-        {errors.contactPersonPhone && (
-          <p className="text-red-500 text-sm mt-1">
-            {errors.contactPersonPhone.message}
-          </p>
-        )}
-      </div>
-      <div>
-        <label htmlFor="">Designation</label>
-        <Controller
-          name="designationId"
-          control={control}
-          render={({ field }: any) => {
-            const selectedOption = designationOptions.find(
-              (opt) => opt.value === field.value,
-            );
-            return (
-              <Select
-                instanceId="designation-select"
-                options={designationOptions}
-                placeholder="Select designation..."
-                className="text-black"
-                value={selectedOption || null}
-                onChange={(option: SingleValue<any>) =>
-                  field.onChange(option?.value || "")
-                }
-                onBlur={field.onBlur}
-              />
-            );
-          }}
-        />
-        {errors.designationId && (
-          <p className="text-red-500 text-sm mt-1">
-            {errors.designationId.message}
-          </p>
-        )}
-      </div>
-      <div className="">
-        <label htmlFor="">Department</label>
-        <Controller
-          name="departmentId"
-          control={control}
-          render={({ field }: any) => {
-            const selectedOption = departmentOptions.find(
-              (opt) => opt.value === field.value,
-            );
-            return (
-              <Select
-                instanceId="department-select"
-                options={departmentOptions}
-                value={selectedOption || null}
-                onChange={(option: SingleValue<any>) =>
-                  field.onChange(option?.value || "")
-                }
-                onBlur={field.onBlur}
-                className="text-black"
-              />
-            );
-          }}
-        />
-        {errors.departmentId && (
-          <p className="text-red-500 text-sm mt-1">
-            {errors.departmentId.message}
-          </p>
-        )}
-      </div>
-      <button
-        type="button"
-        onClick={() => router.back()}
-        className="w-full bg-gray-600 hover:bg-gray-700 text-white p-2 rounded"
-      >
-        Cancel
-      </button>
-      <button
-        type="submit"
-        disabled={isLoading}
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white p-2 rounded"
-      >
-        {isLoading ? "Submitting..." : "Submit"}
-      </button>
     </form>
   );
 }

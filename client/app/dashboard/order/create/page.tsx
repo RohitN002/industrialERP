@@ -20,11 +20,13 @@ export default function CreateOrderPage() {
     });
   };
   return (
-    <div className="flex-1 p-6 text-gray-100 max-w-4xl mx-auto w-full">
-      <h3 className="text-2xl font-bold">Create order</h3>
-      <p className="text-gray-400 text-sm mt-1">
-        Fill in the details to create a new order.
-      </p>
+    <div className="flex-1 p-6 text-(--text-primary) max-w-4xl mx-auto w-full">
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-(--text-primary)">Create Order</h1>
+        <p className="text-(--text-secondary) text-sm mt-1">
+          Fill in the details to create a new order.
+        </p>
+      </div>
       <OrderForm onSubmit={handleSubmit} isLoading={creatMutation.isPending} />
     </div>
   );

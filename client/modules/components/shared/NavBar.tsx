@@ -23,8 +23,8 @@ export default function Navbar() {
   const router = useRouter();
 
   return (
-    <nav className=" border-(--border) h-screen p-4 bg-(--surface) overflow-auto">
-      <ul className="space-y-2">
+    <nav className=" border-(--border) h-screen  bg-(--surface) overflow-auto">
+      <ul className="">
         <ThemeController />
         {allowedRoutes.map((route) => {
           const Icon = route.icon;

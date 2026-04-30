@@ -35,7 +35,7 @@ export default function SupplierPage() {
         createHref="/dashboard/supplier/create"
         createLabel="Add Supplier"
       />
-      <div className="bg-gray-800 rounded-xl shadow overflow-hidden border border-gray-700">
+      <div className="bg-(--surface) rounded-xl shadow overflow-hidden border border-(--border)">
         {isLoading ? (
           <LoadingState message="Loading suppliers..." />
         ) : isError ? (
@@ -46,7 +46,7 @@ export default function SupplierPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-gray-900 border-b border-gray-700 text-sm uppercase tracking-wider text-gray-400">
+                <tr className="bg-(--surface-3) border-b border-(--border) text-sm uppercase tracking-wider text-(--text-secondary)">
                   <th className="p-4 font-medium">Name</th>
                   <th className="p-4 font-medium">Email</th>
                   <th className="p-4 font-medium">Phone</th>
@@ -61,27 +61,27 @@ export default function SupplierPage() {
                   <th className="p-4 font-medium">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-700">
+              <tbody className="divide-y divide-(--border)">
                 {suppliers?.map((supplier: any) => (
                   <tr
                     key={supplier.id}
-                    className="hover:bg-gray-700/30 transition-colors"
+                    className="hover:bg-(--hover) transition-colors"
                   >
                     <td className="p-4 font-medium">{supplier.name}</td>
-                    <td className="p-4 font-medium">{supplier.email}</td>
-                    <td className="p-4 font-medium">{supplier.phone}</td>
-                    <td className="p-4 font-medium">{supplier.address}</td>
-                    <td className="p-4 font-medium">{supplier.city}</td>
-                    <td className="p-4 font-medium">{supplier.state}</td>
-                    <td className="p-4 font-medium">{supplier.pincode}</td>
-                    <td className="p-4 font-medium">{supplier.country}</td>
-                    <td className="p-4 font-medium">
+                    <td className="p-4 text-(--text-secondary)">{supplier.email}</td>
+                    <td className="p-4 text-(--text-secondary)">{supplier.phone}</td>
+                    <td className="p-4 text-(--text-secondary)">{supplier.address}</td>
+                    <td className="p-4 text-(--text-secondary)">{supplier.city}</td>
+                    <td className="p-4 text-(--text-secondary)">{supplier.state}</td>
+                    <td className="p-4 text-(--text-secondary)">{supplier.pincode}</td>
+                    <td className="p-4 text-(--text-secondary)">{supplier.country}</td>
+                    <td className="p-4 text-(--text-secondary)">
                       {supplier.contactPerson}
                     </td>
-                    <td className="p-4 font-medium">
+                    <td className="p-4 text-(--text-secondary)">
                       {supplier.contactPersonPhone}
                     </td>
-                    <td className="p-4 font-medium">{supplier.gst}</td>
+                    <td className="p-4 text-(--text-secondary)">{supplier.gst}</td>
                     <td className="p-4">
                       <RowActions
                         viewHref={`/dashboard/supplier/${supplier.id}/view`}
@@ -99,7 +99,7 @@ export default function SupplierPage() {
           </div>
         )}
       </div>
-      ``
+      
       <ConfirmDialog
         isOpen={!!confirmId}
         title="Delete Supplier"

@@ -30,7 +30,7 @@ export default function EditProductPage() {
 
   if (isLoading) {
     return (
-      <div className="p-8 text-center text-gray-400">
+      <div className="p-8 text-center text-(--text-secondary)">
         Loading product data...
       </div>
     );
@@ -38,15 +38,15 @@ export default function EditProductPage() {
 
   if (!product) {
     return (
-      <div className="p-8 text-center text-red-400">Product not found.</div>
+      <div className="p-8 text-center text-(--error)">Product not found.</div>
     );
   }
 
   return (
-    <div className="flex-1 p-6 text-gray-100 max-w-4xl mx-auto w-full">
+    <div className="flex-1 p-6 text-(--text-primary) max-w-4xl mx-auto w-full">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">Edit Product</h1>
-        <p className="text-gray-400 text-sm mt-1">
+        <h1 className="text-2xl font-bold text-(--text-primary)">Edit Product</h1>
+        <p className="text-(--text-secondary) text-sm mt-1">
           Update the details for this product item.
         </p>
       </div>

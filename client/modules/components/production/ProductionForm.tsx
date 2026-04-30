@@ -54,60 +54,61 @@ export default function ProductionForm({
     control,
     name: "items",
   });
+
   useEffect(() => {
     if (initialData) {
       reset(initialData);
     }
   }, [initialData, reset]);
-  // Split products by type if useful, or just show all
+
   const finishedGoods =
     products?.filter((p) => p.type === "finished_good") || [];
+
+  // ─── Shared style tokens ───────────────────────────────────────────
+  const inputClass =
+    "w-full border border-(--border) bg-(--surface-2) text-(--text-primary) p-2 rounded placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--focus)]";
+  const labelClass = "block text-(--text-primary) text-sm font-semibold mb-1";
+  const errorClass = "text-(--error) text-sm mt-1";
 
   return (
     <form
       onSubmit={handleSubmit((data: any) => onSubmit(data))}
-      className="w-full space-y-6 rounded-xl bg-gray-800 p-6 shadow text-white"
+      className="w-full space-y-6 rounded-xl bg-(--surface) p-6 shadow"
     >
+      {/* ── Batch Details ───────────────────────────────────── */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1">
-            Batch Number *
-          </label>
+          <label className={labelClass}>Batch Number *</label>
           <input
             {...register("batchNo")}
             placeholder="e.g. BATCH-001"
-            className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
+            className={inputClass}
           />
           {errors.batchNo && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.batchNo.message}
-            </p>
+            <p className={errorClass}>{errors.batchNo.message}</p>
           )}
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Status *</label>
-          <select
-            {...register("status")}
-            className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
-          >
+          <label className={labelClass}>Status *</label>
+          <select {...register("status")} className={inputClass}>
             <option value="PLANNED">Planned</option>
             <option value="IN_PROGRESS">In Progress</option>
             <option value="COMPLETED">Completed</option>
             <option value="REJECTED">Rejected</option>
           </select>
           {errors.status && (
-            <p className="text-red-500 text-sm mt-1">{errors.status.message}</p>
+            <p className={errorClass}>{errors.status.message}</p>
           )}
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium mb-1">
+          <label className={labelClass}>
             Produced Product * (Finished Good)
           </label>
           <select
             {...register("producedProductId")}
-            className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
+            className={inputClass}
           >
             <option value="">-- Select Product --</option>
             {finishedGoods.map((p) => (
@@ -117,88 +118,95 @@ export default function ProductionForm({
             ))}
           </select>
           {errors.producedProductId && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.producedProductId.message}
-            </p>
+            <p className={errorClass}>{errors.producedProductId.message}</p>
           )}
         </div>
       </div>
 
-      <div className="border border-gray-700 rounded-lg p-4 bg-gray-900/50">
+      {/* ── Raw Materials ───────────────────────────────────── */}
+      <div className="border border-(--border) rounded-lg p-4 bg-(--surface-3)">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="font-semibold text-lg">Raw Materials Used</h3>
+          <h3 className="text-(--text-primary) font-semibold text-base">
+            Raw Materials Used
+          </h3>
           <button
             type="button"
             onClick={() => append({ productId: "", quantity: 1 })}
-            className="flex items-center gap-1 text-sm bg-blue-600 hover:bg-blue-500 px-3 py-1 rounded"
+            className="flex items-center gap-1 text-sm px-3 py-1.5 rounded font-medium bg-(--btn-primary) text-(--btn-text-white) hover:bg-(--btn-primary-hover) transition-colors cursor-pointer"
           >
             <Plus size={14} /> Add Material
           </button>
         </div>
 
-        {fields.map((field, index) => (
-          <div
-            key={field.id}
-            className="flex flex-col md:flex-row gap-3 mb-3 items-start"
-          >
-            <div className="flex-1">
-              <select
-                {...register(`items.${index}.productId` as const)}
-                className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
-              >
-                <option value="">-- Select Material --</option>
-                {products?.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.name} ({p.sku}) - {p.stockQuantity} in stock
-                  </option>
-                ))}
-              </select>
-              {errors.items?.[index]?.productId && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.items[index]?.productId?.message}
-                </p>
-              )}
-            </div>
-            <div className="w-full md:w-32">
-              <input
-                type="number"
-                {...register(`items.${index}.quantity` as const)}
-                placeholder="Qty"
-                className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
-              />
-              {errors.items?.[index]?.quantity && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.items[index]?.quantity?.message}
-                </p>
-              )}
-            </div>
-            <button
-              type="button"
-              onClick={() => remove(index)}
-              className="mt-1 p-2 text-red-500 hover:bg-red-500/10 rounded transition-colors"
-              disabled={fields.length === 1}
+        <div className="space-y-3">
+          {fields.map((field, index) => (
+            <div
+              key={field.id}
+              className="flex flex-col md:flex-row gap-3 items-start"
             >
-              <Trash2 size={20} />
-            </button>
-          </div>
-        ))}
+              <div className="flex-1">
+                <select
+                  {...register(`items.${index}.productId` as const)}
+                  className={inputClass}
+                >
+                  <option value="">-- Select Material --</option>
+                  {products?.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.name} ({p.sku}) - {p.stockQuantity} in stock
+                    </option>
+                  ))}
+                </select>
+                {errors.items?.[index]?.productId && (
+                  <p className={errorClass}>
+                    {errors.items[index]?.productId?.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="w-full md:w-32">
+                <input
+                  type="number"
+                  {...register(`items.${index}.quantity` as const)}
+                  placeholder="Qty"
+                  className={inputClass}
+                />
+                {errors.items?.[index]?.quantity && (
+                  <p className={errorClass}>
+                    {errors.items[index]?.quantity?.message}
+                  </p>
+                )}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => remove(index)}
+                className="mt-1 p-2 rounded text-(--error) hover:bg-(--error-bg) transition-colors cursor-pointer disabled:opacity-40"
+                disabled={fields.length === 1}
+              >
+                <Trash2 size={20} />
+              </button>
+            </div>
+          ))}
+        </div>
+
         {errors.items && !Array.isArray(errors.items) && (
-          <p className="text-red-500 text-sm mt-1">{errors.items.message}</p>
+          <p className={`${errorClass} mt-2`}>{errors.items.message}</p>
         )}
       </div>
 
-      <div className="flex justify-end space-x-2 pt-4 border-t border-gray-600">
+      {/* ── Actions ─────────────────────────────────────────── */}
+      <div className="flex justify-end space-x-2 pt-2 border-t border-(--border)">
         <button
           type="button"
           onClick={() => router.back()}
-          className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-500"
+          className="px-4 py-2 rounded font-medium text-sm border border-(--border) bg-(--btn-secondary) text-(--btn-secondary-text) hover:opacity-80 transition-opacity cursor-pointer"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={isLoading}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 disabled:opacity-50"
+          className="px-4 py-2 rounded font-medium text-sm bg-(--btn-primary) text-(--btn-text-white) hover:bg-(--btn-primary-hover) disabled:opacity-50 transition-colors cursor-pointer"
         >
           {isLoading
             ? "Saving..."

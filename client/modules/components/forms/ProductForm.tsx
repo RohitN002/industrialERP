@@ -84,95 +84,107 @@ export default function ProductForm({
       label: cat.name,
     })) || [];
 
+  const inputClass =
+    "w-full border border-(--border) bg-(--surface-2) text-(--text-primary) p-2 rounded placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--focus)]";
+
   return (
     <form
       onSubmit={handleSubmit((data: any) => onSubmit(data))}
-      className="w-full space-y-4 rounded-xl bg-gray-800 p-6 shadow text-white"
+      className="w-full space-y-4 rounded-xl bg-(--surface) p-6 shadow"
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1">
+          <label className="block text-(--text-primary) text-sm font-semibold mb-1">
             Product Name *
           </label>
           <input
             {...register("name")}
             placeholder="Name"
-            className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
+            className={inputClass}
           />
           {errors.name && (
-            <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+            <p className="text-(--error) text-sm mt-1">{errors.name.message}</p>
           )}
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">SKU *</label>
+          <label className="block text-(--text-primary) text-sm font-semibold mb-1">
+            SKU *
+          </label>
           <input
             {...register("sku")}
             placeholder="SKU"
-            className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
+            className={inputClass}
           />
           {errors.sku && (
-            <p className="text-red-500 text-sm mt-1">{errors.sku.message}</p>
+            <p className="text-(--error) text-sm mt-1">{errors.sku.message}</p>
           )}
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Price *</label>
+          <label className="block text-(--text-primary) text-sm font-semibold mb-1">
+            Price *
+          </label>
           <input
             type="number"
             step="0.01"
             {...register("price")}
             placeholder="Price"
-            className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
+            className={inputClass}
           />
           {errors.price && (
-            <p className="text-red-500 text-sm mt-1">{errors.price.message}</p>
+            <p className="text-(--error) text-sm mt-1">
+              {errors.price.message}
+            </p>
           )}
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">
+          <label className="block text-(--text-primary) text-sm font-semibold mb-1">
             Stock Quantity *
           </label>
           <input
             type="number"
             {...register("stockQuantity")}
             placeholder="Stock Quantity"
-            className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
+            className={inputClass}
           />
           {errors.stockQuantity && (
-            <p className="text-red-500 text-sm mt-1">
+            <p className="text-(--error) text-sm mt-1">
               {errors.stockQuantity.message}
             </p>
           )}
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Type *</label>
-          <select
-            {...register("type")}
-            className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
-          >
+          <label className="block text-(--text-primary) text-sm font-semibold mb-1">
+            Type *
+          </label>
+          <select {...register("type")} className={inputClass}>
             <option value="raw_material">Raw Material</option>
             <option value="finished_good">Finished Good</option>
             <option value="spare_part">Spare Part</option>
           </select>
           {errors.type && (
-            <p className="text-red-500 text-sm mt-1">{errors.type.message}</p>
+            <p className="text-(--error) text-sm mt-1">{errors.type.message}</p>
           )}
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Unit</label>
+          <label className="block text-(--text-primary) text-sm font-semibold mb-1">
+            Unit
+          </label>
           <input
             {...register("unit")}
             placeholder="e.g. kg, pieces"
-            className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
+            className={inputClass}
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Category</label>
+          <label className="block text-(--text-primary) text-sm font-semibold mb-1">
+            Category
+          </label>
           <Controller
             name="categoryId"
             control={control}
@@ -210,7 +222,9 @@ export default function ProductForm({
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Supplier</label>
+          <label className="block text-(--text-primary) text-sm font-semibold mb-1">
+            Supplier
+          </label>
           <Controller
             name="supplierId"
             control={control}
@@ -239,27 +253,29 @@ export default function ProductForm({
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Description</label>
+        <label className="block text-(--text-primary) text-sm font-semibold mb-1">
+          Description
+        </label>
         <textarea
           {...register("description")}
           placeholder="Description"
           rows={3}
-          className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
+          className={inputClass}
         />
       </div>
 
-      <div className="flex justify-end space-x-2 pt-4 border-t border-gray-600">
+      <div className="flex justify-end space-x-2 pt-4">
         <button
           type="button"
           onClick={() => router.back()}
-          className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-500"
+          className="px-4 py-2 rounded font-medium text-sm border border-(--border) bg-(--btn-secondary) text-(--btn-secondary-text) hover:opacity-80 transition-opacity cursor-pointer"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={isLoading}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 disabled:opacity-50"
+          className="px-4 py-2 rounded font-medium text-sm bg-(--btn-primary) text-(--btn-text-white) hover:bg-(--btn-primary-hover) disabled:opacity-50 transition-colors cursor-pointer"
         >
           {isLoading
             ? "Saving..."

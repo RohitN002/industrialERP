@@ -228,14 +228,14 @@ export default function editAttendance() {
         <div className="flex justify-end gap-2 mt-4">
           <button
             onClick={() => router.back()}
-            className="bg-(--background) text-(--textPrimary) p-2 rounded-md"
+            className=" p-2 rounded-md bg-(--btn-secondary) text-(--btn-secondary-text)"
           >
             cancel
           </button>
           <button
             type="button"
             onClick={handleSubmit}
-            className="bg-(--primary) text-(--textPrimary) p-2 rounded-md"
+            className="bg-(--btn-primary) text-(--btn-text-white) p-2 rounded-md"
           >
             Save
           </button>{" "}

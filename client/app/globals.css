@@ -104,6 +104,13 @@ body {
   --warning-overlay: rgba(180, 83, 9, 0.08);
   --error-overlay: rgba(185, 28, 28, 0.08);
   --info-overlay: rgba(3, 105, 161, 0.08);
+  --btn-primary: #2563eb;
+  --btn-primary-hover: #1d4ed8;
+  --btn-secondary: #f3f4f6;
+  --btn-secondary-text: #374151;
+  --btn-danger: #ef4444;
+  --btn-success: #10b981;
+  --btn-text-white: #ffffff;
 }
 
 [data-theme="dark"] {
@@ -143,4 +150,34 @@ body {
   /* Interaction */
   --hover: rgba(255, 255, 255, 0.06);
   --focus: rgba(96, 165, 250, 0.4);
+  --btn-primary: #3b82f6;
+  --btn-primary-hover: #60a5fa;
+  --btn-secondary: #374151;
+  --btn-secondary-text: #d1d5db;
+  --btn-danger: #b91c1c;
+  --btn-success: #059669;
+}
+.btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-primary {
+  background-color: var(--btn-primary);
+  color: var(--btn-text-white);
+}
+
+.btn-primary:hover {
+  background-color: var(--btn-primary-hover);
+}
+
+.btn-secondary {
+  background-color: var(--btn-secondary);
+  color: var(--btn-secondary-text);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }

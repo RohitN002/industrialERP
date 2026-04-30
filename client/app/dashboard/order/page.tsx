@@ -88,24 +88,24 @@ export default function OrderPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-900 border-b border-gray-700 text-sm uppercase tracking-wider text-gray-400">
+              <tr className="bg-(--surface-3) border-b border-(--border) text-sm uppercase tracking-wider text-(--text-secondary)">
                 <th className="p-4 font-medium">Order Number</th>
                 <th className="p-4 font-medium">Client</th>
                 <th className="p-4 font-medium">Grand Total</th>
                 <th className="p-4 font-medium">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-700">
+            <tbody className="divide-y divide-(--border)">
               {orders.map((order: any) => (
                 <tr
                   key={order.id}
-                  className="hover:bg-gray-700/30 transition-colors"
+                  className="hover:bg-(--hover) transition-colors"
                 >
                   <td className="p-4 font-medium">{order.orderNumber}</td>
-                  <td className="p-4 text-gray-300">
+                  <td className="p-4 text-(--text-secondary)">
                     {clientMap[order.clientId] || "N/A"}
                   </td>
-                  <td className="p-4 text-gray-300">
+                  <td className="p-4 text-(--text-secondary)">
                     Rs.{Number(order.grandTotal).toFixed(2)}
                   </td>
                   <td className="p-4">

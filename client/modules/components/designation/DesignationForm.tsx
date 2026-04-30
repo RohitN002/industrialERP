@@ -6,69 +6,33 @@ import { DesignationInput, designationSchema } from "./designation.schema";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-interface DesignationFormProps {
+export default function DesignationForm({ initialData, onSubmit, isLoading }: {
   initialData?: DesignationInput;
   onSubmit: (data: DesignationInput) => void;
   isLoading?: boolean;
-}
-
-export default function DesignationForm({
-  initialData,
-  onSubmit,
-  isLoading,
-}: DesignationFormProps) {
+}) {
   const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<DesignationInput>({
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<DesignationInput>({
     resolver: zodResolver(designationSchema) as any,
-    defaultValues: initialData
-      ? {
-          name: initialData.name,
-        }
-      : {},
+    defaultValues: initialData ? { name: initialData.name } : {},
   });
-  useEffect(() => {
-    if (initialData) {
-      reset(initialData);
-    }
-  }, [initialData, reset]);
-  return (
-    <form
-      onSubmit={handleSubmit((data: any) => onSubmit(data))}
-      className="w-full space-y-4 rounded-xl bg-gray-800 p-6 shadow text-white"
-    >
-      <div>
-        <label className="block text-sm font-medium mb-1">
-          Designation Name *
-        </label>
-        <input
-          {...register("name")}
-          placeholder="e.g. Software Engineer"
-          className="w-full border border-gray-600 bg-gray-700 text-white p-2 rounded"
-        />
-        {errors.name && (
-          <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
-        )}
-      </div>
+  useEffect(() => { if (initialData) reset(initialData); }, [initialData, reset]);
 
-      <div className="flex gap-3">
-        <button
-          type="button"
-          onClick={() => router.back()}
-          className="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded disabled:opacity-50"
-        >
-          {isLoading ? "Saving..." : "Save Designation"}
+  const inputClass = "w-full border border-(--border) bg-(--surface-2) text-(--text-primary) p-2 rounded placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--focus)]";
+  const labelClass = "block text-(--text-primary) text-sm font-semibold mb-1";
+  const errorClass = "text-(--error) text-sm mt-1";
+
+  return (
+    <form onSubmit={handleSubmit((data: any) => onSubmit(data))} className="w-full space-y-6 rounded-xl bg-(--surface) p-6 shadow">
+      <div>
+        <label className={labelClass}>Designation Name *</label>
+        <input {...register("name")} placeholder="e.g. Software Engineer" className={inputClass} />
+        {errors.name && <p className={errorClass}>{errors.name.message}</p>}
+      </div>
+      <div className="flex justify-end gap-3 pt-2">
+        <button type="button" onClick={() => router.back()} className="px-4 py-2 rounded font-medium text-sm border border-(--border) bg-(--btn-secondary) text-(--btn-secondary-text) hover:opacity-80 transition-opacity cursor-pointer">Cancel</button>
+        <button type="submit" disabled={isLoading} className="px-4 py-2 rounded font-medium text-sm bg-(--btn-primary) text-(--btn-text-white) hover:bg-(--btn-primary-hover) disabled:opacity-50 transition-colors cursor-pointer">
+          {isLoading ? "Saving..." : initialData ? "Update Designation" : "Save Designation"}
         </button>
       </div>
     </form>

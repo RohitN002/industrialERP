@@ -31,14 +31,14 @@ export default function RolePage() {
     });
   };
   return (
-    <div className="flex-1 p-6 text-gray-100">
+    <div className="flex-1 p-6 text-(--text-primary)">
       <PageHeader
         title="Roles"
         createHref="/dashboard/role/create"
         createLabel="Add Role"
       />
 
-      <div className="bg-gray-800 rounded-xl shadow overflow-hidden border border-gray-700">
+      <div className="bg-(--surface) rounded-xl shadow overflow-hidden border border-(--border)">
         {isLoading ? (
           <LoadingState message="Loading roles..." />
         ) : isError ? (
@@ -49,17 +49,17 @@ export default function RolePage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-gray-900 border-b border-gray-700 text-sm uppercase tracking-wider text-gray-400">
+                <tr className="bg-(--surface-3) border-b border-(--border) text-sm uppercase tracking-wider text-(--text-secondary)">
                   <th className="p-4 font-medium">Name</th>
 
                   <th className="p-4 font-medium text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-700">
+              <tbody className="divide-y divide-(--border)">
                 {roles.map((role: Role) => (
                   <tr
                     key={role.id}
-                    className="hover:bg-gray-700/30 transition-colors"
+                    className="hover:bg-(--hover) transition-colors"
                   >
                     <td className="p-4 font-medium">{role.name}</td>
 

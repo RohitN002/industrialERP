@@ -17,7 +17,7 @@ export default function ProductionTable({
     <div className="overflow-x-auto">
       <table className="w-full text-left border-collapse">
         <thead>
-          <tr className="bg-gray-900 border-b border-gray-700 text-sm uppercase tracking-wider text-gray-400">
+          <tr className="bg-(--surface-3) border-b border-(--border) text-sm uppercase tracking-wider text-(--text-secondary)">
             <th className="p-4 font-medium">Batch No</th>
             <th className="p-4 font-medium">Product</th>
             <th className="p-4 font-medium">Status</th>
@@ -26,24 +26,24 @@ export default function ProductionTable({
             <th className="p-4 font-medium text-right">Actions</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-700">
+        <tbody className="divide-y divide-(--border)">
           {productions.map((prod) => (
             <tr
               key={prod.id}
-              className="hover:bg-gray-700/30 transition-colors"
+              className="hover:bg-(--hover) transition-colors"
             >
               <td className="p-4 font-bold">{prod.batchNo}</td>
-              <td className="p-4 text-gray-300">
+              <td className="p-4 text-(--text-secondary)">
                 {prod.producedProduct?.name ?? "Unknown"}
-                <span className="text-xs text-gray-500 ml-1">
+                <span className="text-xs text-(--text-muted) ml-1">
                   ({prod.producedProduct?.sku})
                 </span>
               </td>
               <td className="p-4">
                 <StatusBadge status={prod.status} />
               </td>
-              <td className="p-4 text-gray-300">{prod.items.length} item(s)</td>
-              <td className="p-4 text-gray-400 text-sm">
+              <td className="p-4 text-(--text-secondary)">{prod.items.length} item(s)</td>
+              <td className="p-4 text-(--text-muted) text-sm">
                 {prod.createdBy?.user?.name ?? "Unknown"}
               </td>
               <td className="p-4">

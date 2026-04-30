@@ -33,14 +33,14 @@ export default function ProductionPage() {
   };
 
   return (
-    <div className="flex-1 p-6 text-gray-100">
+    <div className="flex-1 p-6 text-(--text-primary)">
       <PageHeader
         title="Production Batches"
         createHref="/dashboard/production/create"
         createLabel="New Batch"
       />
 
-      <div className="bg-gray-800 rounded-xl shadow overflow-hidden border border-gray-700">
+      <div className="bg-(--surface) rounded-xl shadow overflow-hidden border border-(--border)">
         {isLoading ? (
           <LoadingState message="Loading production batches..." />
         ) : isError ? (
