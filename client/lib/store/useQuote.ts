@@ -20,7 +20,7 @@ export function useDeleteQuote() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) =>
-      api(`/quote/${id}`, {
+      api(`/quotes/${id}`, {
         method: "DELETE",
       }),
     onSuccess: () => {
@@ -46,8 +46,8 @@ export function useCreateQuote() {
 export function useUpdateQuote() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: any) =>
-      api(`/quotes/${data.id}`, {
+    mutationFn: ({ data, id }: { data: any; id: string }) =>
+      api(`/quotes/${id}`, {
         method: "PATCH",
         body: JSON.stringify(data),
       }),

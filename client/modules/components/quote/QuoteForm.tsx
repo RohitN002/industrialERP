@@ -37,7 +37,9 @@ export default function QuoteForm({
       ? {
           clientId: clientId,
           quoteName: initialData.quoteName,
-          expiryDate: initialData.expiryDate,
+          expiryDate: initialData?.expiryDate
+            ? new Date(initialData.expiryDate).toISOString().split("T")[0]
+            : "",
           currency: initialData.currency,
           notes: initialData.notes,
           terms: initialData.terms,
@@ -59,7 +61,10 @@ export default function QuoteForm({
       }),
     [products],
   );
-  console.log("errors", errors);
+  // const formattedDate = new Date(initialData.expiryDate)
+  //   .toISOString()
+  //   .split("T")[0];
+  console.log("initial", initialData);
   const router = useRouter();
   return (
     <form onSubmit={handleSubmit((data: any) => onSubmit(data))}>
@@ -74,7 +79,7 @@ export default function QuoteForm({
       </div>
       <div>
         <label htmlFor="expiryDate">Expiry Date</label>
-        <input type="date" {...register("expiryDate")} />
+        <input type="date" {...register("expiryDate", { valueAsDate: true })} />
         {/* {errors.expiryDate && (
           <p className="text-red-500 text-sm">{errors.expiryDate.message}</p>
         )} */}

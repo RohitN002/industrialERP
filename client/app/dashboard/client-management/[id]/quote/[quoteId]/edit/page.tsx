@@ -15,8 +15,9 @@ export default function EditQuotePage() {
   const { data: quote, isLoading: isLoadingQuote } = useQuoteById(quoteId);
   const updateMutation = useUpdateQuote();
   const handleSubmit = (data: QuoteSchemaType) => {
+    console.log("data", data);
     updateMutation.mutate(
-      { ...data, id: quoteId },
+      { data: { ...data }, id: quoteId },
       {
         onSuccess: () => {
           toast.success("Quote updated successfully!");

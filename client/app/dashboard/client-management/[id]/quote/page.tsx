@@ -15,9 +15,9 @@ import toast from "react-hot-toast";
 
 export default function QuotePage() {
   const params = useParams();
-  console.log("params", params);
+  // console.log("params", params);
   const clientId = String(params.id);
-  console.log("clientId", clientId);
+  // console.log("clientId", clientId);
   const {
     data: quotes,
     isLoading,
@@ -28,9 +28,10 @@ export default function QuotePage() {
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const handleDeleteConfirm = () => {
     if (!confirmId) return;
+    console.log("confirmId", confirmId);
     deleteMutation.mutate(confirmId, {
       onSuccess: () => {
-        toast.success("Client deleted successfully!");
+        toast.success("Quote deleted successfully!");
         setConfirmId(null);
       },
       onError: () => {
