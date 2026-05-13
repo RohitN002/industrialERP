@@ -48,6 +48,12 @@ export const routes: AppRoute[] = [
     roles: [UserRole.ADMIN],
   },
   {
+    name: "Parites",
+    path: "/parites",
+    icon: Users,
+    roles: [UserRole.ADMIN, UserRole.EMPLOYEE],
+  },
+  {
     name: "Employee Attendance",
     path: "/attendance",
     icon: User,

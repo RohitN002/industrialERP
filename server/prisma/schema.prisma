@@ -68,6 +68,7 @@ model User {
   isActive      Boolean  @default(true)
 name            String
   roles         UserRole[]
+ 
     employee      Employee?
   customer      Customer?
   supplier      Supplier?
@@ -95,7 +96,34 @@ model UserRole {
 
     @@id([userId, roleId])
   }
+model BankAccount {
+  id                 String   @id @default(uuid())
 
+
+  accountHolderName  String
+  accountNumber      String   @unique
+
+  bankName           String
+  branchName         String?
+  ifscCode           String?
+
+  upiId              String?
+
+  isPrimary          Boolean  @default(false)
+  isActive           Boolean  @default(true)
+
+supplierId String?
+  supplier    Supplier? @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  employeeId String?
+  employee    Employee? @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  clientId String?
+  client    Client? @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+
+}
 /////////////////////
 // EMPLOYEE & CUSTOMER
 /////////////////////
@@ -105,7 +133,7 @@ model Employee {
   userId    String  @unique
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   mobileNumber  String   @unique
- 
+  bankAccounts     BankAccount[]
    salaryStructures SalaryStructure[]
   payrolls         Payroll[]
   dateOfBirth DateTime?
@@ -296,6 +324,7 @@ model Supplier {
   user User @relation(fields: [userId], references: [id])
  products  Product[]
   phone     String
+    bankAccounts     BankAccount[]
   address   String
   city String
   state String
@@ -494,6 +523,7 @@ model Client {
   source      String?
   status      LeadStatus @default(NEW)
    quotes  Quote[] 
+    bankAccounts     BankAccount[]
   address String?
   city String?
   state String?
