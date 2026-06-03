@@ -62,6 +62,17 @@ export default function ClientForm({
       onSubmit={handleSubmit((data: any) => onSubmit(data))}
       className="w-full space-y-6 rounded-xl bg-(--surface) p-6 shadow"
     >
+      <div className="flex items-center gap-4">
+        <label htmlFor="" className={labelClass}>
+          Type{" "}
+        </label>
+        <button className={`${inputClass} text-(--blue)`} type="button">
+          Individual
+        </button>
+        <button className={`${inputClass} text-(--red)`} type="button">
+          Business
+        </button>
+      </div>
       {/* ── Basic Info ──────────────────────────────────────── */}
       <div>
         <h2 className={sectionHeading}>Basic Information</h2>
