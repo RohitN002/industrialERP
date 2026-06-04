@@ -12,8 +12,15 @@ export const clientManagementSchema = z.object({
   contactPerson: z.string().min(1, "Contact Person is required"),
   contactPersonPhone: z.string().min(1, "Contact Person Phone is required"),
   gst: z.string().min(1, "GST is required"),
+  displayName: z.string().min(1, "Display Name is required"),
   company: z.string().min(1, "Company is required"),
   source: z.string().min(1, "Source is required"),
+  workPhone: z.string().optional(),
+  mobile: z.string().optional(),
+  language: z.string().optional(),
+  currency: z.string().optional(),
+  paymentTerms: z.string().optional(),
+  enablePortal: z.boolean().optional(),
 });
 
 export type ClientManagementInput = z.infer<typeof clientManagementSchema>;

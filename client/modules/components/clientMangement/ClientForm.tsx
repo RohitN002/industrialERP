@@ -24,6 +24,7 @@ export default function ClientForm({
     resolver: zodResolver(clientManagementSchema),
     defaultValues: initialData
       ? {
+          enablePortal: initialData.enablePortal,
           name: initialData.name,
           email: initialData.email,
           phone: initialData.phone,
@@ -40,7 +41,15 @@ export default function ClientForm({
         }
       : {},
   });
-
+  const paymentTerms = [
+    "Due on receipt",
+    "Due on delivery",
+    "Net 30",
+    "Net 60",
+    "Net 90",
+    "Net 120",
+    "Custom",
+  ];
   useEffect(() => {
     if (initialData) {
       reset(initialData);
@@ -48,7 +57,7 @@ export default function ClientForm({
   }, [initialData, reset]);
 
   const router = useRouter();
-
+  const salutation = ["", "Mr", "Mrs", "Ms", "Dr", "Er", "Adv"];
   // ─── Shared style tokens ───────────────────────────────────────────
   const inputClass =
     "w-full border border-(--border) bg-(--surface-2) text-(--text-primary) p-2 rounded placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--focus)]";
@@ -56,12 +65,25 @@ export default function ClientForm({
   const errorClass = "text-(--error) text-sm mt-1";
   const sectionHeading =
     "text-(--text-primary) text-base font-semibold mb-3 pb-1 border-b border-(--border)";
-
+  const currencyValue = ["inr", "usd", "eur", "gbp"];
   return (
     <form
       onSubmit={handleSubmit((data: any) => onSubmit(data))}
       className="w-full space-y-6 rounded-xl bg-(--surface) p-6 shadow"
     >
+      <div>
+        <label htmlFor="">
+          Prefill Customer details from the GST portal using the Customer's
+          GSTIN
+        </label>
+        <input
+          type="text"
+          {...register("gst")}
+          className={inputClass}
+          placeholder="GST number"
+        />
+        <button>Get Details</button>
+      </div>
       <div className="flex items-center gap-4">
         <label htmlFor="" className={labelClass}>
           Type{" "}
@@ -77,23 +99,37 @@ export default function ClientForm({
       <div>
         <h2 className={sectionHeading}>Basic Information</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="name" className={labelClass}>
-              Name *
-            </label>
-            <input
-              id="name"
-              type="text"
-              {...register("name")}
-              className={inputClass}
-              placeholder="Client name"
-            />
-            {errors.name && <p className={errorClass}>{errors.name.message}</p>}
+          <div className="flex gap-10 items-center">
+            <div>
+              <label htmlFor="">Select Salutation</label>
+              <select name="" id="">
+                {salutation.map((item) => (
+                  <option key={item} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="name" className={labelClass}>
+                Name *
+              </label>
+              <input
+                id="name"
+                type="text"
+                {...register("name")}
+                className={inputClass}
+                placeholder="Client name"
+              />
+              {errors.name && (
+                <p className={errorClass}>{errors.name.message}</p>
+              )}
+            </div>
           </div>
 
           <div>
             <label htmlFor="company" className={labelClass}>
-              Company
+              Company Name
             </label>
             <input
               id="company"
@@ -106,7 +142,19 @@ export default function ClientForm({
               <p className={errorClass}>{errors.company.message}</p>
             )}
           </div>
-
+          <div>
+            <label htmlFor="displayName">Display Name</label>
+            <input
+              type="text"
+              id="displayName"
+              {...register("displayName")}
+              className={inputClass}
+              placeholder="Display name"
+            />
+            {errors.displayName && (
+              <p className={errorClass}>{errors.displayName.message}</p>
+            )}
+          </div>
           <div>
             <label htmlFor="email" className={labelClass}>
               Email
@@ -128,17 +176,40 @@ export default function ClientForm({
               Phone
             </label>
             <input
-              id="phone"
+              id="workphone"
               type="text"
-              {...register("phone")}
+              {...register("workPhone")}
               className={inputClass}
-              placeholder="+91 XXXXX XXXXX"
+              placeholder="Work phonne"
             />
-            {errors.phone && (
-              <p className={errorClass}>{errors.phone.message}</p>
+            <input
+              type="text"
+              id="mobile"
+              {...register("mobile")}
+              className={inputClass}
+              placeholder="Mobile number"
+            />
+            {errors.workPhone && (
+              <p className={errorClass}>{errors.workPhone.message}</p>
+            )}
+            {errors.mobile && (
+              <p className={errorClass}>{errors.mobile.message}</p>
             )}
           </div>
-
+          <div>
+            {/* TODO: Make it a multi select dropdown */}
+            <label htmlFor="language">Language spoken</label>
+            <input
+              type="text"
+              id="language"
+              {...register("language")}
+              className={inputClass}
+              placeholder="Language spoken"
+            />
+            {errors.language && (
+              <p className={errorClass}>{errors.language.message}</p>
+            )}
+          </div>
           <div>
             <label htmlFor="gst" className={labelClass}>
               GST Number
@@ -152,7 +223,58 @@ export default function ClientForm({
             />
             {errors.gst && <p className={errorClass}>{errors.gst.message}</p>}
           </div>
-
+          <div>
+            <label htmlFor="paymentTerms">Payment Terms</label>
+            <select
+              id="paymentTerms"
+              {...register("paymentTerms")}
+              className={inputClass}
+            >
+              {paymentTerms.map((term) => (
+                <option key={term} value={term}>
+                  {term}
+                </option>
+              ))}
+            </select>
+            {errors.paymentTerms && (
+              <p className={errorClass}>{errors.paymentTerms.message}</p>
+            )}
+          </div>
+          <div className="">
+            <label htmlFor="currency">Currency</label>
+            <select
+              id="currency"
+              {...register("currency")}
+              className={inputClass}
+            >
+              {currencyValue.map((currency) => (
+                <option key={currency} value={currency}>
+                  {currency}
+                </option>
+              ))}
+            </select>
+            {errors.currency && (
+              <p className={errorClass}>{errors.currency.message}</p>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              defaultChecked={false}
+              id="enablePortal"
+              {...register("enablePortal")}
+            />
+            <label htmlFor="enablePortal">
+              Enable portal access for this customer
+            </label>
+          </div>
+          <div>
+            <label htmlFor="documents">Documents</label>
+            <input type="file" className="" />
+            <button type="button" className="">
+              Upload
+            </button>
+          </div>
           <div>
             <label htmlFor="source" className={labelClass}>
               Source
