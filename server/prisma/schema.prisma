@@ -513,14 +513,15 @@ model Department{
   id String @id @default(uuid())
   name String
   employees Employee[]
-}
+} 
 model Client {
   id          String     @id @default(uuid())
   name        String
-  email       String?
-  phone       String?
-  company     String?
+  email       String?@unique
+  phone       String?@unique
+  company     String?@unique
   source      String?
+  logoUrl     String?
   status      LeadStatus @default(NEW)
    quotes  Quote[] 
     bankAccounts     BankAccount[]
@@ -531,7 +532,7 @@ model Client {
   country String?
   contactPerson String?
   contactPersonPhone String?
-  gst String?
+  gst String?@unique
   assignedToId String?
   assignedTo   Employee?  @relation("AssignedLeads", fields: [assignedToId], references: [id])
   orders Order[]

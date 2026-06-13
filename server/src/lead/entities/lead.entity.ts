@@ -16,7 +16,17 @@ export class LeadRepository {
       orderBy: { createdAt: 'desc' },
     });
   }
-
+  // async findFirst(email: string, phone: string, gst: string) {
+  //   await this.prisma.client.findFirst({
+  //     where: {
+  //       OR: [
+  //         email ? { email: email } : undefined,
+  //         phone ? { phone: phone } : undefined,
+  //         gst ? { gst: gst } : undefined,
+  //       ].filter(Boolean),
+  //     },
+  //   });
+  // }
   async findOne(id: string) {
     return this.prisma.client.findUnique({
       where: { id },
