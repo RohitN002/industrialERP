@@ -543,6 +543,25 @@ model Client {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 }
+model Organization {
+  id String @id @default(uuid())
+  OrganizationName String
+    industry String
+    OrganizationLocation String
+    OrganizationAddress String
+    websiteUrl String
+    primaryMail String
+    primaryPhone String
+    EmailforBilling String?
+    baseCurrency String @default("INR")
+    reportBasis    String?
+    organizationLanguage String?
+    communicationLanguage String?
+    companyId String?
+ 
+    logoUrl String?
+    
+}
 
 model Order {
   id String @id @default(uuid())
