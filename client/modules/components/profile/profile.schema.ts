@@ -1,0 +1,26 @@
+import z from "zod";
+
+export const ProfileSchema = z.object({
+  organizationLogo: z.string().optional(),
+  organizationName: z.string().min(1, "organization name is requrired"),
+  industry: z.string().min(2, "Industry is required"),
+  organizationLocation: z.string(),
+  attention: z.string(),
+  street1: z.string().optional(),
+  street2: z.string().optional(),
+  city: z.string(),
+  state: z.string(),
+  pincode: z.string(),
+  country: z.string(),
+  phone: z.string().optional(),
+  email: z.string().email("Invalid email").optional(),
+  fax: z.string().optional(),
+  websiteUrl: z.string().optional(),
+  baseCurrency: z.string(),
+  fiscalYear: z.string(),
+  reportBasis: z.string(),
+  organizationLanguage: z.string(),
+  communicationLanugae: z.string(),
+  timezone: z.date(),
+  dateFormat: z.string(),
+});
