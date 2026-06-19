@@ -24,3 +24,12 @@ export const ProfileSchema = z.object({
   timezone: z.date(),
   dateFormat: z.string(),
 });
+
+export interface Industry {
+  id: string;
+  name: string;
+}
+
+export interface IndustryResponse {
+  data: Industry[];
+}

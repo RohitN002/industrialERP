@@ -1,27 +1,541 @@
-  // This is your Prisma schema file,
-  // learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
 
-  // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-  // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+datasource db {
+  provider = "postgresql"
+}
 
-  generator client {
-    provider = "prisma-client-js"
-     
-  }
+model User {
+  id               String     @id @default(uuid())
+  email            String     @unique
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  refreshTokenHash String?
+  isActive         Boolean    @default(true)
+  passwordHash     String
+  name             String
+  customer         Customer?
+  employee         Employee?
+  supplier         Supplier?
+   ownedOrganization Organization? @relation("OrganizationOwner")
+  roles            UserRole[]
+    organizationMemberships OrganizationMember[]
+}
+model OrganizationMember {
+  id             String @id @default(uuid())
 
-  datasource db {
-    provider = "postgresql"
+  userId         String
+  organizationId String
 
-  }
+  role           String // OWNER, ADMIN, EMPLOYEE
 
+  user           User @relation(fields: [userId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id])
 
+  @@unique([userId, organizationId])
+}
+model Role {
+  id    String     @id @default(uuid())
+  name  RoleType   @unique
+  users UserRole[]
+}
 
-/////////////////////
-// ENUMS
-/////////////////////
+model Category {
+  id       String    @id @default(uuid())
+  name     String    @unique
+  products Product[]
+}
+
+model UserRole {
+  userId String
+  roleId String
+  role   Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+}
+
+model BankAccount {
+  id                String    @id @default(uuid())
+  accountHolderName String
+  accountNumber     String    @unique
+  bankName          String
+  branchName        String?
+  ifscCode          String?
+  upiId             String?
+  isPrimary         Boolean   @default(false)
+  isActive          Boolean   @default(true)
+  supplierId        String?
+  employeeId        String?
+  clientId          String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  client            Client?   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  employee          Employee? @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  supplier          Supplier? @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+}
+
+model Employee {
+  id                 String              @id @default(uuid())
+  userId             String              @unique
+  createdAt          DateTime            @default(now())
+  address            String?
+  city               String?
+  country            String?
+  dateOfBirth        DateTime?
+  fatherName         String?
+  gender             String?
+  mobileNumber       String              @unique
+  motherName         String?
+  pincode            String?
+  state              String?
+  contactPerson      String?
+  contactPersonPhone String?
+  departmentId       String?
+  designationId      String?
+  attendances        Attendance[]
+  bankAccounts       BankAccount[]
+  leads              Client[]            @relation("AssignedLeads")
+  createdLeads       Client[]            @relation("CreatedLeads")
+  department         Department?         @relation(fields: [departmentId], references: [id])
+  designation        Designation?        @relation(fields: [designationId], references: [id])
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assignedOrders     Order[]             @relation("AssignedOrders")
+  createdOrders      Order[]             @relation("CreatedOrders")
+  orders             OrderEmployee[]
+  payrolls           Payroll[]
+  productions        Production[]
+  purchases          Purchase[]
+  inspections        QualityInspection[]
+  salaryStructures   SalaryStructure[]
+  sales              Sale[]
+  shiftAssignments   ShiftAssignment[]
+
+  @@index([userId])
+}
+
+model SalaryStructure {
+  id            String     @id @default(uuid())
+  employeeId    String
+  baseSalary    Int?
+  perDayRate    Int?
+  perHourRate   Int?
+  effectiveFrom DateTime
+  effectiveTo   DateTime?
+  createdAt     DateTime   @default(now())
+  type          SalaryType
+  employee      Employee   @relation(fields: [employeeId], references: [id])
+}
+
+model Payroll {
+  id            String              @id @default(uuid())
+  employeeId    String
+  month         Int
+  year          Int
+  totalDays     Int
+  presentDays   Int
+  absentDays    Int
+  workedMinutes Int
+  grossSalary   Int
+  deductions    Int
+  netSalary     Int
+  status        PayrollStatus       @default(PENDING)
+  generatedAt   DateTime            @default(now())
+  baseSalary    Int?
+  perDayRate    Int?
+  perHourRate   Int?
+  salaryType    SalaryType
+  employee      Employee            @relation(fields: [employeeId], references: [id])
+  adjustments   PayrollAdjustment[]
+
+  @@unique([employeeId, month, year])
+}
+
+model PayrollAdjustment {
+  id        String         @id @default(uuid())
+  payrollId String
+  type      AdjustmentType
+  amount    Int
+  reason    String?
+  createdAt DateTime       @default(now())
+  payroll   Payroll        @relation(fields: [payrollId], references: [id])
+}
+
+model OrderEmployee {
+  id         String   @id @default(uuid())
+  orderId    String
+  employeeId String
+  role       String
+  employee   Employee @relation(fields: [employeeId], references: [id])
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@unique([orderId, employeeId, role])
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  userId    String?  @unique
+  phone     String?
+  address   String?
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id])
+  sales     Sale[]
+
+  @@index([userId])
+}
+
+model Product {
+  id                    String           @id @default(uuid())
+  name                  String
+  sku                   String           @unique
+  description           String?
+  price                 Decimal          @db.Decimal(12, 2)
+  createdAt             DateTime         @default(now())
+  imageUrl              String?
+  stockQuantity         Int
+  type                  String
+  unit                  String?
+  categoryId            String
+  supplierId            String?
+  orderItems            OrderItem[]
+  category              Category         @relation(fields: [categoryId], references: [id])
+  supplier              Supplier?        @relation(fields: [supplierId], references: [id])
+  productionsAsFinished Production[]     @relation("FinishedProduct")
+  productionItems       ProductionItem[]
+  purchaseItems         PurchaseItem[]
+  quoteItems            QuoteItem[]
+  saleItems             SaleItem[]
+}
+
+model Purchase {
+  id          String              @id @default(uuid())
+  referenceNo String              @unique
+  createdById String
+  createdAt   DateTime            @default(now())
+  createdBy   Employee            @relation(fields: [createdById], references: [id])
+  items       PurchaseItem[]
+  inspections QualityInspection[]
+
+  @@index([createdById])
+}
+
+model PurchaseItem {
+  id         String   @id @default(uuid())
+  purchaseId String
+  productId  String
+  quantity   Int
+  unitPrice  Decimal  @db.Decimal(12, 2)
+  product    Product  @relation(fields: [productId], references: [id])
+  purchase   Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+
+  @@unique([purchaseId, productId])
+  @@index([purchaseId])
+  @@index([productId])
+}
+
+model Supplier {
+  id                 String        @id @default(uuid())
+  userId             String        @unique
+  phone              String
+  address            String
+  createdAt          DateTime      @default(now())
+  city               String
+  contactPerson      String
+  contactPersonPhone String
+  country            String
+  gst                String
+  pincode            String
+  state              String
+  bankAccounts       BankAccount[]
+  products           Product[]
+  user               User          @relation(fields: [userId], references: [id])
+}
+
+model Sale {
+  id          String     @id @default(uuid())
+  invoiceNo   String     @unique
+  status      SaleStatus @default(DRAFT)
+  customerId  String
+  createdById String
+  createdAt   DateTime   @default(now())
+  createdBy   Employee   @relation(fields: [createdById], references: [id])
+  customer    Customer   @relation(fields: [customerId], references: [id])
+  items       SaleItem[]
+
+  @@index([customerId])
+  @@index([createdById])
+}
+
+model SaleItem {
+  id        String  @id @default(uuid())
+  saleId    String
+  productId String
+  quantity  Int
+  unitPrice Decimal @db.Decimal(12, 2)
+  product   Product @relation(fields: [productId], references: [id])
+  sale      Sale    @relation(fields: [saleId], references: [id], onDelete: Cascade)
+
+  @@unique([saleId, productId])
+  @@index([saleId])
+  @@index([productId])
+}
+
+model Production {
+  id                String              @id @default(uuid())
+  batchNo           String              @unique
+  status            ProductionStatus    @default(PLANNED)
+  producedProductId String
+  createdById       String
+  createdAt         DateTime            @default(now())
+  createdBy         Employee            @relation(fields: [createdById], references: [id])
+  producedProduct   Product             @relation("FinishedProduct", fields: [producedProductId], references: [id])
+  items             ProductionItem[]
+  inspections       QualityInspection[]
+
+  @@index([producedProductId])
+  @@index([createdById])
+}
+
+model ProductionItem {
+  id           String     @id @default(uuid())
+  productionId String
+  productId    String
+  quantity     Int
+  product      Product    @relation(fields: [productId], references: [id])
+  production   Production @relation(fields: [productionId], references: [id], onDelete: Cascade)
+
+  @@unique([productionId, productId])
+  @@index([productionId])
+  @@index([productId])
+}
+
+model QualityInspection {
+  id            String        @id @default(uuid())
+  status        QualityStatus @default(PENDING)
+  remarks       String?
+  productionId  String?
+  purchaseId    String?
+  inspectedById String
+  createdAt     DateTime      @default(now())
+  inspectedBy   Employee      @relation(fields: [inspectedById], references: [id])
+  production    Production?   @relation(fields: [productionId], references: [id])
+  purchase      Purchase?     @relation(fields: [purchaseId], references: [id])
+
+  @@index([productionId])
+  @@index([purchaseId])
+  @@index([inspectedById])
+}
+
+model Shift {
+  id            String            @id @default(uuid())
+  name          String
+  startTime     String
+  endTime       String
+  isOvernight   Boolean           @default(false)
+  graceInMin    Int               @default(0)
+  graceOutMin   Int               @default(0)
+  minHalfDayMin Int?
+  minFullDayMin Int?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  attendances   Attendance[]
+  assignments   ShiftAssignment[]
+}
+
+model ShiftAssignment {
+  id       String   @id @default(uuid())
+  userId   String
+  shiftId  String
+  date     DateTime
+  shift    Shift    @relation(fields: [shiftId], references: [id])
+  employee Employee @relation(fields: [userId], references: [id])
+
+  @@unique([userId, date])
+}
+
+model Attendance {
+  id            String           @id @default(uuid())
+  userId        String
+  date          DateTime         @db.Date
+  status        AttendanceStatus
+  checkIn       DateTime?
+  checkOut      DateTime?
+  createdAt     DateTime         @default(now())
+  shiftId       String?
+  updatedAt     DateTime         @updatedAt
+  workedMinutes Int?
+  source        AttendanceSource @default(MANUAL)
+  workedHours   Int?
+  shift         Shift?           @relation(fields: [shiftId], references: [id])
+  employee      Employee         @relation(fields: [userId], references: [id])
+
+  @@unique([userId, date])
+}
+
+model Designation {
+  id        String     @id @default(uuid())
+  name      String
+  employees Employee[]
+}
+
+model Department {
+  id        String     @id @default(uuid())
+  name      String
+  employees Employee[]
+}
+
+model Client {
+  id                 String        @id @default(uuid())
+  name               String
+  email              String?       @unique
+  phone              String?       @unique
+  company            String?       @unique
+  source             String?
+  status             LeadStatus    @default(NEW)
+  address            String?
+  city               String?
+  state              String?
+  pincode            String?
+  country            String?
+  contactPerson      String?
+  contactPersonPhone String?
+  gst                String?       @unique
+  assignedToId       String?
+  createdById        String?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  logoUrl            String?
+  bankAccounts       BankAccount[]
+  assignedTo         Employee?     @relation("AssignedLeads", fields: [assignedToId], references: [id])
+  createdBy          Employee?     @relation("CreatedLeads", fields: [createdById], references: [id])
+  orders             Order[]
+  quotes             Quote[]
+
+  @@index([assignedToId])
+  @@index([createdById])
+}
+
+model Industries {
+  id   String @id @default(dbgenerated("gen_random_uuid()"))
+  name String @unique
+}
+
+model Organization {
+  id                    String  @id @default(uuid())
+  OrganizationName      String
+  industry              String
+  OrganizationLocation  String
+  OrganizationAddress   String
+  websiteUrl            String
+  primaryMail           String
+  primaryPhone          String
+  EmailforBilling       String?
+  baseCurrency          String  @default("INR")
+  reportBasis           String?
+  organizationLanguage  String?
+  communicationLanguage String?
+  companyId             String?
+  logoUrl               String?
+  ownerId String @unique
+  owner   User @relation("OrganizationOwner", fields: [ownerId], references: [id])
+   members OrganizationMember[]
+}
+
+model Order {
+  id                   String          @id @default(uuid())
+  assignedToId         String?
+  createdById          String?
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+  currency             String          @default("INR")
+  notes                String?
+  orderDate            DateTime        @default(now())
+  orderNumber          String          @unique
+  paymentMethod        String?
+  paymentStatus        String          @default("Unpaid")
+  priority             String?
+  shippingAddress      String?
+  shippingCity         String?
+  shippingContact      String?
+  shippingCountry      String?
+  shippingPhone        String?
+  shippingPincode      String?
+  shippingState        String?
+  status               String          @default("Pending")
+  subTotal             Decimal         @default(0) @db.Decimal(12, 2)
+  totalAmount          Decimal         @default(0) @db.Decimal(12, 2)
+  totalDiscount        Decimal         @default(0) @db.Decimal(12, 2)
+  totalTax             Decimal         @default(0) @db.Decimal(12, 2)
+  expectedDeliveryDate DateTime?
+  billingAddress       String?
+  shippingMethod       String?
+  grandTotal           Decimal         @default(0) @db.Decimal(12, 2)
+  shippingCost         Decimal         @default(0) @db.Decimal(12, 2)
+  clientId             String?
+  assignedTo           Employee?       @relation("AssignedOrders", fields: [assignedToId], references: [id])
+  client               Client?         @relation(fields: [clientId], references: [id])
+  createdBy            Employee?       @relation("CreatedOrders", fields: [createdById], references: [id])
+  employees            OrderEmployee[]
+  items                OrderItem[]
+}
+
+model Quote {
+  id                   String      @id @default(uuid())
+  quoteNumber          String      @unique
+  version              Int         @default(1)
+  clientId             String
+  issueDate            DateTime    @default(now())
+  expiryDate           DateTime?
+  status               QuoteStatus @default(DRAFT)
+  currency             String      @default("INR")
+  subTotal             Decimal     @db.Decimal(12, 2)
+  taxTotal             Decimal     @db.Decimal(12, 2)
+  discountTotal        Decimal     @db.Decimal(12, 2)
+  grandTotal           Decimal     @db.Decimal(12, 2)
+  notes                String?
+  terms                String?
+  convertedToOrderId   String?
+  convertedToInvoiceId String?
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+  quoteName            String      @unique
+  client               Client      @relation(fields: [clientId], references: [id])
+  items                QuoteItem[]
+
+  @@index([clientId])
+}
+
+model QuoteItem {
+  id          String   @id @default(uuid())
+  quoteId     String
+  productId   String?
+  description String?
+  quantity    Decimal  @db.Decimal(10, 2)
+  unitPrice   Decimal  @db.Decimal(12, 2)
+  discount    Decimal  @default(0) @db.Decimal(12, 2)
+  tax         Decimal  @default(0) @db.Decimal(12, 2)
+  lineTotal   Decimal  @db.Decimal(12, 2)
+  sortOrder   Int?
+  createdAt   DateTime @default(now())
+  product     Product? @relation(fields: [productId], references: [id])
+  quote       Quote    @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  orderId   String
+  productId String
+  quantity  Int?
+  unitPrice Decimal? @db.Decimal(12, 2)
+  discount  Decimal  @default(0) @db.Decimal(12, 2)
+  tax       Decimal  @default(0) @db.Decimal(12, 2)
+  total     Decimal  @default(0) @db.Decimal(12, 2)
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id])
+}
 
 enum RoleType {
-  EMPLOYEE
   ADMIN
   MANAGER
   SALES
@@ -29,6 +543,7 @@ enum RoleType {
   QUALITY
   CUSTOMER
   SUPPLIER
+  EMPLOYEE
 }
 
 enum ProductionStatus {
@@ -44,6 +559,7 @@ enum SaleStatus {
   SHIPPED
   CANCELLED
 }
+
 enum SalaryType {
   MONTHLY
   DAILY
@@ -56,375 +572,17 @@ enum QualityStatus {
   REJECTED
 }
 
-/////////////////////
-// CORE IDENTITY
-/////////////////////
-
-model User {
-  id            String   @id @default(uuid())
-  email         String   @unique
-
-  passwordHash  String
-  isActive      Boolean  @default(true)
-name            String
-  roles         UserRole[]
- 
-    employee      Employee?
-  customer      Customer?
-  supplier      Supplier?
-  refreshTokenHash String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-}
-
-model Role {
-  id        String     @id @default(uuid())
-  name      RoleType   @unique
-  users     UserRole[]
-}
-model Category{
-  id String @id @default(uuid())
-  name String @unique
-  products Product[]
-}
-model UserRole {
-    userId String
-    roleId String
-
-    user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    role   Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
-
-    @@id([userId, roleId])
-  }
-model BankAccount {
-  id                 String   @id @default(uuid())
-
-
-  accountHolderName  String
-  accountNumber      String   @unique
-
-  bankName           String
-  branchName         String?
-  ifscCode           String?
-
-  upiId              String?
-
-  isPrimary          Boolean  @default(false)
-  isActive           Boolean  @default(true)
-
-supplierId String?
-  supplier    Supplier? @relation(fields: [supplierId], references: [id], onDelete: Cascade)
-  employeeId String?
-  employee    Employee? @relation(fields: [employeeId], references: [id], onDelete: Cascade)
-  clientId String?
-  client    Client? @relation(fields: [clientId], references: [id], onDelete: Cascade)
-
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-
-
-}
-/////////////////////
-// EMPLOYEE & CUSTOMER
-/////////////////////
-
-model Employee {
-  id        String  @id @default(uuid())
-  userId    String  @unique
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  mobileNumber  String   @unique
-  bankAccounts     BankAccount[]
-   salaryStructures SalaryStructure[]
-  payrolls         Payroll[]
-  dateOfBirth DateTime?
-  gender String?
-fatherName String?
-  motherName String?
-  address String?
-  city String?
-  state String?
-  contactPerson String?
-  contactPersonPhone String?
-  pincode String?
-  country String?
-  productions Production[]
-  sales       Sale[]
-  purchases   Purchase[]
-  shiftAssignments ShiftAssignment[]
-   assignedOrders Order[] @relation("AssignedOrders")
-  createdOrders  Order[] @relation("CreatedOrders")
-   orders        OrderEmployee[]
-  inspections QualityInspection[]
-  designationId String?
-  designation   Designation? @relation(fields: [designationId], references: [id])
-  departmentId String?
-  department    Department?  @relation(fields: [departmentId], references: [id])
-  leads       Client[] @relation("AssignedLeads")
-  createdLeads Client[] @relation("CreatedLeads")
-attendances  Attendance[]
-  createdAt   DateTime @default(now())
-    @@index([userId])
-}
-model SalaryStructure {
-  id          String   @id @default(uuid())
-  employeeId  String
-  employee    Employee @relation(fields: [employeeId], references: [id])
-
-  type        SalaryType
-
-  baseSalary  Int?
-  perDayRate  Int?
-  perHourRate Int?
-
-  effectiveFrom DateTime
-  effectiveTo   DateTime?
-
-  createdAt DateTime @default(now())
-}
-
-model Payroll {
-  id          String   @id @default(uuid())
-
-  employeeId  String
-  employee    Employee @relation(fields: [employeeId], references: [id])
-
-  month       Int
-  year        Int
-
-  totalDays       Int
-  presentDays     Int
-  absentDays      Int
-  workedMinutes   Int
-
-  grossSalary     Int
-  deductions      Int
-  netSalary       Int
-  salaryType     SalaryType
-  baseSalary     Int?
-  perDayRate     Int?
-  perHourRate    Int?
-  status PayrollStatus @default(PENDING)
-adjustments PayrollAdjustment[]
-  generatedAt DateTime @default(now())
-
-  @@unique([employeeId, month, year])
-}
 enum PayrollStatus {
   PENDING
   GENERATED
   PAID
   FAILED
 }
+
 enum AdjustmentType {
   BONUS
   DEDUCTION
 }
-model PayrollAdjustment {
-  id         String   @id @default(uuid())
-  payrollId  String
-  payroll    Payroll  @relation(fields: [payrollId], references: [id])
-
-  type       AdjustmentType // BONUS | DEDUCTION
-  amount     Int
-  reason     String?
-
-  createdAt DateTime @default(now())
-}
-model OrderEmployee {
-  id          String   @id @default(uuid())
-
-  orderId     String
-  employeeId  String
-  role        String   
-
-  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  employee    Employee @relation(fields: [employeeId], references: [id])
-
-  @@unique([orderId, employeeId, role]) // optional but useful
-}
-model Customer {
-  id        String  @id @default(uuid())
-  userId    String? @unique
-  user      User?   @relation(fields: [userId], references: [id])
-
-
-  phone     String?
-  address   String?
-
-  sales     Sale[]
- @@index([userId])
-  createdAt DateTime @default(now())
-}
-
-/////////////////////
-// PRODUCT
-/////////////////////
-
-model Product {
-  id          String  @id @default(uuid())
-  name        String
-  sku         String  @unique
-  description String?   
-  price       Decimal @db.Decimal(12,2)
-  stockQuantity Int
-  type        String
-  unit        String?
- supplierId  String?
-  supplier    Supplier? @relation(fields: [supplierId], references: [id])
- orderItems OrderItem[]
- quoteItems QuoteItem[]
-  imageUrl    String?
-  saleItems       SaleItem[]
-  purchaseItems   PurchaseItem[]
-  productionItems ProductionItem[]
-  categoryId String
-  category Category @relation(fields: [categoryId], references: [id])
-  // ✅ Correct inverse relation
-  productionsAsFinished Production[] @relation("FinishedProduct")
-
-  createdAt DateTime @default(now())
-}
-/////////////////////
-// PURCHASE
-/////////////////////
-
-model Purchase {
-  id          String @id @default(uuid())
-  referenceNo String @unique
-
-  createdById String
-  createdBy   Employee @relation(fields: [createdById], references: [id])
-
-  items       PurchaseItem[]
-  inspections QualityInspection[]
-  @@index([createdById])
-  createdAt   DateTime @default(now())
-}
-
-model PurchaseItem {
-  id         String @id @default(uuid())
-  purchaseId String
-  productId  String
-  quantity   Int
-  unitPrice  Decimal @db.Decimal(12,2)
- @@index([purchaseId])
-  @@index([productId])
-  @@unique([purchaseId, productId])
-  purchase   Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
-  product    Product  @relation(fields: [productId], references: [id])
-}
-
-/////////////////////
-// SALES
-///////////////////// 
-
-model Supplier {
-  id        String  @id @default(uuid())
-  userId String @unique
-  user User @relation(fields: [userId], references: [id])
- products  Product[]
-  phone     String
-    bankAccounts     BankAccount[]
-  address   String
-  city String
-  state String
-  pincode String
-  country String
-  contactPerson String
-  contactPersonPhone String
-  gst String
-  createdAt DateTime @default(now())
-}
-model Sale {
-  id          String     @id @default(uuid())
-  invoiceNo   String     @unique
-  status      SaleStatus @default(DRAFT)
-
-  customerId  String
-  customer    Customer   @relation(fields: [customerId], references: [id])
-
-  createdById String
-  createdBy   Employee   @relation(fields: [createdById], references: [id])
-
-  items       SaleItem[]
-  @@index([customerId])
-  @@index([createdById])
-  createdAt   DateTime   @default(now())
-}
-
-model SaleItem {
-  id        String @id @default(uuid())
-  saleId    String
-  productId String
-  quantity  Int
-  unitPrice Decimal @db.Decimal(12,2)
- @@index([saleId])
-  @@index([productId])
-  @@unique([saleId, productId])
-  sale    Sale    @relation(fields: [saleId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id])
-}
-
-/////////////////////
-// PRODUCTION
-/////////////////////
-
-model Production {
-  id          String           @id @default(uuid())
-  batchNo     String           @unique
-  status      ProductionStatus @default(PLANNED)
-
-  producedProductId String
-  producedProduct   Product @relation("FinishedProduct", fields: [producedProductId], references: [id])
-
-  createdById String
-  createdBy   Employee @relation(fields: [createdById], references: [id])
-
-  items       ProductionItem[]
-  inspections QualityInspection[]
- @@index([producedProductId])
-  @@index([createdById])
-  createdAt   DateTime @default(now())
-}
-
-model ProductionItem {
-  id           String @id @default(uuid())
-  productionId String
-  productId    String
-  quantity     Int
- @@index([productionId])
-  @@index([productId])
-  @@unique([productionId, productId])
-  production Production @relation(fields: [productionId], references: [id], onDelete: Cascade)
-  product    Product    @relation(fields: [productId], references: [id])
-}
-
-/////////////////////
-// QUALITY
-/////////////////////
-
-model QualityInspection {
-  id            String        @id @default(uuid())
-  status        QualityStatus @default(PENDING)
-  remarks       String?
-
-  productionId  String?
-  purchaseId    String?
-
-  production Production? @relation(fields: [productionId], references: [id])
-  purchase   Purchase?   @relation(fields: [purchaseId], references: [id])
-
-  inspectedById String
-  inspectedBy   Employee @relation(fields: [inspectedById], references: [id])
-@@index([productionId])
-  @@index([purchaseId])
-  @@index([inspectedById])
-  createdAt     DateTime @default(now())
-}
-
-/////////////////////
-// LEADS & CRM
-/////////////////////
 
 enum LeadStatus {
   NEW
@@ -433,219 +591,23 @@ enum LeadStatus {
   LOST
   CONVERTED
 }
+
 enum AttendanceStatus {
   PRESENT
   ABSENT
   LATE
+  HOLIDAY
   HALF_DAY
   ON_LEAVE
   WEEKEND
-  HOLIDAY
 }
-model Shift {
-  id            String   @id @default(uuid())
 
-  name          String   // "General Shift", "Night Shift"
-
-  startTime     String   // "09:00"
-  endTime       String   // "18:00"
-
-  isOvernight   Boolean  @default(false)
-
-  graceInMin    Int      @default(0)  // allowed late minutes
-  graceOutMin   Int      @default(0)  // early leave tolerance
-
-  minHalfDayMin Int?     // below this = half day
-  minFullDayMin Int?     // required for full day
-  assignments ShiftAssignment[]
-  attendances Attendance[]
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-}
-model ShiftAssignment {
-  id        String   @id @default(uuid())
-
-  userId    String
-  employee  Employee @relation(fields: [userId], references: [id])
-
-  shiftId   String
-  shift     Shift    @relation(fields: [shiftId], references: [id])
-
-  date      DateTime // IMPORTANT: per-day assignment
-
-  @@unique([userId, date])
-}
 enum AttendanceSource {
   MANUAL
   BIOMETRIC
   SYSTEM
 }
-model Attendance {
-  id            String   @id @default(uuid())
 
-  userId        String
-  employee      Employee @relation(fields: [userId], references: [id])
-
-  date DateTime @db.Date
-
-  status        AttendanceStatus
-
-  checkIn       DateTime?
-  checkOut      DateTime?
-
-  workedMinutes Int?     // derived or stored for performance
-  workedHours Int?
-  shiftId       String?
-  shift         Shift?   @relation(fields: [shiftId], references: [id])
-
-  source AttendanceSource @default(MANUAL)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  @@unique([userId, date])
-}
-model Designation{
-  id String @id @default(uuid())
-  name String
-  employees Employee[]
-}
-model Department{
-  id String @id @default(uuid())
-  name String
-  employees Employee[]
-} 
-model Client {
-  id          String     @id @default(uuid())
-  name        String
-  email       String?@unique
-  phone       String?@unique
-  company     String?@unique
-  source      String?
-  logoUrl     String?
-  status      LeadStatus @default(NEW)
-   quotes  Quote[] 
-    bankAccounts     BankAccount[]
-  address String?
-  city String?
-  state String?
-  pincode String?
-  country String?
-  contactPerson String?
-  contactPersonPhone String?
-  gst String?@unique
-  assignedToId String?
-  assignedTo   Employee?  @relation("AssignedLeads", fields: [assignedToId], references: [id])
-  orders Order[]
-  createdById String?
-  createdBy   Employee?   @relation("CreatedLeads", fields: [createdById], references: [id])
-@@index([assignedToId])
-  @@index([createdById])
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-}
-model Organization {
-  id String @id @default(uuid())
-  OrganizationName String
-    industry String
-    OrganizationLocation String
-    OrganizationAddress String
-    websiteUrl String
-    primaryMail String
-    primaryPhone String
-    EmailforBilling String?
-    baseCurrency String @default("INR")
-    reportBasis    String?
-    organizationLanguage String?
-    communicationLanguage String?
-    companyId String?
-    logoUrl String?
-    
-}
-
-model Order {
-  id String @id @default(uuid())
-
-  // Relations to employees
-  assignedToId String?
-  assignedTo Employee? @relation("AssignedOrders", fields: [assignedToId], references: [id])
-  createdById String?
-  createdBy Employee? @relation("CreatedOrders", fields: [createdById], references: [id])
-
-  // Timestamps
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Customer / sales info
- clientId String?
-  client Client? @relation(fields: [clientId], references: [id])
-  orderNumber String @unique
-  orderDate DateTime @default(now())
-  expectedDeliveryDate DateTime?
-  status String @default("Pending") // Pending, Confirmed, Shipped, Delivered, Cancelled
-  priority String?
-
-  // Financial fields (calculated in application)
-  subTotal Decimal @db.Decimal(12,2) @default(0) // sum of items unitPrice * quantity
-  totalDiscount Decimal @db.Decimal(12,2) @default(0) // sum of item discounts
-  totalTax Decimal @db.Decimal(12,2) @default(0)      // sum of item taxes
-  totalAmount Decimal @db.Decimal(12,2) @default(0)   // subTotal - totalDiscount + totalTax
-  paymentStatus String @default("Unpaid")
-  paymentMethod String?
-  currency String @default("INR")
-
-  // Shipping info
-  billingAddress String?
-  shippingAddress String?
-  shippingCity String?
-  shippingState String?
-  shippingCountry String?
-  shippingPincode String?
-  shippingContact String?
-  shippingPhone String?
-shippingMethod String?
-shippingCost Decimal @db.Decimal(12,2) @default(0)
-  // Relations
-  items OrderItem[]
-  employees OrderEmployee[]
-grandTotal Decimal @db.Decimal(12,2) @default(0)
-  // Optional notes
-  notes String?
-}
-model Quote {
-  id              String   @id @default(uuid())
-  quoteName       String  @unique
-  quoteNumber     String   @unique
-  version         Int      @default(1)
-
- clientId      String
-  client        Client @relation(fields: [clientId], references: [id])
-
-  issueDate       DateTime @default(now())
-  expiryDate      DateTime?
-
-  status          QuoteStatus @default(DRAFT)
-
-  currency        String   @default("INR")
-items QuoteItem[]
-  subTotal        Decimal  @db.Decimal(12,2)
-  taxTotal        Decimal  @db.Decimal(12,2)
-  discountTotal   Decimal  @db.Decimal(12,2)
-  grandTotal      Decimal  @db.Decimal(12,2)
-
-  notes           String?
-  terms           String?
-
-  // Conversion tracking
-  convertedToOrderId String?
-  convertedToInvoiceId String?
-
-
-
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  @@index([clientId])
-}
 enum QuoteStatus {
   DRAFT
   SENT
@@ -655,40 +617,4 @@ enum QuoteStatus {
   REJECTED
   EXPIRED
   CONVERTED
-}
-model QuoteItem {
-  id          String  @id @default(uuid())
-
-  quoteId     String
-  quote       Quote   @relation(fields: [quoteId], references: [id], onDelete: Cascade)
-
-  productId   String?
-  product     Product? @relation(fields: [productId], references: [id])
-
-  description String?
-
-  quantity    Decimal @db.Decimal(10,2)
-  unitPrice   Decimal @db.Decimal(12,2)
-
-  discount    Decimal @db.Decimal(12,2) @default(0)
-  tax         Decimal @db.Decimal(12,2) @default(0)
-
-  lineTotal   Decimal @db.Decimal(12,2)
-
-  sortOrder   Int?
-
-  createdAt   DateTime @default(now())
-}
-model OrderItem {
-  id String @id @default(uuid())
-  orderId String
-  productId String
-  quantity Int?
-  unitPrice Decimal? @db.Decimal(12,2)
-  discount Decimal @db.Decimal(12,2) @default(0) // per item
-  tax Decimal @db.Decimal(12,2) @default(0)      // per item
-  total Decimal @db.Decimal(12,2) @default(0)    // calculated: (unitPrice*quantity - discount + tax)
-  
-  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id])
 }
