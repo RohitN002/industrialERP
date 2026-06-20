@@ -1,0 +1,39 @@
+warning: in the working copy of 'server/prisma/schema.prisma', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/server/prisma/schema.prisma b/server/prisma/schema.prisma[m
+[1mindex 5b45317..d686aaa 100644[m
+[1m--- a/server/prisma/schema.prisma[m
+[1m+++ b/server/prisma/schema.prisma[m
+[36m@@ -18,23 +18,9 @@[m [mmodel User {[m
+   customer         Customer?[m
+   employee         Employee?[m
+   supplier         Supplier?[m
+[31m-   ownedOrganization Organization? @relation("OrganizationOwner")[m
+   roles            UserRole[][m
+[31m-    organizationMemberships OrganizationMember[][m
+ }[m
+[31m-model OrganizationMember {[m
+[31m-  id             String @id @default(uuid())[m
+ [m
+[31m-  userId         String[m
+[31m-  organizationId String[m
+[31m-[m
+[31m-  role           String // OWNER, ADMIN, EMPLOYEE[m
+[31m-[m
+[31m-  user           User @relation(fields: [userId], references: [id])[m
+[31m-  organization   Organization @relation(fields: [organizationId], references: [id])[m
+[31m-[m
+[31m-  @@unique([userId, organizationId])[m
+[31m-}[m
+ model Role {[m
+   id    String     @id @default(uuid())[m
+   name  RoleType   @unique[m
+[36m@@ -437,9 +423,6 @@[m [mmodel Organization {[m
+   communicationLanguage String?[m
+   companyId             String?[m
+   logoUrl               String?[m
+[31m-  ownerId String @unique[m
+[31m-  owner   User @relation("OrganizationOwner", fields: [ownerId], references: [id])[m
+[31m-   members OrganizationMember[][m
+ }[m
+ [m
+ model Order {[m
