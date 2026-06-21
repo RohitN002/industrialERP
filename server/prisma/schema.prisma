@@ -18,7 +18,9 @@ model User {
   customer         Customer?
   employee         Employee?
   supplier         Supplier?
-  roles            UserRole[]
+  roles            UserRole[] 
+ ownedOrganizations Organization[] @relation("OrganizationOwner")
+   organizations    OrganizationMember[]
 }
 
 model Role {
@@ -423,8 +425,25 @@ model Organization {
   communicationLanguage String?
   companyId             String?
   logoUrl               String?
-}
+  ownerId String 
+  members OrganizationMember[]
 
+
+  owner User @relation("OrganizationOwner", fields: [ownerId], references: [id])
+}
+model OrganizationMember {
+  id             String @id @default(uuid())
+
+  userId         String
+  organizationId String
+
+  role           String // OWNER, ADMIN, EMPLOYEE
+
+  user           User @relation(fields: [userId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@unique([userId, organizationId])
+}
 model Order {
   id                   String          @id @default(uuid())
   assignedToId         String?
